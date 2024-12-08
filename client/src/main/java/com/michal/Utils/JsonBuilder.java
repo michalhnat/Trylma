@@ -1,4 +1,4 @@
-package com.michal;
+package com.michal.Utils;
 
 import com.google.gson.JsonObject;
 

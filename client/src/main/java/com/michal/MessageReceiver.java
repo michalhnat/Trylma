@@ -13,8 +13,7 @@ public class MessageReceiver extends ServerMessageHandler {
 
     @Override
     public void hanldeMessage(String message) {
-        System.out.println(message);
-
+        display.displayMessage(message);
     }
 
     @Override

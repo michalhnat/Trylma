@@ -6,17 +6,13 @@ import com.michal.Exceptions.FailedSendingMessageToServer;
 import com.michal.Utils.JsonBuilder;
 
 import picocli.CommandLine.Command;
-import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
-@Command(name = "join", description = "Join a game")
-public class JoinGameCommand implements Runnable {
+@Command(name = "create", description = "Create a game")
+public class CreateGameCommand implements Runnable {
 
     @ParentCommand
     private MainCommand parent;
-
-    @Parameters(index = "0", description = "Game ID")
-    private int gameID;
 
     @Override
     public void run() {
@@ -27,10 +23,7 @@ public class JoinGameCommand implements Runnable {
             return;
         }
         try {
-            String jsonMessage = JsonBuilder.setBuilder("join")
-                    .setArgument("gameID", gameID)
-                    .build();
-
+            String jsonMessage = JsonBuilder.setBuilder("create").build();
             communication.sendMessage(jsonMessage);
         } catch (FailedSendingMessageToServer e) {
             display.displayError(e.getMessage());
@@ -38,4 +31,5 @@ public class JoinGameCommand implements Runnable {
             display.displayError("Failed to join game");
         }
     }
+
 }

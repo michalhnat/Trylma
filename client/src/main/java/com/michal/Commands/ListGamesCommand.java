@@ -2,7 +2,7 @@ package com.michal.Commands;
 
 import com.michal.Display;
 import com.michal.ICommunication;
-import com.michal.JsonBuilder;
+import com.michal.Utils.JsonBuilder;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;

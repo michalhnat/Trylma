@@ -11,7 +11,8 @@ import picocli.CommandLine.Command;
         JoinGameCommand.class,
         MoveCommand.class,
         HelpCommand.class,
-        ExitCommand.class
+        ExitCommand.class,
+        CreateGameCommand.class
 })
 public class MainCommand implements Runnable {
     protected ICommunication communication;
