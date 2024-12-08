@@ -6,16 +6,14 @@ import com.michal.JsonBuilder;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+import picocli.CommandLine.ParentCommand;
 
 @Command(name = "move", description = "Move to a specific position")
 
-public class MoveCommand extends AbstractCommand {
+public class MoveCommand implements Runnable {
 
-    private Display display;
-
-    public MoveCommand(ICommunication communication, Display display) {
-        super(communication, display);
-    }
+    @ParentCommand
+    private MainCommand parent;
 
     @Parameters(index = "0", description = "X coordinate")
     private int x;
@@ -25,6 +23,8 @@ public class MoveCommand extends AbstractCommand {
 
     @Override
     public void run() {
+        Display display = parent.getDisplay();
+        ICommunication communication = parent.getCommunication();
         if (!communication.isConnected()) {
             display.displayMessage("Not connected to a server");
             return;

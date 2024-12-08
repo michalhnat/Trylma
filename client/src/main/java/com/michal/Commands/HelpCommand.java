@@ -4,15 +4,17 @@ import com.michal.Display;
 import com.michal.ICommunication;
 
 import picocli.CommandLine.Command;
+import picocli.CommandLine.ParentCommand;
 
 @Command(name = "help", description = "Displays help message")
-public class HelpCommand extends AbstractCommand {
-    public HelpCommand(ICommunication communication, Display display) {
-        super(communication, display);
-    }
+public class HelpCommand implements Runnable {
+
+    @ParentCommand
+    private MainCommand parent;
 
     @Override
     public void run() {
+        Display display = parent.getDisplay();
         display.displayMessage("Available commands:");
         display.displayMessage("help - displays this message");
         display.displayMessage("connect <address> <port> - connects to the server");

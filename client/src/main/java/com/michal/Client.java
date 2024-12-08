@@ -29,8 +29,6 @@ public class Client {
                     }
                 }
 
-                display.displayMessage("Connected to server");
-
                 messageHandler.setDisplay(display);
                 messageHandler.setObjectInputStream(communication.getInputStream());
 

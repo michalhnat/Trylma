@@ -2,12 +2,7 @@ package com.michal;
 
 import java.util.Scanner;
 
-import com.michal.Commands.ConnectToServerCommand;
-import com.michal.Commands.ExitCommand;
-import com.michal.Commands.HelpCommand;
-import com.michal.Commands.JoinGameCommand;
-import com.michal.Commands.ListGamesCommand;
-import com.michal.Commands.MoveCommand;
+import com.michal.Commands.MainCommand;
 
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
@@ -20,22 +15,17 @@ public class CLIInputHandler implements Runnable {
     private Display display;
 
     public CLIInputHandler(ICommunication communication, Display display) {
-        this.commandLine = new CommandLine(this);
+        MainCommand mainCommand = new MainCommand(communication, display);
+        this.commandLine = new CommandLine(mainCommand);
         this.scanner = new Scanner(System.in);
         this.communication = communication;
         this.display = display;
-        commandLine.addSubcommand("connect", new ConnectToServerCommand(communication, display));
-        commandLine.addSubcommand("list", new ListGamesCommand(communication, display));
-        commandLine.addSubcommand("join", new JoinGameCommand(communication, display));
-        commandLine.addSubcommand("move", new MoveCommand(communication, display));
-        commandLine.addSubcommand("help", new HelpCommand(communication, display));
-        commandLine.addSubcommand("exit", new ExitCommand(communication, display));
     }
 
     @Override
     public void run() {
         while (true) {
-            System.out.print(">");
+            display.displayMessage(">", false);
             String input = scanner.nextLine().trim();
 
             if (input.isEmpty()) {
@@ -45,7 +35,7 @@ public class CLIInputHandler implements Runnable {
             try {
                 commandLine.execute(input.split(" "));
             } catch (Exception e) {
-                e.printStackTrace();
+                display.displayError("Invalid command");
             }
         }
     }

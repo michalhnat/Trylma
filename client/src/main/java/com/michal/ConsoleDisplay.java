@@ -2,8 +2,17 @@ package com.michal;
 
 public class ConsoleDisplay implements Display {
     @Override
+    public void displayMessage(String message, boolean newLine) {
+        if (newLine) {
+            System.out.println(message);
+        } else {
+            System.out.print(message);
+        }
+    }
+
+    @Override
     public void displayMessage(String message) {
-        System.out.println(message);
+        displayMessage(message, true);
     }
 
     @Override

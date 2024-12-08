@@ -4,16 +4,17 @@ import com.michal.Display;
 import com.michal.ICommunication;
 
 import picocli.CommandLine.Command;
+import picocli.CommandLine.ParentCommand;
 
 @Command(name = "exit", description = "Exit the application")
-public class ExitCommand extends AbstractCommand {
+public class ExitCommand implements Runnable {
 
-    public ExitCommand(ICommunication communication, Display display) {
-        super(communication, display);
-    }
+    @ParentCommand
+    private MainCommand parent;
 
     @Override
     public void run() {
+        Display display = parent.getDisplay();
         display.displayMessage("Exiting the application");
         System.exit(0);
     }

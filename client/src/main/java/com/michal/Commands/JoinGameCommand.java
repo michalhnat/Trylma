@@ -7,19 +7,21 @@ import com.michal.Exceptions.FailedSendingMessageToServer;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
+import picocli.CommandLine.ParentCommand;
 
 @Command(name = "join", description = "Join a game")
-public class JoinGameCommand extends AbstractCommand {
+public class JoinGameCommand implements Runnable {
 
-    public JoinGameCommand(ICommunication communication, Display display) {
-        super(communication, display);
-    }
+    @ParentCommand
+    private MainCommand parent;
 
     @Parameters(index = "0", description = "Game ID")
     private int gameID;
 
     @Override
     public void run() {
+        Display display = parent.getDisplay();
+        ICommunication communication = parent.getCommunication();
         if (!communication.isConnected()) {
             display.displayError("Not connected to a server");
             return;

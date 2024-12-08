@@ -5,17 +5,19 @@ import com.michal.ICommunication;
 import com.michal.JsonBuilder;
 
 import picocli.CommandLine.Command;
+import picocli.CommandLine.ParentCommand;
 
 @Command(name = "list", description = "List all games")
 
-public class ListGamesCommand extends AbstractCommand {
+public class ListGamesCommand implements Runnable {
 
-    public ListGamesCommand(ICommunication communication, Display display) {
-        super(communication, display);
-    }
+    @ParentCommand
+    private MainCommand parent;
 
     @Override
     public void run() {
+        Display display = parent.getDisplay();
+        ICommunication communication = parent.getCommunication();
         if (!communication.isConnected()) {
             display.displayError("Not connected to a server");
             return;
