@@ -5,6 +5,7 @@ import com.michal.ICommunication;
 import com.michal.Exceptions.FailedSendingMessageToServer;
 import com.michal.Utils.JsonBuilder;
 
+import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
 
@@ -13,6 +14,9 @@ public class CreateGameCommand implements Runnable {
 
     @ParentCommand
     private MainCommand parent;
+
+    @CommandLine.Parameters(index = "0", description = "players")
+    private int players;
 
     @Override
     public void run() {
@@ -23,7 +27,10 @@ public class CreateGameCommand implements Runnable {
             return;
         }
         try {
-            String jsonMessage = JsonBuilder.setBuilder("create").build();
+            String jsonMessage = JsonBuilder
+                    .setBuilder("create")
+                    .setArgument("players", players)
+                    .build();
             communication.sendMessage(jsonMessage);
         } catch (FailedSendingMessageToServer e) {
             display.displayError(e.getMessage());
