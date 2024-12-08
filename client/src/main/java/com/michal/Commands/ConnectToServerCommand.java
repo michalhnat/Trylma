@@ -1,9 +1,10 @@
 package com.michal.Commands;
 
-import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 
+import com.michal.Display;
 import com.michal.ICommunication;
+import com.michal.Exceptions.FailedConnectingToServerException;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
@@ -17,22 +18,26 @@ public class ConnectToServerCommand extends AbstractCommand {
     @Parameters(index = "1", description = "Server port")
     private int serverPort;
 
-    public ConnectToServerCommand(ICommunication communication) {
-        super(communication);
+    private Display display;
+
+    public ConnectToServerCommand(ICommunication communication, Display display) {
+        super(communication, display);
     }
 
     @Override
     public void run() {
         if (communication.isConnected()) {
-            System.out.println("Already connected to a server");
+            display.displayMessage("Already connected to a server");
             return;
         }
         try {
-            System.out.println("Connecting to server " + serverIPString + " on port " + serverPort);
+            display.displayMessage("Connecting to server " + serverIPString + " on port " + serverPort);
             InetAddress serverIP = InetAddress.getByName(serverIPString);
             communication.connectToServer(serverIP, serverPort);
+        } catch (FailedConnectingToServerException e) {
+            display.displayError("Failed to connect to server");
         } catch (Exception e) {
-            e.printStackTrace();
+            display.displayError("Failed to connect to server");
         }
     }
 

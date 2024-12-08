@@ -11,6 +11,17 @@ public abstract class ServerMessageHandler implements Runnable {
         this.in = in;
     }
 
+    public ServerMessageHandler() {
+    }
+
+    public void setDisplay(Display display) {
+        this.display = display;
+    }
+
+    public void setObjectInputStream(ObjectInputStream in) {
+        this.in = in;
+    }
+
     public abstract void hanldeMessage(String message);
 
     public abstract void run();

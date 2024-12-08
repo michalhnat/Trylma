@@ -8,19 +8,13 @@ public class ConsoleDisplay implements Display {
 
     @Override
     public void displayError(String error) {
-        System.err.println(error);
+        System.err.println("\u001B[31m" + error + "\u001B[0m");
     }
 
     @Override
     public void displayBoard() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'displayBoard'");
-    }
-
-    @Override
-    public void displayInfo(String message) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'displayInfo'");
     }
 
 }

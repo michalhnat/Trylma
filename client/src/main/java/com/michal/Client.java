@@ -7,40 +7,42 @@ public class Client {
     private CLIInputHandler inputHandler;
 
     public Client(ICommunication communication, Display display,
-            CLIInputHandler inputHandler) {
+            CLIInputHandler inputHandler, ServerMessageHandler messageHandler) {
         this.communication = communication;
         this.display = display;
         this.inputHandler = inputHandler;
+        this.messageHandler = messageHandler;
     }
 
     public void run() {
-        Thread inputHandlerThread = new Thread(inputHandler);
-        display.displayMessage("Please connect to server using 'connect' command");
+        try {
+            Thread inputHandlerThread = new Thread(inputHandler);
+            display.displayMessage("Please connect to server using 'connect' command");
 
-        Thread connectionCheckThread = new Thread(() -> {
-            while (!communication.isConnected()) {
-                try {
-                    Thread.sleep(1000); // Check every second
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    return;
+            Thread connectionCheckThread = new Thread(() -> {
+                while (!communication.isConnected()) {
+                    try {
+                        Thread.sleep(1000); // Check every second
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                        return;
+                    }
                 }
-            }
 
-            // Once connected, start message handler
-            Thread messageHandlerThread = new Thread(new MessageHandler(display, communication.getInputStream()));
-            messageHandlerThread.start();
-        });
+                display.displayMessage("Connected to server");
 
-        connectionCheckThread.start();
-        inputHandlerThread.start();
+                messageHandler.setDisplay(display);
+                messageHandler.setObjectInputStream(communication.getInputStream());
 
-        // try {
-        // messageHandlerThread.join();
-        // inputHandlerThread.join();
-        // } catch (InterruptedException e) {
-        // // display.showMessage("Thread interrupted: " + e.getMessage());
-        // Thread.currentThread().interrupt();
-        // }
+                Thread messageHandlerThread = new Thread(messageHandler);
+                messageHandlerThread.start();
+            });
+
+            connectionCheckThread.start();
+            inputHandlerThread.start();
+
+        } catch (Exception e) {
+            display.displayError("An unexpected error occurred");
+        }
     }
 }

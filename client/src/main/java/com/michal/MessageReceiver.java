@@ -3,9 +3,12 @@ package com.michal;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-public class MessageHandler extends ServerMessageHandler {
-    public MessageHandler(Display display, ObjectInputStream in) {
+public class MessageReceiver extends ServerMessageHandler {
+    public MessageReceiver(Display display, ObjectInputStream in) {
         super(display, in);
+    }
+
+    public MessageReceiver() {
     }
 
     @Override

@@ -1,0 +1,178 @@
+@startuml
+
+scale max 4096x4096
+
+' interface Runnable
+
+' class Exception
+
+package "com.michal" {
+    class App {
+        + main(String[] args)
+    }
+
+    class Client {
+        - communication : ICommunication
+        - messageHandler : ServerMessageHandler
+        - display : Display
+        - inputHandler : CLIInputHandler
+        + Client(ICommunication communication, Display display, CLIInputHandler inputHandler, ServerMessageHandler messageHandler)
+        + run()
+    }
+
+
+    package "Display_section"{
+    interface Display {
+        + displayBoard()
+        + displayMessage(String message)
+        + displayError(String message)
+    }
+
+    class ConsoleDisplay implements Display {
+        + displayBoard()
+        + displayMessage(String message)
+        + displayError(String message)
+    }
+    }
+
+    package "Communication_section"{
+    interface ICommunication {
+        + connectToServer(InetAddress address, int port)
+        + sendMessage(String message)
+        + getInputStream() : ObjectInputStream
+        + isConnected() : boolean
+    }
+
+    class SocketCommunication implements ICommunication {
+        - socket : Socket
+        - in : ObjectInputStream
+        - out : ObjectOutputStream
+        - connected : boolean
+        + SocketCommunication()
+        + SocketCommunication(InetAddress address, int port)
+        + connectToServer(InetAddress address, int port)
+        + sendMessage(String message)
+        + getInputStream() : ObjectInputStream
+        + isConnected() : boolean
+        - startConnectionMonitor()
+    }
+    }
+
+    abstract class ServerMessageHandler implements Runnable {
+        - display : Display
+        - in : ObjectInputStream
+        + ServerMessageHandler(Display display, ObjectInputStream in)
+        + setDisplay(Display display)
+        + setObjectInputStream(ObjectInputStream in)
+        # handleMessage(String message)
+        + run()
+    }
+
+    class MessageReceiver extends ServerMessageHandler {
+        + MessageReceiver()
+        + MessageReceiver(Display display, ObjectInputStream in)
+        + handleMessage(String message)
+        + run()
+    }
+
+    class CLIInputHandler implements Runnable {
+        - commandLine : CommandLine
+        - scanner : Scanner
+        - communication : ICommunication
+        - display : Display
+        + CLIInputHandler(ICommunication communication, Display display)
+        + run()
+    }
+}
+
+package "com.michal.Commands" {
+    abstract class AbstractCommand implements Runnable {
+        - communication : ICommunication
+        - display : Display
+        + AbstractCommand(ICommunication communication, Display display)
+        + run()
+    }
+
+    class ConnectToServerCommand extends AbstractCommand {
+        - serverIPString : String
+        - serverPort : int
+        + ConnectToServerCommand(ICommunication communication, Display display)
+        + run()
+    }
+
+    class JoinGameCommand extends AbstractCommand {
+        - gameID : int
+        + JoinGameCommand(ICommunication communication, Display display)
+        + run()
+    }
+
+    class ListGamesCommand extends AbstractCommand {
+        + ListGamesCommand(ICommunication communication, Display display)
+        + run()
+    }
+
+    class MoveCommand extends AbstractCommand {
+        + MoveCommand(ICommunication communication, Display display)
+        + run()
+    }
+
+    class HelpCommand extends AbstractCommand {
+        + HelpCommand(ICommunication communication, Display display)
+        + run()
+    }
+
+    class ExitCommand extends AbstractCommand {
+        + ExitCommand(ICommunication communication, Display display)
+        + run()
+    }
+}
+
+package "com.michal.Exceptions" {
+    class FailedConnectingToServerException extends Exception {
+        + FailedConnectingToServerException(String message)
+    }
+
+    class FailedSendingMessageToServer extends Exception {
+        + FailedSendingMessageToServer(String message)
+    }
+
+    class GameNotFoundException extends Exception {
+        + GameNotFoundException(String message)
+    }
+
+    class InvalidMoveException extends Exception {
+        + InvalidMoveException(String message)
+    }
+
+    class NotConnectedException extends Exception {
+        + NotConnectedException(String message)
+    }
+}
+
+' ICommunication <|.. SocketCommunication
+' Display <|.. ConsoleDisplay
+' ServerMessageHandler <|-- MessageReceiver
+' Runnable <|.. CLIInputHandler
+' Runnable <|.. AbstractCommand
+' AbstractCommand <|-- ConnectToServerCommand
+' AbstractCommand <|-- JoinGameCommand
+' AbstractCommand <|-- ListGamesCommand
+' AbstractCommand <|-- MoveCommand
+' AbstractCommand <|-- HelpCommand
+' AbstractCommand <|-- ExitCommand
+
+Client --> ICommunication
+Client --> ServerMessageHandler
+Client --> Display
+Client --> CLIInputHandler
+
+CLIInputHandler --> ConnectToServerCommand
+CLIInputHandler --> JoinGameCommand
+CLIInputHandler --> ListGamesCommand
+CLIInputHandler --> MoveCommand
+CLIInputHandler --> HelpCommand
+CLIInputHandler --> ExitCommand
+
+App --> Client
+
+@enduml

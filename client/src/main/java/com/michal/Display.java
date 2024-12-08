@@ -7,5 +7,4 @@ public interface Display {
 
     void displayError(String message);
 
-    void displayInfo(String message);
 }

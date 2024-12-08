@@ -1,8 +1,8 @@
 package com.michal.Commands;
 
-import java.io.ObjectOutputStream;
-
+import com.michal.Display;
 import com.michal.ICommunication;
+import com.michal.JsonBuilder;
 
 import picocli.CommandLine.Command;
 
@@ -10,16 +10,21 @@ import picocli.CommandLine.Command;
 
 public class ListGamesCommand extends AbstractCommand {
 
-    public ListGamesCommand(ICommunication communication) {
-        super(communication);
+    public ListGamesCommand(ICommunication communication, Display display) {
+        super(communication, display);
     }
 
     @Override
     public void run() {
+        if (!communication.isConnected()) {
+            display.displayError("Not connected to a server");
+            return;
+        }
         try {
-            communication.sendMessage("list");
+            String jsonMessage = JsonBuilder.setBuilder("list").build();
+            communication.sendMessage(jsonMessage);
         } catch (Exception e) {
-            e.printStackTrace();
+            display.displayError("Failed to list games");
         }
     }
 }

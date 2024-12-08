@@ -1,17 +1,15 @@
 package com.michal.Commands;
 
-import java.io.ObjectOutputStream;
-
+import com.michal.Display;
 import com.michal.ICommunication;
-
-import picocli.CommandLine.Command;
-import picocli.CommandLine.Parameters;
 
 public abstract class AbstractCommand implements Runnable {
     protected ICommunication communication;
+    protected Display display;
 
-    public AbstractCommand(ICommunication communication) {
+    public AbstractCommand(ICommunication communication, Display display) {
         this.communication = communication;
+        this.display = display;
     }
 
     public abstract void run();
