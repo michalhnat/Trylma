@@ -30,4 +30,8 @@ public class GameQueue {
     public boolean checkIfPlayerInQueue(ClientHandler player) {
         return players.contains(player);
     }
+
+    public void removePlayer(ClientHandler player) {
+        players.remove(player);
+    }
 }

@@ -27,10 +27,8 @@ public class CreateGameCommand implements Runnable {
             return;
         }
         try {
-            String jsonMessage = JsonBuilder
-                    .setBuilder("create")
-                    .setPayloadArgument("players", players)
-                    .build();
+            String jsonMessage =
+                    JsonBuilder.setBuilder("create").setPayloadArgument("players", players).build();
             communication.sendMessage(jsonMessage);
         } catch (FailedSendingMessageToServer e) {
             display.displayError(e.getMessage());

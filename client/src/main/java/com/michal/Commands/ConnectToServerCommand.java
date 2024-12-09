@@ -26,7 +26,8 @@ public class ConnectToServerCommand implements Runnable {
             return;
         }
         try {
-            display.displayMessage("Connecting to server " + serverIPString + " on port " + serverPort);
+            display.displayMessage(
+                    "Connecting to server " + serverIPString + " on port " + serverPort);
             InetAddress serverIP = InetAddress.getByName(serverIPString);
             communication.connectToServer(serverIP, serverPort);
         } catch (Exception e) {

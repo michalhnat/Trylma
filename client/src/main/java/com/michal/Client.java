@@ -6,8 +6,8 @@ public class Client {
     private Display display;
     private CLIInputHandler inputHandler;
 
-    public Client(ICommunication communication, Display display,
-            CLIInputHandler inputHandler, ServerMessageHandler messageHandler) {
+    public Client(ICommunication communication, Display display, CLIInputHandler inputHandler,
+            ServerMessageHandler messageHandler) {
         this.communication = communication;
         this.display = display;
         this.inputHandler = inputHandler;

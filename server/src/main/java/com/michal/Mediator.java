@@ -6,7 +6,7 @@ public interface Mediator {
 
     public void handleListGames(ClientHandler clientHandler);
 
-    public void handleJoinGame(ClientHandler clientHandler, UUID gameId);
+    public void handleJoinGame(ClientHandler clientHandler, int gameId);
 
     public void handleCreateGame(ClientHandler clientHandler, int players);
 

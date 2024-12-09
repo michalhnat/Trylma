@@ -5,15 +5,9 @@ import com.michal.ICommunication;
 
 import picocli.CommandLine.Command;
 
-@Command(name = "", subcommands = {
-        ConnectToServerCommand.class,
-        ListGamesCommand.class,
-        JoinGameCommand.class,
-        MoveCommand.class,
-        HelpCommand.class,
-        ExitCommand.class,
-        CreateGameCommand.class
-})
+@Command(name = "",
+        subcommands = {ConnectToServerCommand.class, ListGamesCommand.class, JoinGameCommand.class,
+                MoveCommand.class, HelpCommand.class, ExitCommand.class, CreateGameCommand.class})
 public class MainCommand implements Runnable {
     protected ICommunication communication;
     protected Display display;
@@ -32,6 +26,5 @@ public class MainCommand implements Runnable {
     }
 
     @Override
-    public void run() {
-    }
+    public void run() {}
 }

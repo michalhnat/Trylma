@@ -30,10 +30,8 @@ public class MoveCommand implements Runnable {
             return;
         }
         try {
-            String jsonMessage = JsonBuilder.setBuilder("move")
-                    .setPayloadArgument("x", x)
-                    .setPayloadArgument("y", y)
-                    .build();
+            String jsonMessage = JsonBuilder.setBuilder("move").setPayloadArgument("x", x)
+                    .setPayloadArgument("y", y).build();
             communication.sendMessage(jsonMessage);
         } catch (Exception e) {
             display.displayMessage("Failed to move");

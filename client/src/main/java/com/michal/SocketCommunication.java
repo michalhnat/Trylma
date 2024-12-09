@@ -20,11 +20,13 @@ public class SocketCommunication implements ICommunication {
         this.connected = false;
     }
 
-    public SocketCommunication(InetAddress address, int port) throws FailedConnectingToServerException {
+    public SocketCommunication(InetAddress address, int port)
+            throws FailedConnectingToServerException {
         connectToServer(address, port);
     }
 
-    public void connectToServer(InetAddress address, int port) throws FailedConnectingToServerException {
+    public void connectToServer(InetAddress address, int port)
+            throws FailedConnectingToServerException {
         try {
             this.socket = new Socket(address, port);
             this.out = new ObjectOutputStream(socket.getOutputStream());
@@ -32,7 +34,8 @@ public class SocketCommunication implements ICommunication {
             this.connected = true;
             startConnectionMonitor();
         } catch (IOException e) {
-            throw new FailedConnectingToServerException("Failed to connect to server: " + e.getMessage());
+            throw new FailedConnectingToServerException(
+                    "Failed to connect to server: " + e.getMessage());
         }
     }
 
@@ -40,7 +43,8 @@ public class SocketCommunication implements ICommunication {
         try {
             out.writeObject(message);
         } catch (IOException e) {
-            throw new FailedSendingMessageToServer("Failed to send message to server: " + e.getMessage());
+            throw new FailedSendingMessageToServer(
+                    "Failed to send message to server: " + e.getMessage());
         }
     }
 

@@ -8,8 +8,7 @@ public class JsonDeserializer {
     private static final Gson gson = new Gson();
     private static JsonDeserializer instance;
 
-    private JsonDeserializer() {
-    }
+    private JsonDeserializer() {}
 
     public static JsonDeserializer getInstance() {
         if (instance == null) {
