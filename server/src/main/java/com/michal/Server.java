@@ -131,7 +131,10 @@ public class Server implements Mediator {
         private final int id;
         private final int maxPlayers;
         private final List<ClientHandler> players;
+        private int activePlayerIndex;
         private final Board board;
+        private final Random rand = new Random();
+        private boolean inProgress;
         // TODO Ustalenie kolejności graczy
 
         public Game(int maxPlayers) {
@@ -139,6 +142,7 @@ public class Server implements Mediator {
             this.maxPlayers = maxPlayers;
             this.players = new ArrayList<>();
             this.board = new Board();
+            this.inProgress = false;
         }
 
         public int getId() {
@@ -154,9 +158,15 @@ public class Server implements Mediator {
         }
 
         public void move(ClientHandler player, int start, int end) {
-            // TODO sprawdzenie czy ruch jest prawidlowy
-            // TODO Wykonanie ruchu w tablicy (board.move(start, end))
-            broadcastMessage("A player has moved from " + start + " to " + end + ".");
+            if (player == players.get(activePlayerIndex)) {
+                // TODO Wykonanie ruchu w tablicy (board.move(start, end))
+                broadcastMessage("A player has moved from " + start + " to " + end + ".");
+                activePlayerIndex = (activePlayerIndex + 1) % maxPlayers; // Pora na ruch kolejnego gracza
+                players.get(activePlayerIndex).send("Your turn to move");
+            }
+            else {
+                player.send("Please wait for your turn.");
+            }
         }
 
         public void broadcastMessage(String msg) {
@@ -168,11 +178,25 @@ public class Server implements Mediator {
         public boolean addPlayer(ClientHandler player) {
             if (players.size() < maxPlayers) {
                 players.add(player);
+
+                // Jeśli dodaliśmy ostatniego gracza, zaczynamy gre
+                if (players.size() == maxPlayers) {
+                    startGame();
+                }
+
+
                 return true;
             } else {
                 System.out.println("Game ID " + id + " is full.");
                 return false;
             }
+        }
+
+        public void startGame() {
+            broadcastMessage("All players have joined, starting the game...");
+            activePlayerIndex = rand.nextInt(maxPlayers); // Losujemy indeks zaczynającego gracza
+            inProgress = true;
+            players.get(activePlayerIndex).send("Your turn to move");
         }
     }
 
