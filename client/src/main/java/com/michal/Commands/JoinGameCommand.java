@@ -28,7 +28,7 @@ public class JoinGameCommand implements Runnable {
         }
         try {
             String jsonMessage = JsonBuilder.setBuilder("join")
-                    .setArgument("gameID", gameID)
+                    .setPayloadArgument("gameID", gameID)
                     .build();
 
             communication.sendMessage(jsonMessage);

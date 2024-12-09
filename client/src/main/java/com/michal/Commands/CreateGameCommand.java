@@ -29,7 +29,7 @@ public class CreateGameCommand implements Runnable {
         try {
             String jsonMessage = JsonBuilder
                     .setBuilder("create")
-                    .setArgument("players", players)
+                    .setPayloadArgument("players", players)
                     .build();
             communication.sendMessage(jsonMessage);
         } catch (FailedSendingMessageToServer e) {

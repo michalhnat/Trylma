@@ -13,7 +13,7 @@ public class MessageReceiver extends ServerMessageHandler {
 
     @Override
     public void hanldeMessage(String message) {
-        display.displayMessage("\n" + message + "\n");
+        display.displayMessage("\n" + message);
     }
 
     @Override
@@ -25,8 +25,11 @@ public class MessageReceiver extends ServerMessageHandler {
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
+                display.displayMessage("Server has disconnected");
+                break;
             }
+
         }
     }
 }

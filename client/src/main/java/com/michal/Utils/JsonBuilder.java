@@ -4,9 +4,11 @@ import com.google.gson.JsonObject;
 
 public class JsonBuilder {
     private JsonObject jsonObject;
+    private JsonObject payload;
 
     private JsonBuilder(String command) {
         jsonObject = new JsonObject();
+        payload = new JsonObject();
         jsonObject.addProperty("command", command);
     }
 
@@ -24,7 +26,18 @@ public class JsonBuilder {
         return this;
     }
 
+    public JsonBuilder setPayloadArgument(String key, int value) {
+        payload.addProperty(key, value);
+        return this;
+    }
+
+    public JsonBuilder setPayloadArgument(String key, String value) {
+        payload.addProperty(key, value);
+        return this;
+    }
+
     public String build() {
+        jsonObject.add("payload", payload);
         return jsonObject.toString();
     }
 }
