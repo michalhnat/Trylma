@@ -5,8 +5,8 @@ import com.michal.ICommunication;
 import com.michal.Exceptions.FailedSendingMessageToServer;
 import com.michal.Utils.JsonBuilder;
 
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
+import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
 @Command(name = "create", description = "Create a game")
@@ -15,7 +15,7 @@ public class CreateGameCommand implements Runnable {
     @ParentCommand
     private MainCommand parent;
 
-    @CommandLine.Parameters(index = "0", description = "players")
+    @Parameters(index = "0", description = "players")
     private int players;
 
     @Override
