@@ -21,7 +21,11 @@ public class Player {
     }
 
     public void sendMessage(String message) {
-        clientHandler.send(message);
+        clientHandler.sendMessage(message);
+    }
+
+    public void sendError(String message) {
+        clientHandler.sendError(message);
     }
 
     public UUID getId() {

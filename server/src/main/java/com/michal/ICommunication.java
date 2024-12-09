@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 
 public interface ICommunication {
     void sendMessage(String msg, ObjectOutputStream out);
+    void sendError(String msg, ObjectOutputStream out);
 
     void receive(String msg);
 }

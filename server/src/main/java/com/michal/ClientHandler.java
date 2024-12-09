@@ -5,13 +5,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
-import java.util.UUID;
+import java.util.logging.Logger;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.michal.Game.GameSession;
 import com.michal.Game.Player;
 import com.michal.Utils.JsonDeserializer;
+import com.michal.Utils.MyLogger;
 
 public class ClientHandler implements Runnable {
     private final Socket socket;
@@ -21,6 +22,8 @@ public class ClientHandler implements Runnable {
     private ObjectOutputStream out;
     private Player player;
     private boolean inGame;
+    Logger logger = MyLogger.logger;
+    static {MyLogger.loggerConfig();}
 
     public ClientHandler(Socket socket, Mediator mediator) {
         this.socket = socket;
@@ -29,8 +32,12 @@ public class ClientHandler implements Runnable {
         this.inGame = false;
     }
 
-    public void send(String msg) {
+    public void sendMessage(String msg) {
         communication.sendMessage(msg, out);
+    }
+
+    public void sendError(String msg) {
+        communication.sendError(msg, out);
     }
 
     public Player getPlayer() {
@@ -59,7 +66,7 @@ public class ClientHandler implements Runnable {
             String errorMessage = deserializer.getErrorMessage(msg);
 
             if (isError) {
-                System.err.println("Error from client: " + errorMessage);
+                logger.warning("Error from client: " + errorMessage);
                 return;
             }
 
@@ -81,17 +88,17 @@ public class ClientHandler implements Runnable {
                     if (isInGame()) {
                         mediator.handleMove(this, x, y);
                     } else {
-                        send("You are not part of any game session.");
+                        sendError("You are not part of any game session.");
                     }
                     break;
                 default:
-                    send("Unsupported command: " + command);
+                    sendError("Unsupported command: " + command);
                     break;
             }
         } catch (JsonSyntaxException e) {
-            send("Invalid JSON format: " + e.getMessage());
+            sendError("Invalid JSON format: " + e.getMessage());
         } catch (Exception e) {
-            send("Error processing message: " + e.getMessage());
+            sendError("Error processing message: " + e.getMessage());
         }
     }
 
@@ -101,24 +108,24 @@ public class ClientHandler implements Runnable {
             this.out = new ObjectOutputStream(socket.getOutputStream());
             this.in = new ObjectInputStream(socket.getInputStream());
 
-            System.out.println("Client connected: " + socket.getInetAddress());
+            logger.info("Client connected: " + socket.getInetAddress());
 
             Object message;
             while ((message = in.readObject()) != null) {
                 if (message instanceof String) {
                     String textMessage = (String) message;
-                    System.out.println("Received: " + textMessage);
+                    logger.info("Received: " + textMessage);
 
                     handleMessage(textMessage);
                 } else {
-                    System.err.println(
+                    logger.warning(
                             "Received unsupported message type: " + message.getClass().getName());
                 }
             }
         } catch (IOException e) {
-            System.err.println("Client disconnected");
+            logger.warning("Client disconnected");
         } catch (ClassNotFoundException e) {
-            System.err.println("Error reading object from client: " + e.getMessage());
+            logger.warning("Error reading object from client: " + e.getMessage());
         } finally {
             mediator.removeClient(this);
             if (player != null && inGame) {
@@ -137,7 +144,7 @@ public class ClientHandler implements Runnable {
             try {
                 socket.close();
             } catch (IOException e) {
-                System.err.println("Error closing socket: " + e.getMessage());
+                logger.warning("Error closing socket: " + e.getMessage());
             }
         }
     }

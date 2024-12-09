@@ -26,6 +26,7 @@ public class Server implements Mediator {
             serverSocket = new ServerSocket(PORT);
             System.out.println("Server started on port " + PORT);
 
+
             while (true) {
                 var clientSocket = serverSocket.accept();
                 var clientHandler = new ClientHandler(clientSocket, this);
@@ -44,7 +45,7 @@ public class Server implements Mediator {
     @Override
     public void handleCreateGame(ClientHandler clientHandler, int players) {
         if (clientHandler.isInGame()) {
-            clientHandler.send("Error: You are already in a game session.");
+            clientHandler.sendError("Error: You are already in a game session.");
             return;
         }
 
@@ -55,16 +56,16 @@ public class Server implements Mediator {
             synchronized (gameSessions) {
                 gameSessions.add(session);
             }
-            clientHandler.send("Created a new game session with ID: " + session.getSessionId());
+            clientHandler.sendMessage("Created a new game session with ID: " + session.getSessionId());
         } catch (IllegalArgumentException e) {
-            clientHandler.send("Failed to create game session: " + e.getMessage());
+            clientHandler.sendError("Failed to create game session: " + e.getMessage());
         }
     }
 
     @Override
     public void handleJoinGame(ClientHandler clientHandler, int gameId) {
         if (clientHandler.isInGame()) {
-            clientHandler.send("Error: You are already in a game session.");
+            clientHandler.sendError("Error: You are already in a game session.");
             return;
         }
 
@@ -78,20 +79,20 @@ public class Server implements Mediator {
                 session.addPlayer(player);
                 clientHandler.setPlayer(player);
                 clientHandler.setInGame(true);
-                clientHandler.send("Joined game session " + gameId + " with assigned color: "
+                clientHandler.sendMessage("Joined game session " + gameId + " with assigned color: "
                         + player.getColor());
             } catch (IllegalArgumentException e) {
-                clientHandler.send("Could not join game session " + gameId + ": " + e.getMessage());
+                clientHandler.sendError("Could not join game session " + gameId + ": " + e.getMessage());
             }
         } else {
-            clientHandler.send("Game session " + gameId + " not found.");
+            clientHandler.sendError("Game session " + gameId + " not found.");
         }
     }
 
     @Override
     public void handleMove(ClientHandler clientHandler, int x, int y) {
         if (!clientHandler.isInGame()) {
-            clientHandler.send("You are not part of any game session.");
+            clientHandler.sendError("You are not part of any game session.");
             return;
         }
 
@@ -103,7 +104,7 @@ public class Server implements Mediator {
             GameSession session = sessionOptional.get();
             session.handleMove(player, new Position(x, y));
         } else {
-            clientHandler.send("You are not part of any game session.");
+            clientHandler.sendError("You are not part of any game session.");
         }
     }
 
@@ -111,11 +112,11 @@ public class Server implements Mediator {
     public void handleListGames(ClientHandler clientHandler) {
         synchronized (gameSessions) {
             if (gameSessions.isEmpty()) {
-                clientHandler.send("No active game sessions.");
+                clientHandler.sendError("No active game sessions.");
                 return;
             }
             for (GameSession session : gameSessions) {
-                clientHandler.send("Game Session " + session.getSessionId() + ": "
+                clientHandler.sendMessage("Game Session " + session.getSessionId() + ": "
                         + session.getPlayers().size() + "/" + session.getGame().getMaxPlayers()
                         + " players.");
             }

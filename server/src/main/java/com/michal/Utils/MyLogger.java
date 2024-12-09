@@ -1,11 +1,11 @@
-package com.michal;
+package com.michal.Utils;
 
 import java.io.IOException;
 import java.util.logging.*;
 
 public class MyLogger {
     private MyLogger() {
-        throw new InstantiationError("MyLogger is a full statc class");
+        throw new InstantiationError("MyLogger is a full static class");
     }
 
     public static final Logger logger = Logger.getGlobal();

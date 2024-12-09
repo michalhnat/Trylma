@@ -93,7 +93,7 @@ public class GameSession {
 
     public void handleMove(Player player, Position newPosition) {
         if (!game.isInProgress()) {
-            player.sendMessage("Game is not in progress.");
+            player.sendError("Game is not in progress.");
             return;
         }
 
@@ -103,7 +103,7 @@ public class GameSession {
                     + newPosition.getX() + ", " + newPosition.getY() + ").");
             promptNextPlayer();
         } catch (Exception e) {
-            player.sendMessage("Invalid move: " + e.getMessage());
+            player.sendError("Invalid move: " + e.getMessage());
         }
     }
 
