@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.michal.Game.GameInfo;
 import com.michal.Game.GameSession;
 import com.michal.Game.Player;
 import com.michal.Utils.JsonDeserializer;
@@ -20,10 +21,12 @@ public class ClientHandler implements Runnable {
     private final ICommunication communication;
     private ObjectInputStream in;
     private ObjectOutputStream out;
-    private Player player;
-    private boolean inGame;
+    private volatile Player player;
+    private volatile boolean inGame;
     Logger logger = MyLogger.logger;
-    static {MyLogger.loggerConfig();}
+    static {
+        MyLogger.loggerConfig();
+    }
 
     public ClientHandler(Socket socket, Mediator mediator) {
         this.socket = socket;
@@ -32,27 +35,31 @@ public class ClientHandler implements Runnable {
         this.inGame = false;
     }
 
-    public void sendMessage(String msg) {
+    public synchronized void sendMessage(String msg) {
         communication.sendMessage(msg, out);
     }
 
-    public void sendError(String msg) {
+    public synchronized void sendListMessage(List<GameInfo> list) {
+        communication.sendListMessage(list, out);
+    }
+
+    public synchronized void sendError(String msg) {
         communication.sendError(msg, out);
     }
 
-    public Player getPlayer() {
+    public synchronized Player getPlayer() {
         return player;
     }
 
-    public void setPlayer(Player player) {
+    public synchronized void setPlayer(Player player) {
         this.player = player;
     }
 
-    public boolean isInGame() {
+    public synchronized boolean isInGame() {
         return inGame;
     }
 
-    public void setInGame(boolean inGame) {
+    public synchronized void setInGame(boolean inGame) {
         this.inGame = inGame;
     }
 
@@ -129,7 +136,6 @@ public class ClientHandler implements Runnable {
         } finally {
             mediator.removeClient(this);
             if (player != null && inGame) {
-                // Remove player from their game session
                 synchronized (mediator) {
                     List<GameSession> sessions = ((Server) mediator).getGameSessions();
                     for (GameSession session : sessions) {

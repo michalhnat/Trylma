@@ -1,10 +1,10 @@
 package com.michal.Game;
 
-public class Pone {
+public class Pawn {
     private String color;
     private Position position;
 
-    public Pone(String color, Position position) {
+    public Pawn(String color, Position position) {
         this.color = color;
         this.position = position;
     }

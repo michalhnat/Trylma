@@ -1,19 +1,25 @@
 package com.michal.Utils;
 
+import java.util.List;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.michal.Game.GameInfo;
 
 public class JsonBuilder {
     private JsonObject jsonObject;
     private JsonObject payload;
+    private JsonArray payloadArray;
+    private boolean isArrayPayload;
 
-    private JsonBuilder(String command) {
+    private JsonBuilder(String type) {
         jsonObject = new JsonObject();
         payload = new JsonObject();
-        jsonObject.addProperty("command", command);
+        isArrayPayload = false;
+        jsonObject.addProperty("type", type);
     }
 
-    public static JsonBuilder setBuilder(String command) {
-        return new JsonBuilder(command);
+    public static JsonBuilder setBuilder(String type) {
+        return new JsonBuilder(type);
     }
 
     public JsonBuilder setArgument(String key, int value) {
@@ -36,8 +42,19 @@ public class JsonBuilder {
         return this;
     }
 
+    public JsonBuilder setPayloadArray(List<JsonObject> items) {
+        isArrayPayload = true;
+        payloadArray = new JsonArray();
+        items.forEach(payloadArray::add);
+        return this;
+    }
+
     public String build() {
-        jsonObject.add("payload", payload);
+        if (isArrayPayload) {
+            jsonObject.add("payload", payloadArray);
+        } else {
+            jsonObject.add("payload", payload);
+        }
         return jsonObject.toString();
     }
 }

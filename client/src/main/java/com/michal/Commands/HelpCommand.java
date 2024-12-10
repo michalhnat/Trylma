@@ -1,7 +1,6 @@
 package com.michal.Commands;
 
 import com.michal.Display;
-import com.michal.ICommunication;
 
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;

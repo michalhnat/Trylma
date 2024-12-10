@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.michal.Game.Board;
+import com.michal.Game.GameInfo;
 import com.michal.Game.GameSession;
 import com.michal.Game.MockBoard;
 import com.michal.Game.Player;
@@ -43,7 +44,7 @@ public class Server implements Mediator {
     }
 
     @Override
-    public void handleCreateGame(ClientHandler clientHandler, int players) {
+    public synchronized void handleCreateGame(ClientHandler clientHandler, int players) {
         if (clientHandler.isInGame()) {
             clientHandler.sendError("Error: You are already in a game session.");
             return;
@@ -56,14 +57,15 @@ public class Server implements Mediator {
             synchronized (gameSessions) {
                 gameSessions.add(session);
             }
-            clientHandler.sendMessage("Created a new game session with ID: " + session.getSessionId());
+            clientHandler
+                    .sendMessage("Created a new game session with ID: " + session.getSessionId());
         } catch (IllegalArgumentException e) {
             clientHandler.sendError("Failed to create game session: " + e.getMessage());
         }
     }
 
     @Override
-    public void handleJoinGame(ClientHandler clientHandler, int gameId) {
+    public synchronized void handleJoinGame(ClientHandler clientHandler, int gameId) {
         if (clientHandler.isInGame()) {
             clientHandler.sendError("Error: You are already in a game session.");
             return;
@@ -79,10 +81,9 @@ public class Server implements Mediator {
                 session.addPlayer(player);
                 clientHandler.setPlayer(player);
                 clientHandler.setInGame(true);
-                clientHandler.sendMessage("Joined game session " + gameId + " with assigned color: "
-                        + player.getColor());
             } catch (IllegalArgumentException e) {
-                clientHandler.sendError("Could not join game session " + gameId + ": " + e.getMessage());
+                clientHandler
+                        .sendError("Could not join game session " + gameId + ": " + e.getMessage());
             }
         } else {
             clientHandler.sendError("Game session " + gameId + " not found.");
@@ -90,7 +91,7 @@ public class Server implements Mediator {
     }
 
     @Override
-    public void handleMove(ClientHandler clientHandler, int x, int y) {
+    public synchronized void handleMove(ClientHandler clientHandler, int x, int y) {
         if (!clientHandler.isInGame()) {
             clientHandler.sendError("You are not part of any game session.");
             return;
@@ -109,21 +110,24 @@ public class Server implements Mediator {
     }
 
     @Override
-    public void handleListGames(ClientHandler clientHandler) {
+    public synchronized void handleListGames(ClientHandler clientHandler) {
         synchronized (gameSessions) {
             if (gameSessions.isEmpty()) {
                 clientHandler.sendError("No active game sessions.");
                 return;
             }
+
+            List<GameInfo> activeGames = new ArrayList<>();
             for (GameSession session : gameSessions) {
-                clientHandler.sendMessage("Game Session " + session.getSessionId() + ": "
-                        + session.getPlayers().size() + "/" + session.getGame().getMaxPlayers()
-                        + " players.");
+                activeGames.add(new GameInfo(session.getSessionId(), session.getPlayers().size(),
+                        session.getGame().getMaxPlayers()));
             }
+
+            clientHandler.sendListMessage(activeGames);
         }
     }
 
-    public void removeClient(ClientHandler client) {
+    public synchronized void removeClient(ClientHandler client) {
         clients.remove(client);
         if (client.isInGame()) {
             Player player = client.getPlayer();

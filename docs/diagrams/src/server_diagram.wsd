@@ -1,0 +1,153 @@
+@startuml
+
+interface Mediator {
+    + handleListGames(ClientHandler clientHandler)
+    + handleJoinGame(ClientHandler clientHandler, int gameId)
+    + handleCreateGame(ClientHandler clientHandler, int players)
+    + handleMove(ClientHandler clientHandler, int x, int y)
+    + removeClient(ClientHandler clientHandler)
+}
+
+class Server implements Mediator {
+    - ServerSocket serverSocket
+    - static List<GameSession> gameSessions
+    - static List<ClientHandler> clients
+    + void startServer()
+    + List<GameSession> getGameSessions()
+    + synchronized void handleCreateGame(ClientHandler clientHandler, int players)
+    + synchronized void handleJoinGame(ClientHandler clientHandler, int gameId)
+    + synchronized void handleMove(ClientHandler clientHandler, int x, int y)
+    + synchronized void handleListGames(ClientHandler clientHandler)
+    + synchronized void removeClient(ClientHandler client)
+    + void removeSession(GameSession session)
+}
+
+class ClientHandler implements Runnable {
+    - Socket socket
+    - Mediator mediator
+    - ICommunication communication
+    - ObjectInputStream in
+    - ObjectOutputStream out
+    - volatile Player player
+    - volatile boolean inGame
+    + ClientHandler(Socket socket, Mediator mediator)
+    + synchronized void sendMessage(String msg)
+    + synchronized void sendListMessage(List<GameInfo> list)
+    + synchronized void sendError(String msg)
+    + synchronized Player getPlayer()
+    + synchronized void setPlayer(Player player)
+    + synchronized boolean isInGame()
+    + synchronized void setInGame(boolean inGame)
+    - void handleMessage(String msg)
+    + void run()
+}
+
+interface ICommunication {
+    + sendMessage(String msg, ObjectOutputStream out)
+    + sendListMessage(List<GameInfo> message, ObjectOutputStream out)
+    + sendError(String msg, ObjectOutputStream out)
+    + receive(String msg)
+}
+
+class SocketCommunication implements ICommunication {
+    - Socket socket
+    + SocketCommunication(Socket socket)
+    + synchronized void sendMessage(String msg, ObjectOutputStream out)
+    + synchronized void sendListMessage(List<GameInfo> list, ObjectOutputStream out)
+    + synchronized void sendError(String msg, ObjectOutputStream out)
+    + synchronized void receive(String msg)
+}
+
+class Player {
+    - UUID id
+    - ClientHandler clientHandler
+    - String name
+    - Set<Pawn> pawns
+    - GameSession gameSession
+    - String color
+    + Player(ClientHandler clientHandler)
+    + void sendMessage(String message)
+    + void sendError(String message)
+    + UUID getId()
+    + String getName()
+    + ClientHandler getClientHandler()
+    + Set<Pawn> getPawns()
+    + void addPawn(Pawn pawn)
+    + GameSession getGameSession()
+    + void setGameSession(GameSession gameSession)
+    + String getColor()
+    + void setColor(String color)
+}
+
+class GameSession {
+    - static int sessionCounter
+    - int sessionId
+    - Game game
+    - List<Player> players
+    - GameQueue gameQueue
+    - Server server
+    - Queue<String> availableColors
+    + GameSession(Board board, int maxPlayers)
+    + int getSessionId()
+    + synchronized void addPlayer(Player player)
+    + synchronized void removePlayer(Player player)
+    - synchronized void startGame()
+    + synchronized void handleMove(Player player, Position newPosition)
+    - synchronized void promptNextPlayer()
+    - synchronized Player findPlayerByHandler(ClientHandler handler)
+}
+
+abstract class Board {
+    + abstract List<Integer> getAllowedPlayerNumbers()
+    + abstract void move(Position start, Position end)
+    + abstract void print()
+    + abstract boolean isGameOver()
+    + abstract void initialize()
+    + abstract boolean validateMove(Position start, Position end)
+}
+
+class Game {
+    // Abstract representation
+}
+
+class Position {
+    // Position details
+}
+
+class GameQueue {
+    // GameQueue details
+}
+
+class GameInfo {
+    - int id
+    - int currentPlayers
+    - int maxPlayers
+    + GameInfo(int id, int currentPlayers, int maxPlayers)
+    + int getId()
+    + void setId(int id)
+    + int getCurrentPlayers()
+    + void setCurrentPlayers(int currentPlayers)
+    + int getMaxPlayers()
+    + void setMaxPlayers(int maxPlayers)
+}
+
+class App {
+    + static void main(String[] args)
+}
+
+App --> Server
+Server --> "many" ClientHandler
+Server --> "many" GameSession
+GameSession --> Game
+GameSession --> "many" Player
+Player --> ClientHandler
+Player --> GameSession
+ClientHandler --> ICommunication
+ClientHandler --> Mediator
+Board <|-- Game
+GameSession --> GameQueue
+GameSession --> Board
+Player --> Pawn
+Position --> Board
+
+@enduml

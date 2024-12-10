@@ -9,7 +9,7 @@ public class Player {
     private final UUID id;
     private final ClientHandler clientHandler;
     private final String name;
-    private final Set<Pone> pones;
+    private final Set<Pawn> pawns;
     private GameSession gameSession;
     private String color;
 
@@ -17,7 +17,7 @@ public class Player {
         this.id = UUID.randomUUID();
         this.clientHandler = clientHandler;
         this.name = "Player-" + id.toString().substring(0, 8);
-        this.pones = new HashSet<>();
+        this.pawns = new HashSet<>();
     }
 
     public void sendMessage(String message) {
@@ -40,12 +40,12 @@ public class Player {
         return clientHandler;
     }
 
-    public Set<Pone> getPones() {
-        return pones;
+    public Set<Pawn> getPawns() {
+        return pawns;
     }
 
-    public void addPone(Pone pone) {
-        pones.add(pone);
+    public void addPawn(Pawn pawn) {
+        pawns.add(pawn);
     }
 
     public GameSession getGameSession() {
