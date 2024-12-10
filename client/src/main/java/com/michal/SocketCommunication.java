@@ -1,4 +1,3 @@
-
 package com.michal;
 
 import java.io.IOException;
@@ -10,21 +9,42 @@ import java.net.Socket;
 import com.michal.Exceptions.FailedConnectingToServerException;
 import com.michal.Exceptions.FailedSendingMessageToServer;
 
+/**
+ * Class that handles socket communication with the server.
+ */
 public class SocketCommunication implements ICommunication {
     private Socket socket;
     private ObjectInputStream in;
     private ObjectOutputStream out;
     private boolean connected;
 
+    /**
+     * Default constructor for SocketCommunication.
+     * Initializes the connected state to false.
+     */
     public SocketCommunication() {
         this.connected = false;
     }
 
+    /**
+     * Constructs a new SocketCommunication instance and connects to the server.
+     *
+     * @param address the server's InetAddress
+     * @param port the server's port
+     * @throws FailedConnectingToServerException if the connection to the server fails
+     */
     public SocketCommunication(InetAddress address, int port)
             throws FailedConnectingToServerException {
         connectToServer(address, port);
     }
 
+    /**
+     * Connects to the server using the specified address and port.
+     *
+     * @param address the server's InetAddress
+     * @param port the server's port
+     * @throws FailedConnectingToServerException if the connection to the server fails
+     */
     public void connectToServer(InetAddress address, int port)
             throws FailedConnectingToServerException {
         try {
@@ -39,6 +59,12 @@ public class SocketCommunication implements ICommunication {
         }
     }
 
+    /**
+     * Sends a message to the server.
+     *
+     * @param message the message to send
+     * @throws FailedSendingMessageToServer if sending the message fails
+     */
     public void sendMessage(String message) throws FailedSendingMessageToServer {
         try {
             out.writeObject(message);
@@ -48,14 +74,28 @@ public class SocketCommunication implements ICommunication {
         }
     }
 
+    /**
+     * Gets the input stream for receiving messages from the server.
+     *
+     * @return the ObjectInputStream for receiving messages
+     */
     public ObjectInputStream getInputStream() {
         return in;
     }
 
+    /**
+     * Checks if the client is connected to the server.
+     *
+     * @return true if connected, false otherwise
+     */
     public boolean isConnected() {
         return connected;
     }
 
+    /**
+     * Starts a thread to monitor the connection status.
+     * Sets the connected state to false if the socket is closed or not connected.
+     */
     private void startConnectionMonitor() {
         new Thread(() -> {
             try {

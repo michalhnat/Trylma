@@ -8,8 +8,11 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
+/**
+ * Command to move to a specific position.
+ * Implements the Runnable interface to be executed as a command.
+ */
 @Command(name = "move", description = "Move to a specific position")
-
 public class MoveCommand implements Runnable {
 
     @ParentCommand
@@ -21,6 +24,10 @@ public class MoveCommand implements Runnable {
     @Parameters(index = "1", description = "Y coordinate")
     private int y;
 
+    /**
+     * Executes the command to move to a specific position.
+     * Sends a JSON message to the server with the coordinates.
+     */
     @Override
     public void run() {
         Display display = parent.getDisplay();

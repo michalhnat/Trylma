@@ -7,13 +7,20 @@ import com.michal.Utils.JsonBuilder;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ParentCommand;
 
+/**
+ * Command to list all games.
+ * Implements the Runnable interface to be executed as a command.
+ */
 @Command(name = "list", description = "List all games")
-
 public class ListGamesCommand implements Runnable {
 
     @ParentCommand
     private MainCommand parent;
 
+    /**
+     * Executes the command to list all games.
+     * Sends a JSON message to the server to request the list of games.
+     */
     @Override
     public void run() {
         Display display = parent.getDisplay();

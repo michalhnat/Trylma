@@ -8,12 +8,23 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
+/**
+ * Utility class for deserializing JSON strings into Java objects.
+ */
 public class JsonDeserializer {
     private static final Gson gson = new Gson();
     private static JsonDeserializer instance;
 
+    /**
+     * Private constructor to prevent instantiation.
+     */
     private JsonDeserializer() {}
 
+    /**
+     * Returns the singleton instance of JsonDeserializer.
+     *
+     * @return the singleton instance
+     */
     public static JsonDeserializer getInstance() {
         if (instance == null) {
             synchronized (JsonDeserializer.class) {
@@ -25,6 +36,13 @@ public class JsonDeserializer {
         return instance;
     }
 
+    /**
+     * Deserializes a JSON string into a JsonObject.
+     *
+     * @param json the JSON string to deserialize
+     * @return the deserialized JsonObject
+     * @throws JsonSyntaxException if the JSON is not valid
+     */
     public JsonObject deserialize(String json) throws JsonSyntaxException {
         try {
             return gson.fromJson(json, JsonObject.class);
@@ -33,6 +51,13 @@ public class JsonDeserializer {
         }
     }
 
+    /**
+     * Extracts the type field from a JSON string.
+     *
+     * @param json the JSON string to extract the type from
+     * @return the type as a string
+     * @throws JsonSyntaxException if the JSON is not valid or missing the type field
+     */
     public String getType(String json) throws JsonSyntaxException {
         JsonObject obj = deserialize(json);
         if (!obj.has("type")) {
@@ -41,6 +66,13 @@ public class JsonDeserializer {
         return obj.get("type").getAsString();
     }
 
+    /**
+     * Extracts the payload field from a JSON string.
+     *
+     * @param json the JSON string to extract the payload from
+     * @return the payload as a JsonObject
+     * @throws JsonSyntaxException if the JSON is not valid
+     */
     public JsonObject getPayload(String json) throws JsonSyntaxException {
         JsonObject obj = deserialize(json);
         if (!obj.has("payload")) {
@@ -49,6 +81,13 @@ public class JsonDeserializer {
         return obj.get("payload").getAsJsonObject();
     }
 
+    /**
+     * Extracts the message content from the payload of a JSON string.
+     *
+     * @param json the JSON string to extract the message from
+     * @return the message content as a string
+     * @throws JsonSyntaxException if the JSON is not valid or missing the content field
+     */
     public String getMessage(String json) throws JsonSyntaxException {
         JsonObject obj = getPayload(json);
         if (!obj.has("content")) {
@@ -57,6 +96,13 @@ public class JsonDeserializer {
         return obj.get("content").getAsString();
     }
 
+    /**
+     * Extracts a list of games from the payload of a JSON string.
+     *
+     * @param json the JSON string to extract the games from
+     * @return a list of games as strings
+     * @throws JsonSyntaxException if the JSON is not valid
+     */
     public List<String> getGamesAsList(String json) throws JsonSyntaxException {
         JsonObject obj = deserialize(json);
         List<String> gamesList = new ArrayList<>();
@@ -76,7 +122,6 @@ public class JsonDeserializer {
 
         return gamesList;
     }
-
 
     // public boolean isError(String json) throws JsonSyntaxException {
     // JsonObject obj = deserialize(json);

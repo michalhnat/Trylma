@@ -9,6 +9,10 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.Parameters;
 import picocli.CommandLine.ParentCommand;
 
+/**
+ * Command to join a game.
+ * Implements the Runnable interface to be executed as a command.
+ */
 @Command(name = "join", description = "Join a game")
 public class JoinGameCommand implements Runnable {
 
@@ -18,6 +22,10 @@ public class JoinGameCommand implements Runnable {
     @Parameters(index = "0", description = "Game ID")
     private int gameID;
 
+    /**
+     * Executes the command to join a game.
+     * Sends a JSON message to the server with the game ID.
+     */
     @Override
     public void run() {
         Display display = parent.getDisplay();

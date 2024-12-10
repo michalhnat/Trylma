@@ -1,9 +1,9 @@
-// Board.java
 package com.michal.Game;
 
 import java.util.List;
 
 public abstract class Board {
+
     public abstract List<Integer> getAllowedPlayerNumbers();
 
     public abstract void move(Position start, Position end);

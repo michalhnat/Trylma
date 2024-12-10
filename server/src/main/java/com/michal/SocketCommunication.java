@@ -11,14 +11,28 @@ import com.michal.Game.GameInfo;
 import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.MyLogger;
 
+/**
+ * A class for handling socket communication.
+ */
 public class SocketCommunication implements ICommunication {
     private final Socket socket;
     Logger logger = MyLogger.logger;
 
+    /**
+     * Constructs a new SocketCommunication instance with the specified socket.
+     *
+     * @param socket the socket to use for communication
+     */
     public SocketCommunication(Socket socket) {
         this.socket = socket;
     }
 
+    /**
+     * Sends a message to the specified output stream.
+     *
+     * @param msg the message to send
+     * @param out the output stream to send the message to
+     */
     @Override
     public synchronized void sendMessage(String msg, ObjectOutputStream out) {
         try {
@@ -29,6 +43,12 @@ public class SocketCommunication implements ICommunication {
         }
     }
 
+    /**
+     * Sends a list of GameInfo objects as a message to the specified output stream.
+     *
+     * @param list the list of GameInfo objects to send
+     * @param out the output stream to send the message to
+     */
     @Override
     public synchronized void sendListMessage(List<GameInfo> list, ObjectOutputStream out) {
         try {
@@ -48,6 +68,12 @@ public class SocketCommunication implements ICommunication {
         }
     }
 
+    /**
+     * Sends an error message to the specified output stream.
+     *
+     * @param msg the error message to send
+     * @param out the output stream to send the error message to
+     */
     @Override
     public synchronized void sendError(String msg, ObjectOutputStream out) {
         try {
@@ -58,6 +84,11 @@ public class SocketCommunication implements ICommunication {
         }
     }
 
+    /**
+     * Receives a message.
+     *
+     * @param msg the message received
+     */
     @Override
     public synchronized void receive(String msg) {
         System.out.println("Received from client: " + msg);

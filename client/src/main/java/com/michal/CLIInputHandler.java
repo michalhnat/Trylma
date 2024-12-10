@@ -7,6 +7,9 @@ import com.michal.Commands.MainCommand;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 
+/**
+ * CLI input handler that processes user commands.
+ */
 @Command(name = "cli", description = "CLI input handler")
 public class CLIInputHandler implements Runnable {
     private CommandLine commandLine;
@@ -14,6 +17,12 @@ public class CLIInputHandler implements Runnable {
     private ICommunication communication;
     private Display display;
 
+    /**
+     * Constructs a new CLIInputHandler instance with the specified communication and display interfaces.
+     *
+     * @param communication the communication interface to use
+     * @param display the display interface to use
+     */
     public CLIInputHandler(ICommunication communication, Display display) {
         MainCommand mainCommand = new MainCommand(communication, display);
         this.commandLine = new CommandLine(mainCommand);
@@ -22,6 +31,9 @@ public class CLIInputHandler implements Runnable {
         this.display = display;
     }
 
+    /**
+     * Runs the CLI input handler, continuously reading and executing user commands.
+     */
     @Override
     public void run() {
         while (true) {
@@ -39,5 +51,4 @@ public class CLIInputHandler implements Runnable {
             }
         }
     }
-
 }
