@@ -1,31 +1,32 @@
 package com.michal.Game;
 
-import com.michal.ClientHandler;
-import java.util.UUID;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+import com.michal.ClientHandler;
+import com.michal.PlayerCommunicator;
 
 public class Player {
     private final UUID id;
-    private final ClientHandler clientHandler;
+    private final PlayerCommunicator communicator;
     private final String name;
     private final Set<Pawn> pawns;
     private GameSession gameSession;
     private String color;
 
-    public Player(ClientHandler clientHandler) {
-        this.id = UUID.randomUUID();
-        this.clientHandler = clientHandler;
+    public Player(UUID id, PlayerCommunicator communicator) {
+        this.id = id;
+        this.communicator = communicator;
         this.name = "Player-" + id.toString().substring(0, 8);
         this.pawns = new HashSet<>();
     }
 
-    public void sendMessage(String message) {
-        clientHandler.sendMessage(message);
+    public synchronized void sendMessage(String message) {
+        communicator.sendMessage(message);
     }
 
-    public void sendError(String message) {
-        clientHandler.sendError(message);
+    public synchronized void sendError(String message) {
+        communicator.sendError(message);
     }
 
     public UUID getId() {
@@ -36,8 +37,8 @@ public class Player {
         return name;
     }
 
-    public ClientHandler getClientHandler() {
-        return clientHandler;
+    public PlayerCommunicator getcommunicator() {
+        return communicator;
     }
 
     public Set<Pawn> getPawns() {
@@ -56,7 +57,6 @@ public class Player {
         this.gameSession = gameSession;
     }
 
-    // New methods for color
     public String getColor() {
         return color;
     }

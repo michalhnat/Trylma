@@ -1,7 +1,8 @@
 package com.michal.Game;
 
 /**
- * Represents a game with a board, a maximum number of players, and a status indicating if the game is in progress.
+ * Represents a game with a board, a maximum number of players, and a status indicating if the game
+ * is in progress.
  */
 public class Game {
     private final int maxPlayers;

@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 import com.google.gson.JsonObject;
@@ -15,7 +16,7 @@ import com.michal.Game.Player;
 import com.michal.Utils.JsonDeserializer;
 import com.michal.Utils.MyLogger;
 
-public class ClientHandler implements Runnable {
+public class ClientHandler implements Runnable, PlayerCommunicator {
     private final Socket socket;
     private final Mediator mediator;
     private final ICommunication communication;
@@ -23,6 +24,7 @@ public class ClientHandler implements Runnable {
     private ObjectOutputStream out;
     private volatile Player player;
     private volatile boolean inGame;
+    private final UUID id;
     Logger logger = MyLogger.logger;
     static {
         MyLogger.loggerConfig();
@@ -33,17 +35,24 @@ public class ClientHandler implements Runnable {
         this.mediator = mediator;
         this.communication = new SocketCommunication(socket);
         this.inGame = false;
+        this.id = UUID.randomUUID();
     }
 
-    public synchronized void sendMessage(String msg) {
+    public synchronized UUID getId() {
+        return id;
+    }
+
+    @Override
+    public void sendMessage(String msg) {
         communication.sendMessage(msg, out);
     }
 
-    public synchronized void sendListMessage(List<GameInfo> list) {
+    public void sendListMessage(List<GameInfo> list) {
         communication.sendListMessage(list, out);
     }
 
-    public synchronized void sendError(String msg) {
+    @Override
+    public void sendError(String msg) {
         communication.sendError(msg, out);
     }
 

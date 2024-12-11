@@ -52,7 +52,8 @@ public class JsonDeserializer {
      *
      * @param json the JSON string containing the command
      * @return the command as a string
-     * @throws JsonSyntaxException if the JSON string is not valid or does not contain a command field
+     * @throws JsonSyntaxException if the JSON string is not valid or does not contain a command
+     *         field
      */
     public String getCommand(String json) throws JsonSyntaxException {
         JsonObject obj = deserialize(json);

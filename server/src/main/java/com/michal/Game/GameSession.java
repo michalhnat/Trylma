@@ -4,28 +4,28 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-
+import java.util.concurrent.atomic.AtomicInteger;
 import com.michal.ClientHandler;
-import com.michal.Server;
+import com.michal.GameSessionMediator;
 
 public class GameSession {
-    private static int sessionCounter = 1;
+    private static final AtomicInteger sessionCounter = new AtomicInteger(1);
     private final int sessionId;
     private final Game game;
     private final List<Player> players;
     private final GameQueue gameQueue;
-    private final Server server;
+    private final GameSessionMediator server;
     private final Queue<String> availableColors;
 
     private static final List<String> COLORS =
             List.of("Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Cyan", "Magenta");
 
-    public GameSession(Board board, int maxPlayers) {
-        this.sessionId = sessionCounter++;
+    public GameSession(Board board, int maxPlayers, GameSessionMediator server) {
+        this.sessionId = sessionCounter.getAndIncrement();
         this.game = new Game(board, maxPlayers);
         this.players = new ArrayList<>();
         this.gameQueue = new GameQueue();
-        this.server = null;
+        this.server = server;
         this.availableColors = new LinkedList<>(COLORS);
     }
 
@@ -46,9 +46,9 @@ public class GameSession {
         player.setColor(assignedColor);
 
         players.add(player);
-        gameQueue.addPlayer(player.getClientHandler());
+        gameQueue.addPlayer(player);
         player.setGameSession(this);
-        player.getClientHandler().setInGame(true);
+        // player.getClientHandler().setInGame(true);
 
         broadcastMessage("Player " + player.getName() + " has joined the game with color "
                 + assignedColor + ".");
@@ -60,11 +60,10 @@ public class GameSession {
 
     public synchronized void removePlayer(Player player) {
         if (players.remove(player)) {
-            gameQueue.removePlayer(player.getClientHandler());
+            gameQueue.removePlayer(player);
             player.setGameSession(null);
-            player.getClientHandler().setInGame(false);
+            // player.getClientHandler().setInGame(false);
 
-            // Recycle the player's color
             String color = player.getColor();
             if (color != null) {
                 availableColors.offer(color);
@@ -103,22 +102,10 @@ public class GameSession {
     }
 
     private synchronized void promptNextPlayer() {
-        ClientHandler nextHandler = gameQueue.takePlayer();
-        if (nextHandler != null) {
-            Player nextPlayer = findPlayerByHandler(nextHandler);
-            if (nextPlayer != null) {
-                nextPlayer.sendMessage("Your turn to move.");
-            }
+        Player nextPlayer = gameQueue.takePlayer();
+        if (nextPlayer != null) {
+            nextPlayer.sendMessage("Your turn to move.");
         }
-    }
-
-    private synchronized Player findPlayerByHandler(ClientHandler handler) {
-        for (Player p : players) {
-            if (p.getClientHandler().equals(handler)) {
-                return p;
-            }
-        }
-        return null;
     }
 
     private synchronized void broadcastMessage(String message) {

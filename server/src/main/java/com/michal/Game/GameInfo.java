@@ -1,7 +1,8 @@
 package com.michal.Game;
 
 /**
- * Represents information about a game, including its ID, current number of players, and maximum number of players.
+ * Represents information about a game, including its ID, current number of players, and maximum
+ * number of players.
  */
 public class GameInfo {
     private int id;
@@ -9,7 +10,8 @@ public class GameInfo {
     private int maxPlayers;
 
     /**
-     * Constructs a GameInfo object with the specified ID, current number of players, and maximum number of players.
+     * Constructs a GameInfo object with the specified ID, current number of players, and maximum
+     * number of players.
      *
      * @param id the ID of the game
      * @param currentPlayers the current number of players in the game

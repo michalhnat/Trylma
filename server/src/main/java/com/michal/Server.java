@@ -15,18 +15,17 @@ import com.michal.Game.MockBoard;
 import com.michal.Game.Player;
 import com.michal.Game.Position;
 
-public class Server implements Mediator {
+public class Server implements Mediator, GameSessionMediator {
     private ServerSocket serverSocket;
     private static final int PORT = 8085;
 
-    private static List<GameSession> gameSessions = Collections.synchronizedList(new ArrayList<>());
-    private static List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
+    private List<GameSession> gameSessions = Collections.synchronizedList(new ArrayList<>());
+    private List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
 
     public void startServer() {
         try {
             serverSocket = new ServerSocket(PORT);
             System.out.println("Server started on port " + PORT);
-
 
             while (true) {
                 var clientSocket = serverSocket.accept();
@@ -44,73 +43,79 @@ public class Server implements Mediator {
     }
 
     @Override
-    public synchronized void handleCreateGame(ClientHandler clientHandler, int players) {
-        if (clientHandler.isInGame()) {
-            clientHandler.sendError("Error: You are already in a game session.");
-            return;
-        }
-
-        Board board = new MockBoard();
-
-        try {
-            GameSession session = new GameSession(board, players);
-            synchronized (gameSessions) {
-                gameSessions.add(session);
+    public void handleCreateGame(ClientHandler clientHandler, int players) {
+        synchronized (gameSessions) {
+            if (clientHandler.isInGame()) {
+                clientHandler.sendError("Error: You are already in a game session.");
+                return;
             }
-            clientHandler
-                    .sendMessage("Created a new game session with ID: " + session.getSessionId());
-        } catch (IllegalArgumentException e) {
-            clientHandler.sendError("Failed to create game session: " + e.getMessage());
-        }
-    }
 
-    @Override
-    public synchronized void handleJoinGame(ClientHandler clientHandler, int gameId) {
-        if (clientHandler.isInGame()) {
-            clientHandler.sendError("Error: You are already in a game session.");
-            return;
-        }
+            Board board = new MockBoard();
 
-        Optional<GameSession> sessionOptional = gameSessions.stream()
-                .filter(session -> session.getSessionId() == gameId).findFirst();
-
-        if (sessionOptional.isPresent()) {
-            GameSession session = sessionOptional.get();
-            Player player = new Player(clientHandler);
             try {
-                session.addPlayer(player);
-                clientHandler.setPlayer(player);
-                clientHandler.setInGame(true);
+                GameSession session = new GameSession(board, players, this);
+                synchronized (gameSessions) {
+                    gameSessions.add(session);
+                }
+                clientHandler.sendMessage(
+                        "Created a new game session with ID: " + session.getSessionId());
             } catch (IllegalArgumentException e) {
-                clientHandler
-                        .sendError("Could not join game session " + gameId + ": " + e.getMessage());
+                clientHandler.sendError("Failed to create game session: " + e.getMessage());
             }
-        } else {
-            clientHandler.sendError("Game session " + gameId + " not found.");
         }
     }
 
     @Override
-    public synchronized void handleMove(ClientHandler clientHandler, int x, int y) {
+    public void handleJoinGame(ClientHandler clientHandler, int gameId) {
+        if (clientHandler.isInGame()) {
+            clientHandler.sendError("Error: You are already in a game session.");
+            return;
+        }
+        synchronized (gameSessions) {
+            Optional<GameSession> sessionOptional = gameSessions.stream()
+                    .filter(session -> session.getSessionId() == gameId).findFirst();
+
+            if (sessionOptional.isPresent()) {
+                GameSession session = sessionOptional.get();
+                Player player = new Player(clientHandler.getId(), clientHandler);
+                try {
+                    session.addPlayer(player);
+                    clientHandler.setPlayer(player);
+                    clientHandler.setInGame(true);
+                } catch (IllegalArgumentException e) {
+                    clientHandler.sendError(
+                            "Could not join game session " + gameId + ": " + e.getMessage());
+                }
+            } else {
+                clientHandler.sendError("Game session " + gameId + " not found.");
+            }
+        }
+    }
+
+    @Override
+    public void handleMove(ClientHandler clientHandler, int x, int y) {
         if (!clientHandler.isInGame()) {
             clientHandler.sendError("You are not part of any game session.");
             return;
         }
 
-        Player player = clientHandler.getPlayer();
-        Optional<GameSession> sessionOptional = gameSessions.stream()
-                .filter(session -> session.getPlayers().contains(player)).findFirst();
+        synchronized (gameSessions) {
+            Player player = clientHandler.getPlayer();
+            Optional<GameSession> sessionOptional = gameSessions.stream()
+                    .filter(session -> session.getPlayers().contains(player)).findFirst();
 
-        if (sessionOptional.isPresent()) {
-            GameSession session = sessionOptional.get();
-            session.handleMove(player, new Position(x, y));
-        } else {
-            clientHandler.sendError("You are not part of any game session.");
+            if (sessionOptional.isPresent()) {
+                GameSession session = sessionOptional.get();
+                session.handleMove(player, new Position(x, y));
+            } else {
+                clientHandler.sendError("You are not part of any game session.");
+            }
         }
+
     }
 
     @Override
-    public synchronized void handleListGames(ClientHandler clientHandler) {
+    public void handleListGames(ClientHandler clientHandler) {
         synchronized (gameSessions) {
             if (gameSessions.isEmpty()) {
                 clientHandler.sendError("No active game sessions.");
@@ -127,17 +132,19 @@ public class Server implements Mediator {
         }
     }
 
-    public synchronized void removeClient(ClientHandler client) {
-        clients.remove(client);
-        if (client.isInGame()) {
-            Player player = client.getPlayer();
-            if (player != null) {
-                synchronized (gameSessions) {
-                    for (GameSession session : new ArrayList<>(gameSessions)) {
-                        if (session.getPlayers().contains(player)) {
-                            session.removePlayer(player);
-                            client.setInGame(false);
-                            break;
+    public void removeClient(ClientHandler client) {
+        synchronized (clients) {
+            clients.remove(client);
+            if (client.isInGame()) {
+                Player player = client.getPlayer();
+                if (player != null) {
+                    synchronized (gameSessions) {
+                        for (GameSession session : new ArrayList<>(gameSessions)) {
+                            if (session.getPlayers().contains(player)) {
+                                session.removePlayer(player);
+                                client.setInGame(false);
+                                break;
+                            }
                         }
                     }
                 }
@@ -145,7 +152,10 @@ public class Server implements Mediator {
         }
     }
 
+    @Override
     public void removeSession(GameSession session) {
-        gameSessions.remove(session);
+        synchronized (gameSessions) {
+            gameSessions.remove(session);
+        }
     }
 }

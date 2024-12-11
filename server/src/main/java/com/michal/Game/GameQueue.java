@@ -2,13 +2,11 @@ package com.michal.Game;
 
 import java.util.Queue;
 
-import com.michal.ClientHandler;
-
 /**
  * Represents a queue of players in the game.
  */
 public class GameQueue {
-    private Queue<ClientHandler> players;
+    private Queue<Player> players;
 
     /**
      * Constructs a GameQueue with an empty queue of players.
@@ -22,8 +20,8 @@ public class GameQueue {
      *
      * @return the player taken from the queue, or null if the queue is empty
      */
-    public ClientHandler takePlayer() {
-        ClientHandler player = players.poll();
+    public synchronized Player takePlayer() {
+        Player player = players.poll();
         if (player != null) {
             players.offer(player);
         }
@@ -35,7 +33,7 @@ public class GameQueue {
      *
      * @param player the player to add to the queue
      */
-    public void addPlayer(ClientHandler player) {
+    public synchronized void addPlayer(Player player) {
         players.add(player);
     }
 
@@ -54,7 +52,7 @@ public class GameQueue {
      * @param player the player to check
      * @return true if the player is in the queue, false otherwise
      */
-    public boolean checkIfPlayerInQueue(ClientHandler player) {
+    public boolean checkIfPlayerInQueue(Player player) {
         return players.contains(player);
     }
 
@@ -63,7 +61,7 @@ public class GameQueue {
      *
      * @param player the player to remove from the queue
      */
-    public void removePlayer(ClientHandler player) {
+    public synchronized void removePlayer(Player player) {
         players.remove(player);
     }
 }
