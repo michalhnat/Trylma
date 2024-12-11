@@ -47,7 +47,6 @@ public class ConsoleDisplay implements Display {
      */
     @Override
     public void displayBoard() {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'displayBoard'");
     }
 }
