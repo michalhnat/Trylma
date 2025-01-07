@@ -55,7 +55,7 @@ public class MockBoard extends Board {
      * Mock implementation of the initialize method.
      */
     @Override
-    public void initialize() {
+    public void initialize(Layout layout, List<Player> players) {
         // Mock initialize
     }
 

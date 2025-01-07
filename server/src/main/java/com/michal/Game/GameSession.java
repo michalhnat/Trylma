@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
-import com.michal.ClientHandler;
+
 import com.michal.GameSessionMediator;
 
 public class GameSession {
@@ -80,7 +80,7 @@ public class GameSession {
     }
 
     private synchronized void startGame() {
-        game.start();
+        game.start(players);
         broadcastMessage("Game started!");
         promptNextPlayer();
     }

@@ -1,5 +1,7 @@
 package com.michal.Game;
 
+import java.util.List;
+
 /**
  * Represents a game with a board, a maximum number of players, and a status indicating if the game
  * is in progress.
@@ -8,6 +10,7 @@ public class Game {
     private final int maxPlayers;
     private GameStatus status;
     private Board board;
+    private Layout layout;
 
     /**
      * Constructs a Game with the specified board and maximum number of players.
@@ -24,14 +27,15 @@ public class Game {
         this.board = board;
         this.maxPlayers = maxPlayers;
         this.status = GameStatus.WAITING;
+        this.layout = Layout.TWOPLAYERS_THREESETS; //PLACEHOLDER TODO change so the constructor takes a layout
     }
 
     /**
      * Starts the game and initializes the board.
      */
-    public void start() {
+    public void start(List<Player> players) {
         this.status = GameStatus.IN_PROGRESS;
-        board.initialize();
+        board.initialize(layout, players);
     }
 
     /**

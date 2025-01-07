@@ -8,12 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.michal.Game.Board;
-import com.michal.Game.GameInfo;
-import com.michal.Game.GameSession;
-import com.michal.Game.MockBoard;
-import com.michal.Game.Player;
-import com.michal.Game.Position;
+import com.michal.Game.*;
 
 public class Server implements Mediator, GameSessionMediator {
     private ServerSocket serverSocket;
@@ -50,7 +45,7 @@ public class Server implements Mediator, GameSessionMediator {
                 return;
             }
 
-            Board board = new MockBoard();
+            Board board = new StandardBoard();
 
             try {
                 GameSession session = new GameSession(board, players, this);

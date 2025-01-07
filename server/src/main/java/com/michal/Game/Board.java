@@ -12,7 +12,7 @@ public abstract class Board {
 
     public abstract boolean isGameOver();
 
-    public abstract void initialize();
+    public abstract void initialize(Layout layout, List<Player> players);
 
     public abstract boolean validateMove(Position start, Position end);
 }
