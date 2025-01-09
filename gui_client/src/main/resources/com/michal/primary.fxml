@@ -1,0 +1,45 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.michal.PrimaryController">
+   <left>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="220.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="info_label">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </Label>
+            <TextField fx:id="ip_tf" alignment="CENTER" prefHeight="25.0" prefWidth="98.0" promptText="Type server addr ip" onAction="#connectToServer"/>
+            <TextField fx:id="port_tf" alignment="CENTER" prefHeight="25.0" prefWidth="98.0" promptText="Type server port" onAction="#connectToServer"/>
+            <Button fx:id="connect_button"  mnemonicParsing="false" text="Connect" onAction="#connectToServer"/>
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </VBox>
+   </left>
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <HBox alignment="CENTER">
+            <Label fx:id="games_label" alignment="CENTER" prefHeight="17.0" prefWidth="117.0" text="Available games" textAlignment="CENTER" />
+            <Button fx:id="refresh"  mnemonicParsing="false" text="refresh" onAction="#request_games_list"/>
+            </HBox>
+            <ListView fx:id="games_list" prefHeight="421.0" prefWidth="100.0" />
+            <HBox alignment="CENTER">
+            <TextField fx:id="create_tf" alignment="CENTER" promptText="Type no players" onAction="#create_game"/>
+            <Button fx:id="create_button"  mnemonicParsing="false" text="create" onAction="#create_game"/>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>
+
