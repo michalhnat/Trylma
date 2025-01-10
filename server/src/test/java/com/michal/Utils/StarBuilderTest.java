@@ -1,5 +1,6 @@
 package com.michal.Utils;
 
+import com.michal.Game.CornerNode;
 import com.michal.Game.Node;
 
 public class StarBuilderTest {
@@ -25,7 +26,7 @@ public class StarBuilderTest {
             for (Node node : row) {
                 if (node == null) {
                     System.out.print("  ");
-                } else if (node.isCorner()) {
+                } else if (node instanceof CornerNode) {
                     System.out.print("()");
                 } else {
                     System.out.print("[]");

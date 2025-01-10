@@ -10,9 +10,7 @@ import java.util.logging.Logger;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.michal.Game.GameInfo;
-import com.michal.Game.GameSession;
-import com.michal.Game.Player;
+import com.michal.Game.*;
 import com.michal.Utils.JsonDeserializer;
 import com.michal.Utils.MyLogger;
 
@@ -95,8 +93,10 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                     mediator.handleJoinGame(this, gameId);
                     break;
                 case "create":
-                    int players = payload.get("players").getAsInt();
-                    mediator.handleCreateGame(this, players);
+                    Layout layout = Layout.valueOf(payload.get("layout").getAsString());
+                    Variant variant = Variant.valueOf(payload.get("variant").getAsString());
+                    int boardSize = payload.get("boardSize").getAsInt();
+                    mediator.handleCreateGame(this, boardSize, layout, variant);
                     break;
                 case "move":
                     int x = payload.get("x").getAsInt();

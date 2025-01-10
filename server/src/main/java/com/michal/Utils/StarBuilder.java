@@ -42,11 +42,11 @@ public class StarBuilder {
         for (int x = blockSize; x <= maxSize - blockSize; x++) {
             for (int y = blockSize; y <= maxSize - blockSize; y++) {
                 if (y >= x +size) { // NorthWest corner
-                    board[x][y] = new CornerNode(x, y, Direction.NORTHWEST);
+                    board[x][y] = new CornerNode(Direction.NORTHWEST);
                 } else if (y <= x - size) { // SouthEast corner
-                    board[x][y] = new CornerNode(x, y, Direction.SOUTHEAST);
+                    board[x][y] = new CornerNode(Direction.SOUTHEAST);
                 } else {
-                    board[x][y] = new Node(x, y);
+                    board[x][y] = new Node();
                 }
             }
         }
@@ -57,7 +57,7 @@ public class StarBuilder {
         for (int x=0; x < blockSize;x++) {
             for (int y = blockSize; y < 2*blockSize; y++) {
                 if (y <= x + blockSize) {
-                    board[x][y] = new CornerNode(x, y, Direction.SOUTHWEST);
+                    board[x][y] = new CornerNode(Direction.SOUTHWEST);
                 }
             }
         }
@@ -66,7 +66,7 @@ public class StarBuilder {
         for (int x = midpoint + 1; x <= maxSize - blockSize; x++) {
             for (int y = midpoint + size; y <= maxSize; y++) {
                 if (y <= x + blockSize) {
-                    board[x][y] = new CornerNode(x, y, Direction.NORTH);
+                    board[x][y] = new CornerNode(Direction.NORTH);
                 }
             }
         }
@@ -75,7 +75,7 @@ public class StarBuilder {
         for (int x = blockSize; x < midpoint; x++) {
             for (int y = 0; y < blockSize; y++) {
                 if (y >= x-blockSize) {
-                    board[x][y] = new CornerNode(x, y, Direction.SOUTH);
+                    board[x][y] = new CornerNode(Direction.SOUTH);
                 }
             }
         }
@@ -84,7 +84,7 @@ public class StarBuilder {
         for (int x = midpoint + size; x <= maxSize; x++) {
             for (int y = midpoint+1; y < midpoint+size; y++) {
                 if (y >= x-blockSize) {
-                    board[x][y] = new CornerNode(x, y, Direction.NORTHEAST);
+                    board[x][y] = new CornerNode(Direction.NORTHEAST);
                 }
             }
         }

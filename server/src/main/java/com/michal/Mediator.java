@@ -1,5 +1,8 @@
 package com.michal;
 
+import com.michal.Game.Layout;
+import com.michal.Game.Variant;
+
 import java.util.UUID;
 
 /**
@@ -26,9 +29,8 @@ public interface Mediator {
      * Handles the request to create a new game for the specified client.
      *
      * @param clientHandler the client handler requesting to create a game
-     * @param players the number of players for the new game
      */
-    public void handleCreateGame(ClientHandler clientHandler, int players);
+    public void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout, Variant variant);
 
     /**
      * Handles the request to make a move in the game for the specified client.

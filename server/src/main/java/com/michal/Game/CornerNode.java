@@ -3,8 +3,7 @@ package com.michal.Game;
 public class CornerNode extends Node{
     private final Direction direction;
 
-    public CornerNode(Integer x, Integer y, Direction direction) {
-        super(x, y);
+    public CornerNode(Direction direction) {
         this.direction = direction;
     }
 

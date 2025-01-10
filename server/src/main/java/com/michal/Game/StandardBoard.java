@@ -9,9 +9,16 @@ import java.util.Map;
 
 public class StandardBoard extends Board {
 
-    private final Integer size = 5;
-    private final Node[][] board = StarBuilder.buildStar(size);
+    private final int size;
+    private final Node[][] board;
     private final List<Integer> allowedPlayerNumbers = new ArrayList<>(Arrays.asList(2, 3, 4, 6));
+    private final MoveValidator moveValidator = new MoveValidatorStandard();
+
+    public StandardBoard(int size) {
+        super();
+        this.size = size;
+        this.board = StarBuilder.buildStar(size);
+    }
 
     @Override
     public List<Integer> getAllowedPlayerNumbers() {
@@ -67,7 +74,6 @@ public class StandardBoard extends Board {
 
     @Override
     public boolean validateMove(Position start, Position end) {
-        // Validate move logic
-        return true;
+        return moveValidator.isValidMove(board, start, end);
     }
 }
