@@ -10,9 +10,7 @@ import java.util.logging.Logger;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
-import com.michal.Game.GameInfo;
-import com.michal.Game.GameSession;
-import com.michal.Game.Player;
+import com.michal.Game.*;
 import com.michal.Utils.JsonDeserializer;
 import com.michal.Utils.MyLogger;
 
@@ -49,6 +47,12 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
 
     public void sendListMessage(List<GameInfo> list) {
         communication.sendListMessage(list, out);
+    }
+
+    public void sendBoard(String board) { communication.sendBoard(board, out); }
+
+    public void sendGameInfo(GameInfo gameInfo) {
+        communication.sendGameInfo(gameInfo, out);
     }
 
     @Override
@@ -95,14 +99,22 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                     mediator.handleJoinGame(this, gameId);
                     break;
                 case "create":
-                    int players = payload.get("players").getAsInt();
-                    mediator.handleCreateGame(this, players);
+                    Layout layout = Layout.valueOf(payload.get("layout").getAsString());
+                    Variant variant = Variant.valueOf(payload.get("variant").getAsString());
+                    int boardSize = payload.get("boardSize").getAsInt();
+                    mediator.handleCreateGame(this, boardSize, layout, variant);
                     break;
                 case "move":
-                    int x = payload.get("x").getAsInt();
-                    int y = payload.get("y").getAsInt();
+                    int start_x = payload.get("start_x").getAsInt();
+                    int start_y = payload.get("start_y").getAsInt();
+                    Position start = new Position(start_x, start_y);
+
+                    int end_x = payload.get("end_x").getAsInt();
+                    int end_y = payload.get("end_y").getAsInt();
+                    Position end = new Position(end_x, end_y);
+
                     if (isInGame()) {
-                        mediator.handleMove(this, x, y);
+                        mediator.handleMove(this, start, end);
                     } else {
                         sendError("You are not part of any game session.");
                     }

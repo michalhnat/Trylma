@@ -24,6 +24,10 @@ public interface ICommunication {
      */
     void sendListMessage(List<GameInfo> message, ObjectOutputStream out);
 
+    void sendGameInfo(GameInfo gameInfo, ObjectOutputStream out);
+
+    void sendBoard(String board, ObjectOutputStream out);
+
     /**
      * Sends an error message to the specified output stream.
      *

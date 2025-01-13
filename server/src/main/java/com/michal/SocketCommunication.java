@@ -58,11 +58,36 @@ public class SocketCommunication implements ICommunication {
                 gameObj.addProperty("gameId", game.getId());
                 gameObj.addProperty("currentPlayers", game.getCurrentPlayers());
                 gameObj.addProperty("maxPlayers", game.getMaxPlayers());
+                gameObj.addProperty("layout", game.getLayout());
+                gameObj.addProperty("variant", game.getVariant());
                 return gameObj;
             }).collect(Collectors.toList());
 
             builder.setPayloadArray(gameObjects);
             out.writeObject(builder.build());
+        } catch (IOException e) {
+            logger.warning("Error sending message: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public synchronized void sendGameInfo(GameInfo gameInfo, ObjectOutputStream out) {
+        try {
+            out.writeObject(
+                    JsonBuilder.setBuilder("gameInfo").setPayloadArgument("gameId", gameInfo.getId())
+                            .setPayloadArgument("maxPlayers", gameInfo.getMaxPlayers())
+                            .setPayloadArgument("layout", gameInfo.getLayout())
+                            .setPayloadArgument("variant", gameInfo.getVariant()).build());
+        } catch (IOException e) {
+            logger.warning("Error sending message: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public synchronized void sendBoard(String board, ObjectOutputStream out) {
+        try {
+            out.writeObject(
+                    JsonBuilder.setBuilder("board").setPayloadArgument("content", board).build());
         } catch (IOException e) {
             logger.warning("Error sending message: " + e.getMessage());
         }
