@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 import atlantafx.base.theme.Dracula;
+
 /**
  * JavaFX App
  */
@@ -21,7 +22,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         communication = new SocketCommunication();
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("secondary"), 600, 600);
         Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
         stage.setScene(scene);
         stage.show();
