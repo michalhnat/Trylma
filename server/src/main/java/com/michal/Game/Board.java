@@ -4,6 +4,8 @@ import java.util.List;
 
 public abstract class Board {
 
+    public Node[][] board;
+
     public abstract List<Integer> getAllowedPlayerNumbers();
 
     public abstract void move(Position start, Position end);
@@ -14,5 +16,7 @@ public abstract class Board {
 
     public abstract void initialize(Layout layout, List<Player> players);
 
-    public abstract boolean validateMove(Position start, Position end);
+    public abstract boolean validateMove(Player player, Position start, Position end);
+
+    public abstract Node[][] getBoardArray();
 }

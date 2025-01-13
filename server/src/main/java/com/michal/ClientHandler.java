@@ -49,6 +49,12 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
         communication.sendListMessage(list, out);
     }
 
+    public void sendBoard(String board) { communication.sendBoard(board, out); }
+
+    public void sendGameInfo(GameInfo gameInfo) {
+        communication.sendGameInfo(gameInfo, out);
+    }
+
     @Override
     public void sendError(String msg) {
         communication.sendError(msg, out);
@@ -99,10 +105,16 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                     mediator.handleCreateGame(this, boardSize, layout, variant);
                     break;
                 case "move":
-                    int x = payload.get("x").getAsInt();
-                    int y = payload.get("y").getAsInt();
+                    int start_x = payload.get("start_x").getAsInt();
+                    int start_y = payload.get("start_y").getAsInt();
+                    Position start = new Position(start_x, start_y);
+
+                    int end_x = payload.get("end_x").getAsInt();
+                    int end_y = payload.get("end_y").getAsInt();
+                    Position end = new Position(end_x, end_y);
+
                     if (isInGame()) {
-                        mediator.handleMove(this, x, y);
+                        mediator.handleMove(this, start, end);
                     } else {
                         sendError("You are not part of any game session.");
                     }

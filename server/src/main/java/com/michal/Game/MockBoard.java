@@ -9,7 +9,7 @@ import java.util.List;
  */
 public class MockBoard extends Board {
     private final int size = 8;
-    private final String[][] board = new String[size][size];
+    private final Node[][] board = new Node[size][size];
     private final List<Integer> allowedPlayerNumbers = new ArrayList<>(Arrays.asList(2, 3, 4, 6));
 
     /**
@@ -67,7 +67,17 @@ public class MockBoard extends Board {
      * @return true indicating the move is valid
      */
     @Override
-    public boolean validateMove(Position start, Position end) {
+    public boolean validateMove(Player player, Position start, Position end) {
         return true;
+    }
+
+    /**
+     * Returns the board array.
+     *
+     * @return the board array
+     */
+    @Override
+    public Node[][] getBoardArray() {
+        return board;
     }
 }

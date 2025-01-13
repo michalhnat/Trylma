@@ -29,6 +29,14 @@ public class Player {
         communicator.sendError(message);
     }
 
+    public synchronized void sendBoard(String board) {
+        communicator.sendBoard(board);
+    }
+
+    public void sendGameInfo(GameInfo gameInfo) {
+        communicator.sendGameInfo(gameInfo);
+    }
+
     public UUID getId() {
         return id;
     }

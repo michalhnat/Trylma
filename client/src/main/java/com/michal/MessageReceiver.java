@@ -48,6 +48,9 @@ public class MessageReceiver extends ServerMessageHandler {
                     display.displayMessage(game);
                 }
                 break;
+            case "board":
+                display.displayMessage(jsonDeserializer.getMessage(message));
+                break;
         }
         display.displayMessage(">", false);
     }

@@ -5,8 +5,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Logger;
 
 import com.michal.GameSessionMediator;
+import com.michal.Utils.BoardStringBuilder;
+import com.michal.Utils.MyLogger;
 
 public class GameSession {
     private static final AtomicInteger sessionCounter = new AtomicInteger(1);
@@ -16,13 +19,17 @@ public class GameSession {
     private final GameQueue gameQueue;
     private final GameSessionMediator server;
     private final Queue<String> availableColors;
+    Logger logger = MyLogger.logger;
+    static {
+        MyLogger.loggerConfig();
+    }
 
     private static final List<String> COLORS =
             List.of("Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Cyan", "Magenta");
 
-    public GameSession(Board board, int maxPlayers, GameSessionMediator server) {
+    public GameSession(Board board, Layout layout, Variant variant, GameSessionMediator server) {
         this.sessionId = sessionCounter.getAndIncrement();
-        this.game = new Game(board, maxPlayers);
+        this.game = new Game(board, layout, variant);
         this.players = new ArrayList<>();
         this.gameQueue = new GameQueue();
         this.server = server;
@@ -53,6 +60,9 @@ public class GameSession {
         broadcastMessage("Player " + player.getName() + " has joined the game with color "
                 + assignedColor + ".");
 
+        player.sendGameInfo(new GameInfo(this.getSessionId(), this.getPlayers().size(),
+                this.getGame().getLayout(), this.getGame().getVariant()));
+
         if (players.size() == game.getMaxPlayers()) {
             startGame();
         }
@@ -81,23 +91,29 @@ public class GameSession {
 
     private synchronized void startGame() {
         game.start(players);
+//        if (game.getBoard() == null) {
+//            System.out.println("Board is null");
+//        }
         broadcastMessage("Game started!");
+        broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoard()));
         promptNextPlayer();
     }
 
-    public synchronized void handleMove(Player player, Position newPosition) {
+    public synchronized void handleMove(Player player, Position start, Position end) {
         if (!game.isInProgress()) {
             player.sendError("Game is not in progress.");
             return;
         }
 
         try {
-            game.move(player, newPosition);
-            broadcastMessage("Player " + player.getName() + " moved to position ("
-                    + newPosition.getX() + ", " + newPosition.getY() + ").");
+            game.move(player, start, end);
+            broadcastMessage("Player " + player.getColor() + " moved");
+
+            broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoard()));
             promptNextPlayer();
         } catch (Exception e) {
-            player.sendError("Invalid move: " + e.getMessage());
+            player.sendError("Error: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -111,6 +127,12 @@ public class GameSession {
     private synchronized void broadcastMessage(String message) {
         for (Player p : players) {
             p.sendMessage(message);
+        }
+    }
+
+    private synchronized void broadcastBoard(String board) {
+        for (Player p : players) {
+            p.sendBoard(board);
         }
     }
 

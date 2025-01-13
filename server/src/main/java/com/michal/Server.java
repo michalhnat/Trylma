@@ -48,7 +48,7 @@ public class Server implements Mediator, GameSessionMediator {
             Board board = new StandardBoard(boardSize);
 
             try {
-                GameSession session = new GameSession(board, layout.getPlayers(), this);
+                GameSession session = new GameSession(board, layout, variant, this);
                 synchronized (gameSessions) {
                     gameSessions.add(session);
                 }
@@ -88,7 +88,7 @@ public class Server implements Mediator, GameSessionMediator {
     }
 
     @Override
-    public void handleMove(ClientHandler clientHandler, int x, int y) {
+    public void handleMove(ClientHandler clientHandler, Position start, Position end) {
         if (!clientHandler.isInGame()) {
             clientHandler.sendError("You are not part of any game session.");
             return;
@@ -101,7 +101,7 @@ public class Server implements Mediator, GameSessionMediator {
 
             if (sessionOptional.isPresent()) {
                 GameSession session = sessionOptional.get();
-                session.handleMove(player, new Position(x, y));
+                session.handleMove(player, start, end);
             } else {
                 clientHandler.sendError("You are not part of any game session.");
             }
@@ -120,7 +120,7 @@ public class Server implements Mediator, GameSessionMediator {
             List<GameInfo> activeGames = new ArrayList<>();
             for (GameSession session : gameSessions) {
                 activeGames.add(new GameInfo(session.getSessionId(), session.getPlayers().size(),
-                        session.getGame().getMaxPlayers()));
+                        session.getGame().getLayout(), session.getGame().getVariant()));
             }
 
             clientHandler.sendListMessage(activeGames);

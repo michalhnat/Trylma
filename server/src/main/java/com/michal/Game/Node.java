@@ -13,6 +13,7 @@ public class Node {
     }
 
     public Pawn getPawn() {
+
         return pawn;
     }
 

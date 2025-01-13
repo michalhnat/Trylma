@@ -19,8 +19,14 @@ public class CreateGameCommand implements Runnable {
     @ParentCommand
     private MainCommand parent;
 
-    @Parameters(index = "0", description = "Number of players")
-    private int players;
+    @Parameters(index = "0", description = "Layout of the game")
+    private String layout;
+
+    @Parameters(index = "1", description = "Variant of the game")
+    private String variant;
+
+    @Parameters(index = "2", description = "Size of the board")
+    private int boardSize;
 
     /**
      * Executes the command to create a game.
@@ -36,7 +42,9 @@ public class CreateGameCommand implements Runnable {
         }
         try {
             String jsonMessage =
-                    JsonBuilder.setBuilder("create").setPayloadArgument("players", players).build();
+                    JsonBuilder.setBuilder("create").setPayloadArgument("layout", layout)
+                            .setPayloadArgument("variant", variant)
+                            .setPayloadArgument("boardSize", boardSize).build();
             communication.sendMessage(jsonMessage);
         } catch (FailedSendingMessageToServer e) {
             display.displayError(e.getMessage());

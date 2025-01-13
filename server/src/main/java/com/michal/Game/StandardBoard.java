@@ -27,7 +27,9 @@ public class StandardBoard extends Board {
 
     @Override
     public void move(Position start, Position end) {
-        // Move logic
+        Pawn movedPawn = board[start.getX()][start.getY()].getPawn();
+        board[start.getX()][start.getY()].setPawn(null);
+        board[end.getX()][end.getY()].setPawn(movedPawn);
     }
 
     @Override
@@ -73,7 +75,14 @@ public class StandardBoard extends Board {
     }
 
     @Override
-    public boolean validateMove(Position start, Position end) {
-        return moveValidator.isValidMove(board, start, end);
+    public boolean validateMove(Player player, Position start, Position end) {
+        return moveValidator.isValidMove(board, player, start, end);
+    }
+
+    public Node[][] getBoardArray() {
+        if (board == null) {
+            System.out.println("Board is null in the method getBoardArray()");
+        }
+        return board;
     }
 }
