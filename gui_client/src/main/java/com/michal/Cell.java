@@ -60,6 +60,14 @@ public class Cell extends StackPane {
         return this.getLayoutY() + circle.getRadius();
     }
 
+    public int getI() {
+        return i;
+    }
+
+    public int getJ() {
+        return j;
+    }
+
     public void setFill(Paint color) {
         circle.setFill(color);
     }

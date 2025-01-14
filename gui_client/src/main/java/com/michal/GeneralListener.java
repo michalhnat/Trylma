@@ -28,7 +28,7 @@ public class GeneralListener implements Runnable {
         while (true) {
             try {
                 String message = (String) in.readObject();
-                System.out.println("Recived: " + message);
+                // System.out.println("Recived: " + message);
                 handleMessage(message);
             } catch (ClassNotFoundException e) {
                 // System.out.println("Error: " + e.getMessage());

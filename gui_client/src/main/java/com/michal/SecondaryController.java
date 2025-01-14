@@ -71,14 +71,14 @@ public class SecondaryController implements IController {
         // BoardPane.getChildren().add(cell);
         // });
 
-        try {
-            gameManager = new GameManager(communication.getInputStream(), communication, label,
-                    label, board, borderPane);
-            Thread gameManagerThread = new Thread(gameManager);
-            gameManagerThread.start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // try {
+        // gameManager = new GameManager(communication.getInputStream(), communication, label,
+        // label, board, borderPane);
+        // Thread gameManagerThread = new Thread(gameManager);
+        // gameManagerThread.start();
+        // } catch (Exception e) {
+        // e.printStackTrace();
+        // }
 
 
         // gameManager.start();
@@ -113,7 +113,8 @@ public class SecondaryController implements IController {
         JsonDeserializer jsonDeserializer = JsonDeserializer.getInstance();
         switch (jsonDeserializer.getType(message)) {
             case "board":
-                System.out.println("Board: " + message);
+                String map = jsonDeserializer.getMessage(message);
+                System.out.println(map);
                 updateBoard(jsonDeserializer.getMessage(message));
                 break;
             case "gameInfo":
@@ -148,6 +149,7 @@ public class SecondaryController implements IController {
                 BoardPane.getChildren().add(cell);
             });
         } else {
+            System.out.println("Edit board");
             board.editBoardOutOfMap(map);
         }
     }
