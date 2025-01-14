@@ -19,7 +19,7 @@ public class Board {
         for (int i = 0; i < mapArray.length; i++) {
             String[] row = mapArray[i].split("");
 
-            System.out.println("Row " + i + ": " + String.join("", row));
+            // System.out.println("Row " + i + ": " + String.join("", row));
             for (int j = 0; j < row.length; j++) {
                 double x = radius * j * 2 + radius + i * radius;
                 double y = radius * 2 * i + radius;
@@ -31,6 +31,34 @@ public class Board {
                     cells.add(new Cell(x, y, i, j, radius, Color.RED));
                 }
 
+            }
+        }
+    }
+
+    private Cell getCellByCoordinates(int x, int y) {
+        for (Cell cell : cells) {
+            if (cell.getX() == x && cell.getY() == y) {
+                return cell;
+            }
+        }
+        return null;
+    }
+
+    public void editBoardOutOfMap(String map) {
+        String[] mapArray = map.split("\n");
+        for (int i = 0; i < mapArray.length; i++) {
+            String[] row = mapArray[i].split("");
+            for (int j = 0; j < row.length; j++) {
+                Cell cell = getCellByCoordinates(i, j);
+                if (cell != null) {
+                    if (row[j].equals("W")) {
+                        cell.setFill(Color.GRAY);
+                    } else if (row[j].equals("B")) {
+                        cell.setFill(Color.CYAN);
+                    } else if (row[j].equals("R")) {
+                        cell.setFill(Color.RED);
+                    }
+                }
             }
         }
     }

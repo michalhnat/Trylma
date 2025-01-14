@@ -17,22 +17,22 @@ public class PrimaryController {
 
     private ICommunication communication;
     private PrimaryServerListener listener;
-    
+
     @FXML
     private TextField ip_tf;
 
     @FXML
     private TextField port_tf;
-    
+
     @FXML
     private Button connect_btn;
-    
+
     @FXML
     private Label info_label;
-    
+
     @FXML
     private Label games_label;
-    
+
     @FXML
     private ListView<HboxCell> games_list;
 
@@ -43,19 +43,27 @@ public class PrimaryController {
     private Button create_button;
 
     @FXML
-    private TextField create_tf;
-    
+    private TextField variant_tf;
+
+    @FXML
+    private TextField layout_tf;
+
+    @FXML
+    private TextField boardSize_tf;
+
+
 
     // @FXML
     // public void initialize() {
-    //     // communication = App.getCommunication();
-    //     if (App.getCommunication().getInputStream() == null) {
-    //         System.out.println("null");
-    //     } else {
-    //         System.out.println("not null");
-    //     }
-    //     listener = new PrimaryServerListener(info_label, info_label, games_list, App.getCommunication().getInputStream());
-        
+    // // communication = App.getCommunication();
+    // if (App.getCommunication().getInputStream() == null) {
+    // System.out.println("null");
+    // } else {
+    // System.out.println("not null");
+    // }
+    // listener = new PrimaryServerListener(info_label, info_label, games_list,
+    // App.getCommunication().getInputStream());
+
     // }
 
     @FXML
@@ -75,7 +83,8 @@ public class PrimaryController {
 
             try {
                 // System.out.println(App.getCommunication().isConnected());
-                listener = new PrimaryServerListener(info_label, info_label, games_list, App.getCommunication());
+                listener = new PrimaryServerListener(info_label, info_label, games_list,
+                        App.getCommunication());
                 Thread listenerThread = new Thread(listener);
                 listenerThread.start();
                 request_games_list();
@@ -97,35 +106,34 @@ public class PrimaryController {
             App.getCommunication().sendMessage(jsonMessage);
         } catch (Exception e) {
             info_label.setText("Failed to list games");
+
         }
     }
 
     @FXML
     private void create_game() {
-        int players = Integer.parseInt(create_tf.getText());
-
-        if (players < 2 || players > 6 || players % 2 != 0) {
-            info_label.setText("Invalid number of players");
-            return;
-        }
-
-        String jsonMessage =
-                    JsonBuilder.setBuilder("create").setPayloadArgument("players", players).build();
+        String layout = layout_tf.getText();
+        String variant = variant_tf.getText();
+        int boardSize = Integer.parseInt(boardSize_tf.getText());
+        String jsonMessage = JsonBuilder.setBuilder("create").setPayloadArgument("layout", layout)
+                .setPayloadArgument("variant", variant).setPayloadArgument("boardSize", boardSize)
+                .build();
         // String gameName = create_tf.getText();
         // String jsonMessage = JsonBuilder.setBuilder("create").add("name", gameName).build();
         try {
             App.getCommunication().sendMessage(jsonMessage);
             request_games_list();
         } catch (Exception e) {
+            e.printStackTrace();
             info_label.setText("Failed to create game");
         }
     }
 
     // public void setCommunication(ICommunication communication) {
-    //     this.communication = communication;
+    // this.communication = communication;
     // }
     // @FXML
     // private void switchToSecondary() throws IOException {
-    //     App.setRoot("secondary");
+    // App.setRoot("secondary");
     // }
 }

@@ -42,7 +42,11 @@
             </HBox>
             <ListView fx:id="games_list" prefHeight="421.0" prefWidth="100.0" />
             <HBox alignment="CENTER">
-               <TextField fx:id="create_tf" alignment="CENTER" promptText="Type no players"
+               <TextField fx:id="layout_tf" alignment="CENTER" promptText="Layout of the game"
+                  onAction="#create_game" />
+               <TextField fx:id="variant_tf" alignment="CENTER" promptText="Variant of the game"
+                  onAction="#create_game" />
+               <TextField fx:id="boardSize_tf" alignment="CENTER" promptText="Size of the board"
                   onAction="#create_game" />
                <Button fx:id="create_button" mnemonicParsing="false" text="create"
                   onAction="#create_game" />
