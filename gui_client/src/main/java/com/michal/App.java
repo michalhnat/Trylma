@@ -18,6 +18,7 @@ public class App extends Application {
 
     private static Scene scene;
     private static ICommunication communication;
+    private static GeneralListener generalListener;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -34,6 +35,14 @@ public class App extends Application {
 
     static ICommunication getCommunication() {
         return communication;
+    }
+
+    static void setGeneralListener(GeneralListener generalListener) {
+        App.generalListener = generalListener;
+    }
+
+    static GeneralListener getGeneralListener() {
+        return generalListener;
     }
 
     private static Parent loadFXML(String fxml) throws IOException {

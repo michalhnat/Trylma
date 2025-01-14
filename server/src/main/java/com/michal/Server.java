@@ -38,7 +38,8 @@ public class Server implements Mediator, GameSessionMediator {
     }
 
     @Override
-    public void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout, Variant variant) {
+    public void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout,
+            Variant variant) {
         synchronized (gameSessions) {
             if (clientHandler.isInGame()) {
                 clientHandler.sendError("Error: You are already in a game session.");
@@ -120,7 +121,8 @@ public class Server implements Mediator, GameSessionMediator {
             List<GameInfo> activeGames = new ArrayList<>();
             for (GameSession session : gameSessions) {
                 activeGames.add(new GameInfo(session.getSessionId(), session.getPlayers().size(),
-                        session.getGame().getLayout(), session.getGame().getVariant()));
+                        session.getGame().getLayout(), session.getGame().getVariant(),
+                        session.getGame().getStatus(), "None"));
             }
 
             clientHandler.sendListMessage(activeGames);

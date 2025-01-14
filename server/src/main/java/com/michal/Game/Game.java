@@ -89,5 +89,9 @@ public class Game {
         return variant;
     }
 
+    public GameStatus getStatus() {
+        return status;
+    }
+
     // Additional game logic methods
 }

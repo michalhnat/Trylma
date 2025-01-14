@@ -1,4 +1,8 @@
-Jan 13, 2025 10:32:08 PM com.michal.ClientHandler run
+Jan 14, 2025 2:04:01 PM com.michal.ClientHandler run
 INFO: Client connected: /127.0.0.1
-Jan 13, 2025 10:32:22 PM com.michal.ClientHandler run
+Jan 14, 2025 2:04:01 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 14, 2025 2:04:01 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 14, 2025 2:04:02 PM com.michal.ClientHandler run
 INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}

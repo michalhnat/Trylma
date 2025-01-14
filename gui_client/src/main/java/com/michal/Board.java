@@ -24,11 +24,11 @@ public class Board {
                 double x = radius * j * 2 + radius + i * radius;
                 double y = radius * 2 * i + radius;
                 if ((row[j].equals("W"))) {
-                    cells.add(new Cell(x, y, i, j, radius, Color.GRAY));
+                    cells.add(new Cell(x, y, 16 - i, j, radius, Color.GRAY));
                 } else if (row[j].equals("B")) {
-                    cells.add(new Cell(x, y, i, j, radius, Color.CYAN));
+                    cells.add(new Cell(x, y, 16 - i, j, radius, Color.CYAN));
                 } else if (row[j].equals("R")) {
-                    cells.add(new Cell(x, y, i, j, radius, Color.RED));
+                    cells.add(new Cell(x, y, 16 - i, j, radius, Color.RED));
                 }
 
             }
@@ -62,6 +62,17 @@ public class Board {
             }
         }
     }
+
+    public boolean isEmpty() {
+        return cells.isEmpty();
+    }
+    // public void updateBoard(String map) {
+    // if (cells.isEmpty()) {
+    // createBoardOutOfMap(map);
+    // } else {
+    // editBoardOutOfMap(map);
+    // }
+    // }
 
     public List<Cell> getCells() {
         return cells;

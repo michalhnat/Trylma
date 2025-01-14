@@ -114,9 +114,11 @@ public class JsonDeserializer {
         JsonArray games = obj.get("payload").getAsJsonArray();
         for (JsonElement game : games) {
             JsonObject gameObj = game.getAsJsonObject();
+
             String gameString = String.format("Game #%d (%d/%d players)",
                     gameObj.get("gameId").getAsInt(), gameObj.get("currentPlayers").getAsInt(),
                     gameObj.get("maxPlayers").getAsInt());
+            // System.out.println(gameString);
             gamesList.add(gameString);
         }
 

@@ -20,9 +20,9 @@
                </opaqueInsets>
             </Label>
             <TextField fx:id="ip_tf" alignment="CENTER" prefHeight="25.0" prefWidth="98.0"
-               promptText="Type server addr ip" onAction="#connectToServer" />
+               promptText="Type server addr ip" text="127.0.0.1" onAction="#connectToServer" />
             <TextField fx:id="port_tf" alignment="CENTER" prefHeight="25.0" prefWidth="98.0"
-               promptText="Type server port" onAction="#connectToServer" />
+               promptText="Type server port" onAction="#connectToServer" text="8085" />
             <Button fx:id="connect_button" mnemonicParsing="false" text="Connect"
                onAction="#connectToServer" />
          </children>
@@ -42,11 +42,14 @@
             </HBox>
             <ListView fx:id="games_list" prefHeight="421.0" prefWidth="100.0" />
             <HBox alignment="CENTER">
-               <TextField fx:id="layout_tf" alignment="CENTER" promptText="Layout of the game"
+               <TextField fx:id="layout_tf" text="TWOPLAYERS_ONESET" alignment="CENTER"
+                  promptText="Layout of the game"
                   onAction="#create_game" />
-               <TextField fx:id="variant_tf" alignment="CENTER" promptText="Variant of the game"
+               <TextField fx:id="variant_tf" text="STANDARD" alignment="CENTER"
+                  promptText="Variant of the game"
                   onAction="#create_game" />
-               <TextField fx:id="boardSize_tf" alignment="CENTER" promptText="Size of the board"
+               <TextField fx:id="boardSize_tf" text="5" alignment="CENTER"
+                  promptText="Size of the board"
                   onAction="#create_game" />
                <Button fx:id="create_button" mnemonicParsing="false" text="create"
                   onAction="#create_game" />

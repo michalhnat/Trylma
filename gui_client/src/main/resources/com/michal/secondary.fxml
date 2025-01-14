@@ -20,7 +20,7 @@
                 <TextField fx:id="y" promptText="y" />
                 <TextField fx:id="destination_x" promptText="destination_x" />
                 <TextField fx:id="destination_y" promptText="destination_y" />
-                <Button fx:id="moveButton" text="Move" />
+                <Button fx:id="moveButton" text="Move" onAction="#move" />
             </buttons>
         </ButtonBar>
     </bottom>

@@ -2,21 +2,24 @@ package com.michal;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.michal.Exceptions.FailedConnectingToServerException;
 import com.michal.Utils.JsonBuilder;
-
+import com.michal.Utils.JsonDeserializer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
-public class PrimaryController {
+public class PrimaryController implements IController {
 
+    private static IController instance;
     private ICommunication communication;
-    private PrimaryServerListener listener;
+    private GeneralListener listener;
+
 
     @FXML
     private TextField ip_tf;
@@ -52,19 +55,11 @@ public class PrimaryController {
     private TextField boardSize_tf;
 
 
-
-    // @FXML
-    // public void initialize() {
-    // // communication = App.getCommunication();
-    // if (App.getCommunication().getInputStream() == null) {
-    // System.out.println("null");
-    // } else {
-    // System.out.println("not null");
-    // }
-    // listener = new PrimaryServerListener(info_label, info_label, games_list,
-    // App.getCommunication().getInputStream());
-
-    // }
+    @FXML
+    private void initialize() {
+        communication = App.getCommunication();
+        instance = this;
+    }
 
     @FXML
     private void connectToServer() throws IOException {
@@ -82,12 +77,20 @@ public class PrimaryController {
             info_label.setText("Connected to the server.");
 
             try {
-                // System.out.println(App.getCommunication().isConnected());
-                listener = new PrimaryServerListener(info_label, info_label, games_list,
-                        App.getCommunication());
+                listener = new GeneralListener(communication);
+                App.setGeneralListener(listener);
+                App.getGeneralListener().setController(this);
+
                 Thread listenerThread = new Thread(listener);
                 listenerThread.start();
+
                 request_games_list();
+
+                // listener = new PrimaryServerListener(info_label, info_label, games_list,
+                // App.getCommunication());
+                // Thread listenerThread = new Thread(listener);
+                // listenerThread.start();
+                // request_games_list();
             } catch (Exception e) {
                 info_label.setText("Failed to start listener");
             }
@@ -129,6 +132,75 @@ public class PrimaryController {
         }
     }
 
+    @Override
+    public void showInfo(String message) {
+        info_label.setText(message);
+    }
+
+    @Override
+    public void showError(String message) {
+        info_label.setText(message);
+    }
+
+    @Override
+    public void handleMessage(String message) {
+        // System.out.println("PrimaryController: " + message);
+        JsonDeserializer jsonDeserializer = JsonDeserializer.getInstance();
+        switch (jsonDeserializer.getType(message)) {
+            case "list":
+                // System.out.println("PrimaryController: " + jsonDeserializer.getType(message));
+                List<String> games = jsonDeserializer.getGamesAsList(message);
+                List<HboxCell> cells = createCells(games);
+                games_list.getItems().clear();
+                games_list.getItems().addAll(cells);
+                break;
+            default:
+                showError("Unknown message type: " + jsonDeserializer.getType(message));
+                break;
+        }
+    }
+
+    public List<HboxCell> createCells(List<String> labels) {
+        List<HboxCell> cells = new ArrayList<>();
+        for (int i = 0; i < labels.size(); i++) {
+            Button button = new Button();
+            button.setText("Join");
+            int gameID = extractGameID(labels.get(i));
+            button.setOnAction(e -> {
+                try {
+                    if (gameID == -1) {
+                        showError("Failed to join game");
+                        return;
+                    }
+                    String jsonMessage = JsonBuilder.setBuilder("join")
+                            .setPayloadArgument("gameID", String.valueOf(gameID)).build();
+                    App.setRoot("secondary");
+                    App.getGeneralListener().setController(SecondaryController.getInstance());
+                    communication.sendMessage(jsonMessage);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    showError(("Failed to join game"));
+                }
+            });
+            cells.add(new HboxCell(labels.get(i), button));
+        }
+        return cells;
+    }
+
+    private int extractGameID(String label) {
+        try {
+            int hashIndex = label.indexOf('#');
+            int spaceIndex = label.indexOf(' ', hashIndex);
+            if (hashIndex != -1 && spaceIndex != -1) {
+                String idStr = label.substring(hashIndex + 1, spaceIndex);
+                return Integer.parseInt(idStr);
+            }
+        } catch (NumberFormatException e) {
+            // Handle parsing error
+        }
+        return -1;
+    }
+
     // public void setCommunication(ICommunication communication) {
     // this.communication = communication;
     // }
@@ -136,4 +208,8 @@ public class PrimaryController {
     // private void switchToSecondary() throws IOException {
     // App.setRoot("secondary");
     // }
+
+    public static IController getInstance() {
+        return instance;
+    }
 }
