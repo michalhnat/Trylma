@@ -71,6 +71,10 @@ public class Cell extends StackPane {
     public void setFill(Paint color) {
         circle.setFill(color);
     }
+
+    public Paint getFill() {
+        return circle.getFill();
+    }
 }
 
 // package com.michal;

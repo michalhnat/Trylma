@@ -77,11 +77,18 @@ public class Board {
         Map<int[], Paint> changes = compareMaps(map);
         for (Map.Entry<int[], Paint> entry : changes.entrySet()) {
             int[] location = entry.getKey();
+
             Cell cell = getCellByCoordinates(location[0], location[1]);
             if (cell != null) {
+                // System.out.println(
+                // "Before: " + location[0] + " " + location[1] + " Color: " + cell.getFill());
                 cell.setFill(entry.getValue());
+                // System.out.println(
+                // "After " + location[0] + " " + location[1] + " Color: " + entry.getValue());
             }
         }
+
+        currentMap = map;
     }
 
     public Map<int[], Paint> compareMaps(String newMap) {
