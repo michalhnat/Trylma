@@ -10,6 +10,7 @@ import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.JsonDeserializer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -45,11 +46,17 @@ public class PrimaryController implements IController {
     @FXML
     private Button create_button;
 
-    @FXML
-    private TextField variant_tf;
+    // @FXML
+    // private TextField variant_tf;
+
+    // @FXML
+    // private TextField layout_tf;
 
     @FXML
-    private TextField layout_tf;
+    private ChoiceBox<String> layout_cb;
+
+    @FXML
+    private ChoiceBox<String> variant_cb;
 
     @FXML
     private TextField boardSize_tf;
@@ -115,21 +122,32 @@ public class PrimaryController implements IController {
 
     @FXML
     private void create_game() {
-        String layout = layout_tf.getText();
-        String variant = variant_tf.getText();
-        int boardSize = Integer.parseInt(boardSize_tf.getText());
-        String jsonMessage = JsonBuilder.setBuilder("create").setPayloadArgument("layout", layout)
-                .setPayloadArgument("variant", variant).setPayloadArgument("boardSize", boardSize)
-                .build();
+        try {
+            String layout = layout_cb.getValue().toString();
+            String variant = variant_cb.getValue().toString();
+            int boardSize = Integer.parseInt(boardSize_tf.getText());
+
+            if (layout == null || layout.isEmpty() || variant == null || variant.isEmpty()
+                    || boardSize == 0 || boardSize < 0) {
+                throw new Exception("Invalid layout, variant or board size");
+            }
+
+            String jsonMessage = JsonBuilder.setBuilder("create")
+                    .setPayloadArgument("layout", layout).setPayloadArgument("variant", variant)
+                    .setPayloadArgument("boardSize", boardSize).build();
+
+            try {
+                App.getCommunication().sendMessage(jsonMessage);
+                request_games_list();
+            } catch (Exception e) {
+                info_label.setText("Failed to create game");
+            }
+        } catch (Exception e) {
+            info_label.setText(e.getMessage());
+        }
         // String gameName = create_tf.getText();
         // String jsonMessage = JsonBuilder.setBuilder("create").add("name", gameName).build();
-        try {
-            App.getCommunication().sendMessage(jsonMessage);
-            request_games_list();
-        } catch (Exception e) {
-            e.printStackTrace();
-            info_label.setText("Failed to create game");
-        }
+
     }
 
     @Override

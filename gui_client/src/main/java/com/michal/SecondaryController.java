@@ -13,7 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
-public class SecondaryController implements IController {
+public class SecondaryController implements IController, BoardControllerMediator {
     private static IController instance;
 
     @FXML
@@ -54,7 +54,7 @@ public class SecondaryController implements IController {
         communication = App.getCommunication();
         instance = this;
 
-        board = new Board(15);
+        board = new Board(15, this);
         // board.createBoardOutOfMap("XXXXXXXXXXXXWXXXX\r\n" + //
         // "XXXXXXXXXXXWWXXXX\r\n" + //
         // "XXXXXXXXXXWWWXXXX\r\n" + //
@@ -100,6 +100,8 @@ public class SecondaryController implements IController {
 
     @Override
     public void showInfo(String message) {
+        message = message.toUpperCase();
+        label.setStyle("-fx-font-weight: bold");
         System.out.println("Info: " + message);
         label.setText(message);
         label.setTextFill(Color.GREEN);
@@ -107,6 +109,8 @@ public class SecondaryController implements IController {
 
     @Override
     public void showError(String message) {
+        message = message.toUpperCase();
+        label.setStyle("-fx-font-weight: bold");
         label.setText(message);
         label.setTextFill(Color.RED);
         System.out.println("Error: " + message);
@@ -147,6 +151,7 @@ public class SecondaryController implements IController {
                 .setPayloadArgument("end_y", destination_y).build();
         try {
             communication.sendMessage(jsonMessage);
+            board.restet_border_on_active_cells();
         } catch (Exception e) {
             showError("Failed to move");
         }
@@ -162,6 +167,18 @@ public class SecondaryController implements IController {
             // System.out.println("Edit board");
             board.editBoardOutOfMap(map);
         }
+    }
+
+    @Override
+    public void setStartXY(int x, int y) {
+        this.x.setText(Integer.toString(x));
+        this.y.setText(Integer.toString(y));
+    }
+
+    @Override
+    public void setEndXY(int x, int y) {
+        this.destination_x.setText(Integer.toString(x));
+        this.destination_y.setText(Integer.toString(y));
     }
 
 }

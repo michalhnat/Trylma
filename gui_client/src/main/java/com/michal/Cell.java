@@ -1,22 +1,28 @@
 
 package com.michal;
 
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.input.MouseEvent;
 
 public class Cell extends StackPane {
     private int i;
     private int j;
     private Circle circle;
     private Text text;
+    private Board board;
+    private Color color;
 
-    public Cell(double centerX, double centerY, int i, int j, double radius, Paint color) {
+    public Cell(double centerX, double centerY, int i, int j, double radius, Color color,
+            Board board) {
         this.i = i;
         this.j = j;
+        this.board = board;
+        this.color = color;
 
         circle = new Circle(radius, color);
         circle.setStrokeWidth(0);
@@ -32,19 +38,31 @@ public class Cell extends StackPane {
 
         this.setOnMouseEntered(event -> handleMouseEntered(event));
         this.setOnMouseExited(event -> handleMouseExited(event));
+        this.setOnMouseClicked(event -> handleMouseClicked(event));
     }
 
     private void handleMouseEntered(MouseEvent event) {
         circle.setOpacity(0.7);
-        circle.setStroke(Paint.valueOf("black"));
-        circle.setStrokeWidth(1);
+        // circle.setStroke(Paint.valueOf("black"));
+        // circle.setStrokeWidth(1);
         text.setVisible(true);
     }
 
     private void handleMouseExited(MouseEvent event) {
         circle.setOpacity(1.0);
-        circle.setStrokeWidth(0);
+        // circle.setStrokeWidth(0);
         text.setVisible(false);
+    }
+
+    private void handleMouseClicked(MouseEvent event) {
+        board.handleCellClick(i, j);
+        circle.setStrokeWidth(1);
+        circle.setStroke(color.invert());
+        // System.out.println("Clicked on cell: " + i + ", " + j);
+    }
+
+    public void resetBorder() {
+        circle.setStrokeWidth(0);
     }
 
     public void setXY(double x, double y) {

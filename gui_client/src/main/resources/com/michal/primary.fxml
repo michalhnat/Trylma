@@ -6,13 +6,18 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.collections.*?>
+<?import java.lang.String?>
 
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+<BorderPane style="-fx-padding: 5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+   minWidth="-Infinity"
    prefHeight="600.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21"
    xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.michal.PrimaryController">
    <left>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="220.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" spacing="5" style="-fx-padding: 5" prefHeight="200.0"
+         prefWidth="220.0" BorderPane.alignment="CENTER">
          <children>
             <Label fx:id="info_label">
                <opaqueInsets>
@@ -32,28 +37,53 @@
       </VBox>
    </left>
    <center>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" spacing="5" style="-fx-padding: 5" prefHeight="200.0"
+         prefWidth="100.0" BorderPane.alignment="CENTER">
          <children>
-            <HBox alignment="CENTER">
+            <HBox alignment="CENTER" spacing="5" style="-fx-padding: 5">
                <Label fx:id="games_label" alignment="CENTER" prefHeight="17.0" prefWidth="117.0"
                   text="Available games" textAlignment="CENTER" />
                <Button fx:id="refresh" mnemonicParsing="false" text="refresh"
                   onAction="#request_games_list" />
             </HBox>
             <ListView fx:id="games_list" prefHeight="421.0" prefWidth="100.0" />
-            <HBox alignment="CENTER">
-               <TextField fx:id="layout_tf" text="TWOPLAYERS_ONESET" alignment="CENTER"
+            <VBox alignment="CENTER" spacing="5" style="-fx-padding: 5">
+               <HBox alignment="CENTER" spacing="5" style="-fx-padding: 5">
+                  <ChoiceBox fx:id="layout_cb" value="TWOPLAYERS_ONESET">
+                     <items>
+                        <FXCollections fx:factory="observableArrayList">
+                           <String fx:value="SIXPLAYERS" />
+                           <String fx:value="FOURPLAYERS" />
+                           <String fx:value="THREEPLAYERS_ONESET" />
+                           <String fx:value="THREEPLAYERS_TWOSETS" />
+                           <String fx:value="TWOPLAYERS_ONESET" />
+                           <String fx:value="TWOPLAYERS_TWOSETS_ADJACENT" />
+                           <String fx:value="TWOPLAYERS_TWOSETS_OPPOSITE" />
+                           <String fx:value="TWOPLAYERS_THREESETS" />
+                        </FXCollections>
+                     </items>
+                  </ChoiceBox>
+                  <ChoiceBox fx:id="variant_cb" value="STANDARD">
+                     <items>
+                        <FXCollections fx:factory="observableArrayList">
+                           <String fx:value="STANDARD" />
+                           <String fx:value="SUPER" />
+                        </FXCollections>
+                     </items>
+                  </ChoiceBox>
+                  <!-- <TextField fx:id="layout_tf" text="TWOPLAYERS_ONESET" alignment="CENTER"
                   promptText="Layout of the game"
                   onAction="#create_game" />
                <TextField fx:id="variant_tf" text="STANDARD" alignment="CENTER"
                   promptText="Variant of the game"
-                  onAction="#create_game" />
-               <TextField fx:id="boardSize_tf" text="5" alignment="CENTER"
-                  promptText="Size of the board"
-                  onAction="#create_game" />
+                  onAction="#create_game" /> -->
+                  <TextField fx:id="boardSize_tf" text="5" alignment="CENTER"
+                     promptText="Size of the board"
+                     onAction="#create_game" />
+               </HBox>
                <Button fx:id="create_button" mnemonicParsing="false" text="create"
                   onAction="#create_game" />
-            </HBox>
+            </VBox>
          </children>
       </VBox>
    </center>

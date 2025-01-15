@@ -11,11 +11,16 @@ public class Board {
     private List<Cell> cells;
     private int radius;
     private String currentMap;
-    private final Map<String, Paint> colorMap = new HashMap<>();
+    private final Map<String, Color> colorMap = new HashMap<>();
+    private BoardControllerMediator controller;
 
-    public Board(int radius) {
+    private int[] first_clicked = new int[2];
+    private int[] second_clicked = new int[2];
+
+    public Board(int radius, BoardControllerMediator controller) {
         this.cells = new ArrayList<>();
         this.radius = radius;
+        this.controller = controller;
 
         colorMap.put("W", Color.GRAY);
         colorMap.put("B", Color.BLUE);
@@ -46,8 +51,9 @@ public class Board {
                 // cells.add(new Cell(x, y, j, 16 - i, radius, Color.RED));
                 // }
                 if (!(row[j].equals("X"))) {
-                    cells.add(new Cell(x, y, j, 16 - i, radius, colorMap.get(row[j])));
+                    cells.add(new Cell(x, y, j, 16 - i, radius, colorMap.get(row[j]), this));
                 }
+
             }
         }
     }
@@ -79,8 +85,8 @@ public class Board {
         // }
         // }
         // }
-        Map<int[], Paint> changes = compareMaps(map);
-        for (Map.Entry<int[], Paint> entry : changes.entrySet()) {
+        Map<int[], Color> changes = compareMaps(map);
+        for (Map.Entry<int[], Color> entry : changes.entrySet()) {
             int[] location = entry.getKey();
 
             Cell cell = getCellByCoordinates(location[0], location[1]);
@@ -96,8 +102,8 @@ public class Board {
         currentMap = map;
     }
 
-    public Map<int[], Paint> compareMaps(String newMap) {
-        Map<int[], Paint> changes = new HashMap<>();
+    public Map<int[], Color> compareMaps(String newMap) {
+        Map<int[], Color> changes = new HashMap<>();
         String[] newMapArray = newMap.split("\n");
         String[] currentMapArray = currentMap.split("\n");
 
@@ -108,7 +114,7 @@ public class Board {
             for (int j = 0; j < newRow.length; j++) {
                 if (!newRow[j].equals(currentRow[j])) {
                     int[] location = {j, 16 - i};
-                    Paint newColor = colorMap.get(newRow[j]);
+                    Color newColor = colorMap.get(newRow[j]);
                     changes.put(location, newColor);
                 }
             }
@@ -116,8 +122,51 @@ public class Board {
         return changes;
     }
 
+    public void handleCellClick(int i, int j) {
+        if (first_clicked[0] == 0 && first_clicked[1] == 0) {
+            first_clicked[0] = i;
+            first_clicked[1] = j;
+            controller.setStartXY(i, j);
+        } else if (second_clicked[0] == 0 && second_clicked[1] == 0) {
+            second_clicked[0] = i;
+            second_clicked[1] = j;
+            controller.setEndXY(i, j);
+        } else {
+            first_clicked[0] = i;
+            first_clicked[1] = j;
+            controller.setStartXY(i, j);
+            second_clicked[0] = 0;
+            second_clicked[1] = 0;
+            controller.setEndXY(0, 0);
+        }
+        Cell firstCell = getCellByCoordinates(first_clicked[0], first_clicked[1]);
+        Cell secondCell = getCellByCoordinates(second_clicked[0], second_clicked[1]);
+
+        // System.out.println("First: " + first_clicked[0] + " " + first_clicked[1]);
+        // System.out.println("Second: " + second_clicked[0] + " " + second_clicked[1]);
+
+        if (firstCell != null) {
+            firstCell.resetBorder();
+        }
+        if (secondCell != null) {
+            secondCell.resetBorder();
+        }
+    }
+
     public boolean isEmpty() {
         return cells.isEmpty();
+    }
+
+    public void restet_border_on_active_cells() {
+        Cell firstCell = getCellByCoordinates(first_clicked[0], first_clicked[1]);
+        Cell secondCell = getCellByCoordinates(second_clicked[0], second_clicked[1]);
+
+        if (firstCell != null) {
+            firstCell.resetBorder();
+        }
+        if (secondCell != null) {
+            secondCell.resetBorder();
+        }
     }
     // public void updateBoard(String map) {
     // if (cells.isEmpty()) {
