@@ -36,12 +36,12 @@
       <artifactId>gson</artifactId>
       <version>2.11.0</version>
     </dependency>
-      <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-api</artifactId>
-          <version>5.11.3</version>
-          <scope>test</scope>
-      </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.11.3</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
@@ -61,6 +61,18 @@
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
           <version>3.1.0</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>3.6.2</version>
+          <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+          </configuration>
+          <!-- <tags>
+            ...
+          </tags> -->
         </plugin>
         <!-- default lifecycle, jar packaging: see
         https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
