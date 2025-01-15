@@ -9,8 +9,11 @@ public class MoveValidatorStandard implements MoveValidator{
         HashSet<Position> validMoves = new HashSet<>();
         validMoves.add(start);
 
-        // First, single tile moves
-        List<Position> neighbours = getNeighbours(start);
+        // First, recursively check every single possible jump
+        recursiveJump(board, start, validMoves);
+
+        // Then, single tile moves
+        List<Position> neighbours = getNeighbours(start, board.length);
         for (Position n : neighbours) {
             if (board[n.getX()][n.getY()] != null) {  // If the tile is on the board
                 if (board[n.getX()][n.getY()].getPawn() == null) {  // If the tile is empty
@@ -19,15 +22,12 @@ public class MoveValidatorStandard implements MoveValidator{
             }
         }
 
-        // Then, recursively check every single possible jump
-        recursiveJump(board, start, validMoves);
-
         validMoves.remove(start);
         return validMoves;
     }
 
     private void recursiveJump(Node[][] board, Position current, HashSet<Position> validMoves) {
-        List<Position> neighbours = getNeighbours(current);
+        List<Position> neighbours = getNeighbours(current, board.length);
         for (Position n : neighbours) {
             if (board[n.getX()][n.getY()] != null) {  // If the tile is on the board
                 if (board[n.getX()][n.getY()].getPawn() != null) {  // If the tile has a pawn that can be jumped over
@@ -47,15 +47,18 @@ public class MoveValidatorStandard implements MoveValidator{
         }
     }
 
-    private List<Position> getNeighbours (Position center) {
-
-        return List.of(
+    private List<Position> getNeighbours (Position center, int boardLength) {
+        List<Position> neighbours = new java.util.ArrayList<>(List.of(
                 new Position(center.getX() - 1, center.getY()),
                 new Position(center.getX() + 1, center.getY()),
                 new Position(center.getX(), center.getY() - 1),
                 new Position(center.getX(), center.getY() + 1),
                 new Position(center.getX() + 1, center.getY() + 1),
                 new Position(center.getX() - 1, center.getY() - 1)
-        );
+        ));
+
+        neighbours.removeIf(neighbour -> neighbour.getX() < 0 || neighbour.getY() < 0 || neighbour.getX() >= boardLength || neighbour.getY() >= boardLength);
+
+        return neighbours;
     }
 }
