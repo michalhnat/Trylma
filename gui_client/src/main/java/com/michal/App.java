@@ -1,6 +1,7 @@
 package com.michal;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -27,6 +28,8 @@ public class App extends Application {
         Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
         stage.setScene(scene);
         stage.show();
+        stage.setOnCloseRequest(e -> Platform.exit());
+
     }
 
     static void setRoot(String fxml) throws IOException {

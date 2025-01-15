@@ -19,6 +19,7 @@ public class GameSession {
     private final GameQueue gameQueue;
     private final GameSessionMediator server;
     private final Queue<String> availableColors;
+    private Player currentPlayer;
     Logger logger = MyLogger.logger;
     static {
         MyLogger.loggerConfig();
@@ -107,6 +108,11 @@ public class GameSession {
             return;
         }
 
+        if (currentPlayer != player) {
+            player.sendError("It's not your turn to move.");
+            return;
+        }
+
         try {
             game.move(player, start, end);
             broadcastMessage("Player " + player.getColor() + " moved");
@@ -121,8 +127,10 @@ public class GameSession {
 
     private synchronized void promptNextPlayer() {
         Player nextPlayer = gameQueue.takePlayer();
+        currentPlayer = nextPlayer;
         if (nextPlayer != null) {
             nextPlayer.sendMessage("Your turn to move.");
+
         }
     }
 
