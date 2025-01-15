@@ -2,10 +2,7 @@ package com.michal.Game;
 
 import com.michal.Utils.StarBuilder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class StarBoard extends Board {
 
@@ -39,9 +36,49 @@ public class StarBoard extends Board {
     }
 
     @Override
-    public boolean isGameOver() {
-        // Game over logic
-        return false;
+    public Player checkIfSomeoneWon(List<Player> players) {
+        // Map all directions to their oppoosites
+        Map<Direction, Direction> oppositeDirections = Map.of(
+                Direction.SOUTH, Direction.NORTH,
+                Direction.NORTH, Direction.SOUTH,
+                Direction.SOUTHWEST, Direction.NORTHEAST,
+                Direction.NORTHEAST, Direction.SOUTHWEST,
+                Direction.NORTHWEST, Direction.SOUTHEAST,
+                Direction.SOUTHEAST, Direction.NORTHWEST
+        );
+
+        // For each player, check if they won
+        for (Player p : players) {
+            String playerColor = p.getColor();
+            Direction playerDestination = null;
+            for (Node[] row : board) {
+                for (Node node : row) {
+                    if (node instanceof CornerNode cornerNode && cornerNode.getOwner() == p) {
+                        playerDestination = oppositeDirections.get(cornerNode.getDirection());
+                        break;
+                    }
+                }
+            }
+
+            // Check every corner that is the destination of the player. If all of them have a pawn of the player color, the player won
+            boolean won = true;
+            for (Node[] row : board) {
+                for (Node node : row) {
+                    if (node instanceof CornerNode cornerNode && cornerNode.getDirection() == playerDestination) {
+                        if (cornerNode.getPawn() == null || !Objects.equals(cornerNode.getPawn().getPlayer().getColor(), playerColor)) {
+                            won = false;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (won) {
+                return p;
+            }
+        }
+
+        return null;
     }
 
     @Override

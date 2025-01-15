@@ -48,4 +48,6 @@ public interface Mediator {
      * @param clientHandler the client handler to remove
      */
     public void removeClient(ClientHandler clientHandler);
+
+    void handlePass(ClientHandler clientHandler);
 }

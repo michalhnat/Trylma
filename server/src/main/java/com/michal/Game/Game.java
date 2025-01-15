@@ -1,7 +1,5 @@
 package com.michal.Game;
 
-import com.google.errorprone.annotations.Var;
-
 import java.util.List;
 
 /**
@@ -50,8 +48,6 @@ public class Game {
      * @throws Exception if the move is not valid
      */
     public void move(Player player, Position start, Position end) throws Exception {
-        // Implement game-specific move logic
-        // If the move is invalid, throw InvalidMoveException
         boolean valid = board.validateMove(player, start, end);
         if (!valid) {
             throw new Exception("Move is not valid.");
@@ -79,7 +75,7 @@ public class Game {
         return maxPlayers;
     }
 
-    public Node[][] getBoard() {
+    public Node[][] getBoardArray() {
         return board.getBoardArray();
     }
 
@@ -93,6 +89,10 @@ public class Game {
 
     public GameStatus getStatus() {
         return status;
+    }
+
+    public Player checkIfSomeoneWon(List<Player> players) {
+        return board.checkIfSomeoneWon(players);
     }
 
     // Additional game logic methods
