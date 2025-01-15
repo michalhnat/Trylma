@@ -20,11 +20,7 @@ public class GameSession {
     private final GameQueue gameQueue;
     private final GameSessionMediator server;
     private final Queue<String> availableColors;
-    Logger logger = MyLogger.logger;
     private Player currentPlayer;
-    static {
-        MyLogger.loggerConfig();
-    }
 
     private static final List<String> COLORS =
             List.of("Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Cyan", "Magenta");
