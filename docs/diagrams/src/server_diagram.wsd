@@ -5,20 +5,24 @@ package com.michal {
         +handleCreateGame(ClientHandler clientHandler, int players)
         +handleJoinGame(ClientHandler clientHandler, int gameId)
         +handleMove(ClientHandler clientHandler, int x, int y)
+        +handlePass(ClientHandler clientHandler)
         +handleListGames(ClientHandler clientHandler)
         +removeClient(ClientHandler clientHandler)
     }
 
     interface PlayerCommunicator {
         +sendMessage(String msg)
-        +sendListMessage(List<GameInfo> list)
         +sendError(String msg)
+        +sendGameInfo(GameInfo gameInfo)
+        +sendBoard(String board)
     }
 
     interface ICommunication {
         +sendMessage(String msg, ObjectOutputStream out)
         +sendListMessage(List<GameInfo> list, ObjectOutputStream out)
         +sendError(String msg, ObjectOutputStream out)
+        +sendGameInfo(GameInfo gameInfo, ObjectOutputStream out)
+        +sendBoard(String board, ObjectOutputStream out)
     }
 
     interface GameSessionMediator {
@@ -40,6 +44,8 @@ package com.michal {
         +synchronized UUID getId()
         +sendMessage(String msg)
         +sendListMessage(List<GameInfo> list)
+        +sendGameInfo(GameInfo gameInfo)
+        +sendBoard(String board)
         +sendError(String msg)
         +synchronized Player getPlayer()
         +synchronized void setPlayer(Player player)
@@ -57,12 +63,13 @@ package com.michal {
         -List<ClientHandler> clients
         +startServer()
         +List<GameSession> getGameSessions()
-        +handleCreateGame(ClientHandler clientHandler, int players)
+        +handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout, Variant variant)
         +handleJoinGame(ClientHandler clientHandler, int gameId)
-        +handleMove(ClientHandler clientHandler, int x, int y)
+        +handleMove(ClientHandler clientHandler, Position start, Position end)
         +handleListGames(ClientHandler clientHandler)
         +removeClient(ClientHandler client)
         +removeSession(GameSession session)
+        +handlePass(ClientHandler clientHandler)
     }
 
     class SocketCommunication implements ICommunication {
@@ -72,40 +79,52 @@ package com.michal {
         +synchronized void sendMessage(String msg, ObjectOutputStream out)
         +synchronized void sendListMessage(List<GameInfo> list, ObjectOutputStream out)
         +synchronized void sendError(String msg, ObjectOutputStream out)
+        +synchronized void sendGameInfo(GameInfo gameInfo, ObjectOutputStream out)
+        +synchronized void sendBoard(String board, ObjectOutputStream out)
     }
 }
 
 package com.michal.Game {
     abstract class Board {
+        -Node[][] board
         +List<Integer> getAllowedPlayerNumbers()
         +void move(Position start, Position end)
         +void print()
-        +boolean isGameOver()
-        +void initialize()
-        +boolean validateMove(Position start, Position end)
+        +Player checkIfSomeoneWon(List<Player> players)
+        +void initialize(Layout layout, List<Player> players)
+        +boolean validateMove(Player player, Position start, Position end)
+        +Node[][] getBoardArray()
     }
 
-    class MockBoard extends Board {
-        -int size = 8
-        -String[][] board = new String[size][size]
-        -List<Integer> allowedPlayerNumbers
-        +MockBoard()
+    class StarBoard extends Board {
+        -int size
+        -Node[][] board
+        -MoveValidator moveValidator
+        +StarBoard(int size, MoveValidator moveValidator)
         +List<Integer> getAllowedPlayerNumbers()
         +void move(Position start, Position end)
         +void print()
-        +boolean isGameOver()
-        +void initialize()
-        +boolean validateMove(Position start, Position end)
+        +Player checkIfSomeoneWon(List<Player> players)
+        +void initialize(Layout layout, List<Player> players)
+        +boolean validateMove(Player player, Position start, Position end)
+        +Node[][] getBoardArray()
     }
 
     class Game {
         -Board board
         -int maxPlayers
         -GameStatus status
-        +Game(Board board, int maxPlayers)
-        +boolean isInProgress()
+        -Layout layout
+        -Variant variant
+        +Game(Board board, Layout layout, Variant variant)
+        +void start(List<Player> players)
+        +move(Player player, Position start, Position end)
+        +GameStatus getStatus()
         +int getMaxPlayers()
-        // Additional game logic methods
+        +Node[][] getBoardArray()
+        +Layout getLayout()
+        +Variant getVariant()
+        +Player checkIfSomeoneWon(List<Player> players)
     }
 
     class GameInfo {
@@ -120,6 +139,8 @@ package com.michal.Game {
         +int getMaxPlayers()
         +void setMaxPlayers(int maxPlayers)
         +String toString()
+        +String getLayout()
+        +String getVariant()
     }
 
     class GameQueue {
@@ -129,6 +150,7 @@ package com.michal.Game {
         +synchronized void addPlayer(Player player)
         +int getSize()
         +boolean containsPlayer(Player player)
+        +List<Player> getPlayers()
     }
 
     class GameSession {
@@ -140,13 +162,16 @@ package com.michal.Game {
         -GameSessionMediator server
         -Queue<String> availableColors
         +static List<String> COLORS
-        +GameSession(Board board, int maxPlayers, GameSessionMediator server)
+        +GameSession(Board board, Layout layout, Variant variant, GameSessionMediator server)
         +int getSessionId()
         +synchronized void addPlayer(Player player)
         +synchronized void removePlayer(Player player)
         +synchronized void startGame()
-        +synchronized void handleMove(Player player, Position newPosition)
+        +synchronized void handleMove(Player player, Position start, Position end)
         +synchronized void promptNextPlayer()
+        +void broadcastMessage(String message)
+        +void broadcastBoard(String board)
+        +void handlePass(Player player)
     }
 
     enum GameStatus {
@@ -159,17 +184,16 @@ package com.michal.Game {
         -UUID id
         -PlayerCommunicator communicator
         -String name
-        -Set<Pawn> pawns
         -GameSession gameSession
         -String color
         +Player(UUID id, PlayerCommunicator communicator)
         +synchronized void sendMessage(String message)
         +synchronized void sendError(String message)
+        +synchronized void sendGameInfo(GameInfo gameInfo)
+        +synchronized void sendBoard(String board)
         +UUID getId()
         +String getName()
         +PlayerCommunicator getCommunicator()
-        +Set<Pawn> getPawns()
-        +void addPawn(Pawn pawn)
         +GameSession getGameSession()
         +void setGameSession(GameSession gameSession)
         +String getColor()
@@ -181,7 +205,61 @@ package com.michal.Game {
     }
 
     class Pawn {
-        // Methods and attributes not specified
+        -Player player
+        +Player getPlayer()
+        +void setPlayer(Player player)
+    }
+
+    class Node {
+        -Pawn pawn
+        -Player owner
+        +Pawn getPawn()
+        +void setPawn(Pawn pawn)
+        +Player getOwner()
+        +void setOwner(Player owner)
+    }
+
+    class CornerNode extends Node {
+        -Direction direction
+        +Direction getDirection()
+    }
+
+    enum Direction {
+        NORTH
+        SOUTH
+        NORTHWEST
+        NORTHEAST
+        SOUTHWEST
+        SOUTHEAST
+    }
+
+    enum Layout {
+        SIXPLAYERS
+        FOURPLAYERS
+        THREEPLAYERS_ONESET
+        THREEPLAYERS_TWOSETS
+        TWOPLAYERS_ONESET,
+        TWOPLAYERS_TWOSETS_ADJACENT
+        TWOPLAYERS_TWOSETS_OPPOSITE
+        TWOPLAYERS_THREESETS
+    }
+
+    enum Variant {
+        STANDARD
+        SUPER
+    }
+
+    interface MoveValidator {
+        +HashSet<Position> getValidMoves(Node[][] board, Position start)
+        +default boolean isValidMove(Node[][] board, Player player, Position start, Position end)
+    }
+
+    class MoveValidatorStandard implements MoveValidator {
+        +HashSet<Position> getValidMoves(Node[][] board, Position start)
+    }
+
+    class MoveValidatorSuper implements MoveValidator {
+        +HashSet<Position> getValidMoves(Node[][] board, Position start)
     }
 }
 
@@ -199,6 +277,14 @@ package com.michal.Utils {
         +static void loggerConfig()
         +static Logger logger
     }
+
+    class BoardStringBuilder {
+        +static String buildBoardString(Node[][] board)
+    }
+
+    class StarBuilder {
+        +static String buildStar(int size)
+    }
 }
 
 com.michal.ClientHandler --> com.michal.Server : uses
@@ -210,6 +296,13 @@ com.michal.Game.GameSession --> com.michal.Game.GameQueue : uses
 com.michal.Game.Game --> com.michal.Game.Board : uses
 com.michal.Game.Player --> com.michal.PlayerCommunicator : communicates
 com.michal.ClientHandler -> com.michal.Utils.JsonDeserializer : uses
-com.michal.Game.Board <|-- com.michal.Game.MockBoard
+com.michal.Game.Board --> com.michal.Game.Node : contains
+com.michal.Game.Game --> com.michal.Game.GameStatus : has
+com.michal.Game.Game --> com.michal.Game.Layout : has
+com.michal.Game.Game --> com.michal.Game.Variant : has
+com.michal.Game.Board --> com.michal.Game.MoveValidator : uses
+com.michal.Game.Node --> com.michal.Game.Pawn : contains
+
+com.michal.Game.StarBoard --> com.michal.Utils.StarBuilder : uses
 
 @enduml

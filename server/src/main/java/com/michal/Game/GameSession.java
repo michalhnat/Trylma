@@ -118,10 +118,14 @@ public class GameSession {
             broadcastMessage("Player " + player.getColor() + " moved");
             broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoardArray()));
 
-            Player winner = game.checkIfSomeoneWon(players);
+            Player winner = game.checkIfSomeoneWon(gameQueue.getPlayers());
             if (winner != null) {
-                broadcastMessage("Player " + winner.getColor() + " has won the game!");
+                broadcastMessage("Player " + winner.getColor() + " has won!");
                 gameQueue.removePlayer(winner);
+                if (gameQueue.getSize() == 1) {
+                    broadcastMessage("The game has ended");
+                    server.removeSession(this);
+                }
             }
 
             promptNextPlayer();
