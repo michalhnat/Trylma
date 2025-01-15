@@ -73,16 +73,6 @@ class SecondaryController {
   -ICommunication communication
 }
 
-' Custom UI Components
-class HboxCell {
-  -Label label
-}
-
-class Hboxtwolabel {
-  -Label label1
-  -Label label2
-}
-
 ' Relationships
 App --> ICommunication
 App --> GeneralListener
