@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import com.michal.Game.*;
 
@@ -45,7 +44,14 @@ public class Server implements Mediator, GameSessionMediator {
                 return;
             }
 
-            Board board = new StandardBoard(boardSize);
+            MoveValidator moveValidator;
+            if (variant == Variant.SUPER) {
+                moveValidator = new MoveValidatorSuper();
+            }
+            else {
+                moveValidator = new MoveValidatorStandard();
+            }
+            Board board = new StarBoard(boardSize, moveValidator);
 
             try {
                 GameSession session = new GameSession(board, layout, variant, this);

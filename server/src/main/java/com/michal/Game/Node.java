@@ -12,6 +12,12 @@ public class Node {
         this.owner = null;
     }
 
+    // Copy constructor
+    public Node(Node node) {
+        this.pawn = node.pawn != null ? new Pawn(node.pawn.getPlayer()) : null;
+        this.owner = node.owner != null ? new Player(node.owner) : null;
+    }
+
     public Pawn getPawn() {
 
         return pawn;

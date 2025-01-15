@@ -7,17 +7,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-public class StandardBoard extends Board {
+public class StarBoard extends Board {
 
     private final int size;
     private final Node[][] board;
     private final List<Integer> allowedPlayerNumbers = new ArrayList<>(Arrays.asList(2, 3, 4, 6));
-    private final MoveValidator moveValidator = new MoveValidatorStandard();
+    private final MoveValidator moveValidator;
 
-    public StandardBoard(int size) {
+    public StarBoard(int size, MoveValidator moveValidator) {
         super();
         this.size = size;
         this.board = StarBuilder.buildStar(size);
+        this.moveValidator = moveValidator;
     }
 
     @Override
@@ -80,9 +81,6 @@ public class StandardBoard extends Board {
     }
 
     public Node[][] getBoardArray() {
-        if (board == null) {
-            System.out.println("Board is null in the method getBoardArray()");
-        }
         return board;
     }
 }

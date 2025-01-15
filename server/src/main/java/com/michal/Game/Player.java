@@ -21,6 +21,16 @@ public class Player {
         this.pawns = new HashSet<>();
     }
 
+    // Copy constructor
+    public Player(Player player) {
+        this.id = player.id;
+        this.communicator = player.communicator;
+        this.name = player.name;
+        this.pawns = new HashSet<>(player.pawns);
+        this.gameSession = player.gameSession;
+        this.color = player.color;
+    }
+
     public synchronized void sendMessage(String message) {
         communicator.sendMessage(message);
     }
