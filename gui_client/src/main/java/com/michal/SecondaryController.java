@@ -1,7 +1,6 @@
 package com.michal;
 
 import java.util.HashMap;
-import java.util.List;
 import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.JsonDeserializer;
 import javafx.fxml.FXML;
@@ -13,59 +12,76 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 
+/**
+ * Controller for the game board view. Handles game state, board visualization, and player moves.
+ * Implements IController for message handling and BoardControllerMediator for board interactions.
+ */
 public class SecondaryController implements IController, BoardControllerMediator {
+    /** Singleton instance of the controller */
     private static IController instance;
 
+    // FXML Injected Components
+    /** Pane containing the game board */
     @FXML
     private AnchorPane BoardPane;
-
+    /** Main layout container */
     @FXML
     private BorderPane borderPane;
-
+    /** Button to confirm move */
     @FXML
     private Button moveButton;
-
+    /** Button to pass turn */
     @FXML
     private Button passButton;
-
+    /** Start X coordinate input */
     @FXML
     private TextField x;
-
+    /** Start Y coordinate input */
     @FXML
     private TextField y;
-
+    /** Destination X coordinate input */
     @FXML
     private TextField destination_x;
-
+    /** Destination Y coordinate input */
     @FXML
     private TextField destination_y;
-
+    /** Status message display */
     @FXML
     private Label label;
-
+    /** Game information list view */
     @FXML
     private ListView<Hboxtwolabel> info_list;
 
+    /** Game board instance */
     private Board board;
-
-
-
+    /** Communication interface for server interaction */
     private ICommunication communication;
 
+    /**
+     * Initializes the controller. Creates board and sets up communication.
+     */
     @FXML
     public void initialize() {
         communication = App.getCommunication();
         instance = this;
 
         board = new Board(15, this);
-
     }
 
+    /**
+     * Returns singleton instance of the controller.
+     * 
+     * @return IController instance
+     */
     public static IController getInstance() {
         return instance;
-
     }
 
+    /**
+     * Displays informational message with green color.
+     * 
+     * @param message Message to display
+     */
     @Override
     public void showInfo(String message) {
         message = message.toUpperCase();
@@ -75,6 +91,11 @@ public class SecondaryController implements IController, BoardControllerMediator
         label.setTextFill(Color.GREEN);
     }
 
+    /**
+     * Displays error message with red color.
+     * 
+     * @param message Error message to display
+     */
     @Override
     public void showError(String message) {
         message = message.toUpperCase();
@@ -96,6 +117,11 @@ public class SecondaryController implements IController, BoardControllerMediator
                 break;
             case "gameInfo":
                 HashMap<String, String> gameInfo = jsonDeserializer.getGameInfoMap(message);
+                if (gameInfo.get("players").equals("1")
+                        && gameInfo.get("status").equals("IN_PROGRESS")) {
+                    showError("No more players");
+                    return;
+                }
                 info_list.getItems().clear();
                 gameInfo.forEach((key, value) -> {
                     Hboxtwolabel hbox = new Hboxtwolabel(key, value);
@@ -108,6 +134,9 @@ public class SecondaryController implements IController, BoardControllerMediator
         }
     }
 
+    /**
+     * Handles move button click. Validates coordinates and sends move request to server.
+     */
     @FXML
     private void move() {
         int x = Integer.parseInt(this.x.getText());
@@ -131,6 +160,9 @@ public class SecondaryController implements IController, BoardControllerMediator
         }
     }
 
+    /**
+     * Handles pass button click. Sends pass turn request to server.
+     */
     @FXML
     private void pass() {
         String jsonMessage = JsonBuilder.setBuilder("pass").build();
@@ -142,6 +174,12 @@ public class SecondaryController implements IController, BoardControllerMediator
         }
     }
 
+    /**
+     * Updates game board based on server map data. Creates new board if empty, updates existing
+     * board otherwise.
+     * 
+     * @param map String representation of board state
+     */
     private void updateBoard(String map) {
         if (board.isEmpty()) {
             board.createBoardOutOfMap(map);
@@ -154,16 +192,27 @@ public class SecondaryController implements IController, BoardControllerMediator
         }
     }
 
+    /**
+     * Sets starting coordinates for move.
+     * 
+     * @param x Starting X coordinate
+     * @param y Starting Y coordinate
+     */
     @Override
     public void setStartXY(int x, int y) {
         this.x.setText(Integer.toString(x));
         this.y.setText(Integer.toString(y));
     }
 
+    /**
+     * Sets ending coordinates for move.
+     * 
+     * @param x Destination X coordinate
+     * @param y Destination Y coordinate
+     */
     @Override
     public void setEndXY(int x, int y) {
         this.destination_x.setText(Integer.toString(x));
         this.destination_y.setText(Integer.toString(y));
     }
-
 }

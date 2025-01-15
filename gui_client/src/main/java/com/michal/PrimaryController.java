@@ -15,59 +15,71 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 
+/**
+ * Primary controller for the main application window. Handles server connection, game listing, and
+ * game creation functionality. Implements IController interface for message handling and UI
+ * updates.
+ */
 public class PrimaryController implements IController {
-
+    /** Singleton instance of the controller */
     private static IController instance;
+
+    /** Communication interface for server interaction */
     private ICommunication communication;
+
+    /** Listener for server messages */
     private GeneralListener listener;
 
-
+    // FXML Injected Components
+    /** Text field for server IP address input */
     @FXML
     private TextField ip_tf;
-
+    /** Text field for server port input */
     @FXML
     private TextField port_tf;
-
+    /** Button to initiate server connection */
     @FXML
     private Button connect_btn;
-
+    /** Label for displaying information messages */
     @FXML
     private Label info_label;
-
+    /** Label for games section */
     @FXML
     private Label games_label;
-
+    /** List view for displaying available games */
     @FXML
     private ListView<HboxCell> games_list;
-
+    /** Button to refresh games list */
     @FXML
     private Button refresh_button;
-
+    /** Button to create new game */
     @FXML
     private Button create_button;
-
-    // @FXML
-    // private TextField variant_tf;
-
-    // @FXML
-    // private TextField layout_tf;
-
+    /** Choice box for selecting game layout */
     @FXML
     private ChoiceBox<String> layout_cb;
-
+    /** Choice box for selecting game variant */
     @FXML
     private ChoiceBox<String> variant_cb;
-
+    /** Text field for board size input */
     @FXML
     private TextField boardSize_tf;
 
-
+    /**
+     * Initializes the controller. Called automatically after FXML loading.
+     */
     @FXML
     private void initialize() {
         communication = App.getCommunication();
         instance = this;
     }
 
+    /**
+     * Handles connection to the game server. Validates IP and port inputs before attempting
+     * connection.
+     *
+     * @throws IOException If connection fails
+     */
     @FXML
     private void connectToServer() throws IOException {
         String ip = ip_tf.getText();
@@ -92,12 +104,6 @@ public class PrimaryController implements IController {
                 listenerThread.start();
 
                 request_games_list();
-
-                // listener = new PrimaryServerListener(info_label, info_label, games_list,
-                // App.getCommunication());
-                // Thread listenerThread = new Thread(listener);
-                // listenerThread.start();
-                // request_games_list();
             } catch (Exception e) {
                 info_label.setText("Failed to start listener");
             }
@@ -109,6 +115,9 @@ public class PrimaryController implements IController {
 
     }
 
+    /**
+     * Requests list of available games from server.
+     */
     @FXML
     private void request_games_list() {
         String jsonMessage = JsonBuilder.setBuilder("list").build();
@@ -120,6 +129,10 @@ public class PrimaryController implements IController {
         }
     }
 
+    /**
+     * Creates a new game with specified parameters. Validates layout, variant and board size before
+     * creation.
+     */
     @FXML
     private void create_game() {
         try {
@@ -145,28 +158,40 @@ public class PrimaryController implements IController {
         } catch (Exception e) {
             info_label.setText(e.getMessage());
         }
-        // String gameName = create_tf.getText();
-        // String jsonMessage = JsonBuilder.setBuilder("create").add("name", gameName).build();
 
     }
 
+    /**
+     * Displays informational message in the UI.
+     * 
+     * @param message Message to display
+     */
     @Override
     public void showInfo(String message) {
         info_label.setText(message);
     }
 
+    /**
+     * Displays error message in the UI.
+     * 
+     * @param message Error message to display
+     */
     @Override
     public void showError(String message) {
         info_label.setText(message);
     }
 
+    /**
+     * Handles incoming messages from server. Processes different message types and updates UI
+     * accordingly.
+     * 
+     * @param message JSON formatted message from server
+     */
     @Override
     public void handleMessage(String message) {
-        // System.out.println("PrimaryController: " + message);
         JsonDeserializer jsonDeserializer = JsonDeserializer.getInstance();
         switch (jsonDeserializer.getType(message)) {
             case "list":
-                // System.out.println("PrimaryController: " + jsonDeserializer.getType(message));
                 List<String> games = jsonDeserializer.getGamesAsList(message);
                 List<HboxCell> cells = createCells(games);
                 games_list.getItems().clear();
@@ -178,6 +203,12 @@ public class PrimaryController implements IController {
         }
     }
 
+    /**
+     * Creates HboxCell list items for games list view.
+     * 
+     * @param labels List of game descriptions
+     * @return List of HboxCell items with join buttons
+     */
     public List<HboxCell> createCells(List<String> labels) {
         List<HboxCell> cells = new ArrayList<>();
         for (int i = 0; i < labels.size(); i++) {
@@ -205,6 +236,12 @@ public class PrimaryController implements IController {
         return cells;
     }
 
+    /**
+     * Extracts game ID from game description label.
+     * 
+     * @param label Game description text
+     * @return Game ID or -1 if extraction fails
+     */
     private int extractGameID(String label) {
         try {
             int hashIndex = label.indexOf('#');
@@ -214,19 +251,15 @@ public class PrimaryController implements IController {
                 return Integer.parseInt(idStr);
             }
         } catch (NumberFormatException e) {
-            // Handle parsing error
         }
         return -1;
     }
 
-    // public void setCommunication(ICommunication communication) {
-    // this.communication = communication;
-    // }
-    // @FXML
-    // private void switchToSecondary() throws IOException {
-    // App.setRoot("secondary");
-    // }
-
+    /**
+     * Returns singleton instance of the controller.
+     * 
+     * @return IController instance
+     */
     public static IController getInstance() {
         return instance;
     }
