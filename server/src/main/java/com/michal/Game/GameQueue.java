@@ -1,5 +1,6 @@
 package com.michal.Game;
 
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -63,5 +64,9 @@ public class GameQueue {
      */
     public synchronized void removePlayer(Player player) {
         players.remove(player);
+    }
+
+    public List<Player> getPlayers() {
+        return List.copyOf(players);
     }
 }
