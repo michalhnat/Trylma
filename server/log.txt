@@ -1,24 +1,8 @@
-Jan 14, 2025 6:23:19 PM com.michal.ClientHandler run
+Jan 15, 2025 1:52:03 PM com.michal.ClientHandler run
 INFO: Client connected: /127.0.0.1
-Jan 14, 2025 6:24:11 PM com.michal.ClientHandler run
-WARNING: Client disconnected
-Jan 14, 2025 6:24:19 PM com.michal.ClientHandler run
-INFO: Client connected: /127.0.0.1
-Jan 14, 2025 6:24:44 PM com.michal.ClientHandler run
-WARNING: Client disconnected
-Jan 14, 2025 6:24:53 PM com.michal.ClientHandler run
-INFO: Client connected: /127.0.0.1
-Jan 14, 2025 6:25:27 PM com.michal.ClientHandler run
-WARNING: Client disconnected
-Jan 14, 2025 6:25:33 PM com.michal.ClientHandler run
-INFO: Client connected: /127.0.0.1
-Jan 14, 2025 6:30:03 PM com.michal.ClientHandler run
-WARNING: Client disconnected
-Jan 14, 2025 6:31:50 PM com.michal.ClientHandler run
-INFO: Client connected: /127.0.0.1
-Jan 14, 2025 6:31:50 PM com.michal.ClientHandler run
+Jan 15, 2025 1:52:03 PM com.michal.ClientHandler run
 INFO: Received: {"command":"list","payload":{}}
-Jan 14, 2025 6:31:51 PM com.michal.ClientHandler run
+Jan 15, 2025 1:52:03 PM com.michal.ClientHandler run
 INFO: Received: {"command":"list","payload":{}}
-Jan 14, 2025 6:31:59 PM com.michal.ClientHandler run
+Jan 15, 2025 1:52:04 PM com.michal.ClientHandler run
 INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}

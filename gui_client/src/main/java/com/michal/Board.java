@@ -18,9 +18,14 @@ public class Board {
         this.radius = radius;
 
         colorMap.put("W", Color.GRAY);
-        colorMap.put("B", Color.CYAN);
+        colorMap.put("B", Color.BLUE);
         colorMap.put("R", Color.RED);
-
+        colorMap.put("Y", Color.YELLOW);
+        colorMap.put("G", Color.GREEN);
+        colorMap.put("P", Color.PURPLE);
+        colorMap.put("O", Color.ORANGE);
+        colorMap.put("C", Color.CYAN);
+        colorMap.put("M", Color.MAGENTA);
     }
 
     public void createBoardOutOfMap(String map) {

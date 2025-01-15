@@ -23,7 +23,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         communication = new SocketCommunication();
-        scene = new Scene(loadFXML("primary"), 600, 600);
+        scene = new Scene(loadFXML("primary"), 1000, 800);
         Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
         stage.setScene(scene);
         stage.show();

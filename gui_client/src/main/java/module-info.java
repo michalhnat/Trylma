@@ -6,7 +6,9 @@ module com.michal {
     requires java.sql;
 
     requires java.logging;
+    requires javafx.graphics;
 
     opens com.michal to javafx.fxml, com.google.gson;
+
     exports com.michal;
 }

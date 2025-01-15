@@ -1,11 +1,13 @@
 package com.michal;
 
+import java.util.HashMap;
 import java.util.List;
 import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.JsonDeserializer;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -38,9 +40,12 @@ public class SecondaryController implements IController {
     @FXML
     private Label label;
 
+    @FXML
+    private ListView<Hboxtwolabel> info_list;
+
     private Board board;
 
-    private GameManager gameManager;
+    // private GameManager gameManager;
 
     private ICommunication communication;
 
@@ -118,7 +123,12 @@ public class SecondaryController implements IController {
                 updateBoard(jsonDeserializer.getMessage(message));
                 break;
             case "gameInfo":
-                System.out.println("Game info: " + message);
+                HashMap<String, String> gameInfo = jsonDeserializer.getGameInfoMap(message);
+                info_list.getItems().clear();
+                gameInfo.forEach((key, value) -> {
+                    Hboxtwolabel hbox = new Hboxtwolabel(key, value);
+                    info_list.getItems().add(hbox);
+                });
                 break;
             default:
                 showError("Unknown message type: " + jsonDeserializer.getType(message));
@@ -149,7 +159,7 @@ public class SecondaryController implements IController {
                 BoardPane.getChildren().add(cell);
             });
         } else {
-            System.out.println("Edit board");
+            // System.out.println("Edit board");
             board.editBoardOutOfMap(map);
         }
     }
