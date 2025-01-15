@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ListView?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.michal.SecondaryController">
+    <left>
+        <ListView fx:id="info_list" />
+    </left>
+    <center>
+        <AnchorPane fx:id="BoardPane" />
+    </center>
+    <bottom>
+        <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <buttons>
+                <TextField fx:id="x" promptText="x" />
+                <TextField fx:id="y" promptText="y" />
+                <TextField fx:id="destination_x" promptText="destination_x" />
+                <TextField fx:id="destination_y" promptText="destination_y" />
+                <Button fx:id="moveButton" text="Move" onAction="#move" />
+            </buttons>
+        </ButtonBar>
+    </bottom>
+    <top>
+        <HBox alignment="CENTER" prefHeight="35.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="label" />
+            </children>
+        </HBox>
+    </top>
+</BorderPane>

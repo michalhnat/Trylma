@@ -60,6 +60,8 @@ public class SocketCommunication implements ICommunication {
                 gameObj.addProperty("maxPlayers", game.getMaxPlayers());
                 gameObj.addProperty("layout", game.getLayout());
                 gameObj.addProperty("variant", game.getVariant());
+                gameObj.addProperty("status", game.getStatus().toString());
+                gameObj.addProperty("players_color", game.getPlayers_color());
                 return gameObj;
             }).collect(Collectors.toList());
 
@@ -73,11 +75,13 @@ public class SocketCommunication implements ICommunication {
     @Override
     public synchronized void sendGameInfo(GameInfo gameInfo, ObjectOutputStream out) {
         try {
-            out.writeObject(
-                    JsonBuilder.setBuilder("gameInfo").setPayloadArgument("gameId", gameInfo.getId())
-                            .setPayloadArgument("maxPlayers", gameInfo.getMaxPlayers())
-                            .setPayloadArgument("layout", gameInfo.getLayout())
-                            .setPayloadArgument("variant", gameInfo.getVariant()).build());
+            out.writeObject(JsonBuilder.setBuilder("gameInfo")
+                    .setPayloadArgument("gameId", gameInfo.getId())
+                    .setPayloadArgument("maxPlayers", gameInfo.getMaxPlayers())
+                    .setPayloadArgument("layout", gameInfo.getLayout())
+                    .setPayloadArgument("variant", gameInfo.getVariant())
+                    .setPayloadArgument("status", gameInfo.getStatus().toString())
+                    .setPayloadArgument("color", gameInfo.getPlayers_color()).build());
         } catch (IOException e) {
             logger.warning("Error sending message: " + e.getMessage());
         }

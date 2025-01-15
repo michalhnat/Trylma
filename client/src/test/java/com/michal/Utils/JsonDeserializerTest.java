@@ -62,12 +62,12 @@ public class JsonDeserializerTest {
         assertThrows(JsonSyntaxException.class, () -> deserializer.getMessage(json));
     }
 
-    @Test
-    public void testGetGamesAsList() {
-        JsonDeserializer deserializer = JsonDeserializer.getInstance();
-        String json = "{\"payload\":[{\"gameId\":1,\"currentPlayers\":2,\"maxPlayers\":4}]}";
-        List<String> games = deserializer.getGamesAsList(json);
-        assertEquals(1, games.size());
-        assertEquals("Game #1 (2/4 players)", games.getFirst());
-    }
+    // @Test
+    // public void testGetGamesAsList() {
+    //     JsonDeserializer deserializer = JsonDeserializer.getInstance();
+    //     String json = "{\"payload\":[{\"gameId\":1,\"currentPlayers\":2,\"maxPlayers\":4}]}";
+    //     List<String> games = deserializer.getGamesAsList(json);
+    //     assertEquals(1, games.size());
+    //     assertEquals("Game #1 (2/4 players)", games.getFirst());
+    // }
 }

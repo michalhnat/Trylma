@@ -1,6 +1,7 @@
 
 client/target/
 server/target/
+gui_client/target/
 
 .vscode/
 
