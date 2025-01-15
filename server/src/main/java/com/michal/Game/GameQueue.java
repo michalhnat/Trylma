@@ -7,7 +7,7 @@ import java.util.Queue;
  * Represents a queue of players in the game.
  */
 public class GameQueue {
-    private Queue<Player> players;
+    private final Queue<Player> players;
 
     /**
      * Constructs a GameQueue with an empty queue of players.
@@ -48,16 +48,6 @@ public class GameQueue {
     }
 
     /**
-     * Checks if a player is in the queue.
-     *
-     * @param player the player to check
-     * @return true if the player is in the queue, false otherwise
-     */
-    public boolean checkIfPlayerInQueue(Player player) {
-        return players.contains(player);
-    }
-
-    /**
      * Removes a player from the queue.
      *
      * @param player the player to remove from the queue
@@ -66,6 +56,11 @@ public class GameQueue {
         players.remove(player);
     }
 
+    /**
+     * Returns an unmodifiable list of players in the queue.
+     *
+     * @return a list of players
+     */
     public List<Player> getPlayers() {
         return List.copyOf(players);
     }

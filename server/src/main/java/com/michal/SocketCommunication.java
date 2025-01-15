@@ -2,7 +2,6 @@ package com.michal;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.net.Socket;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -15,16 +14,13 @@ import com.michal.Utils.MyLogger;
  * A class for handling socket communication.
  */
 public class SocketCommunication implements ICommunication {
-    private final Socket socket;
     Logger logger = MyLogger.logger;
 
     /**
      * Constructs a new SocketCommunication instance with the specified socket.
      *
-     * @param socket the socket to use for communication
      */
-    public SocketCommunication(Socket socket) {
-        this.socket = socket;
+    public SocketCommunication() {
     }
 
     /**
@@ -72,6 +68,12 @@ public class SocketCommunication implements ICommunication {
         }
     }
 
+    /**
+     * Sends a GameInfo object as a message to the specified output stream.
+     *
+     * @param gameInfo the GameInfo object to send
+     * @param out the output stream to send the message to
+     */
     @Override
     public synchronized void sendGameInfo(GameInfo gameInfo, ObjectOutputStream out) {
         try {
@@ -87,6 +89,12 @@ public class SocketCommunication implements ICommunication {
         }
     }
 
+    /**
+     * Sends a board state as a message to the specified output stream.
+     *
+     * @param board the board state to send
+     * @param out the output stream to send the message to
+     */
     @Override
     public synchronized void sendBoard(String board, ObjectOutputStream out) {
         try {
@@ -111,15 +119,5 @@ public class SocketCommunication implements ICommunication {
         } catch (IOException e) {
             logger.warning("Error sending message: " + e.getMessage());
         }
-    }
-
-    /**
-     * Receives a message.
-     *
-     * @param msg the message received
-     */
-    @Override
-    public synchronized void receive(String msg) {
-        System.out.println("Received from client: " + msg);
     }
 }

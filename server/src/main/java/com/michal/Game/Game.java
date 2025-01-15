@@ -9,22 +9,19 @@ import java.util.List;
 public class Game {
     private final int maxPlayers;
     private GameStatus status;
-    private Board board;
-    private Layout layout;
-    private Variant variant;
+    private final Board board;
+    private final Layout layout;
+    private final Variant variant;
 
     /**
      * Constructs a Game with the specified board and maximum number of players.
      *
      * @param board the game board
-     * @param maxPlayers the maximum number of players allowed in the game
+     * @param layout the game layout
+     * @param variant the game variant
      * @throws IllegalArgumentException if the number of players is not allowed for this game
      */
     public Game(Board board, Layout layout, Variant variant) {
-        if (!board.getAllowedPlayerNumbers().contains(layout.getPlayers())) {
-            throw new IllegalArgumentException( // TODO tego nie potrzeba?
-                    "Number of players is not allowed for this game.");
-        }
         this.board = board;
         this.maxPlayers = layout.getPlayers();
         this.status = GameStatus.WAITING;
@@ -34,6 +31,8 @@ public class Game {
 
     /**
      * Starts the game and initializes the board.
+     *
+     * @param players the list of players participating in the game
      */
     public void start(List<Player> players) {
         this.status = GameStatus.IN_PROGRESS;
@@ -44,6 +43,7 @@ public class Game {
      * Moves a player to a new position on the board.
      *
      * @param player the player making the move
+     * @param start the starting position of the pawn
      * @param end the new position to move the player to
      * @throws Exception if the move is not valid
      */
@@ -51,8 +51,7 @@ public class Game {
         boolean valid = board.validateMove(player, start, end);
         if (!valid) {
             throw new Exception("Move is not valid.");
-        }
-        else {
+        } else {
             board.move(start, end);
         }
     }
@@ -62,8 +61,8 @@ public class Game {
      *
      * @return true if the game is in progress, false otherwise
      */
-    public boolean isInProgress() {
-        return status == GameStatus.IN_PROGRESS;
+    public boolean isWaitingForPlayers() {
+        return status != GameStatus.IN_PROGRESS;
     }
 
     /**
@@ -75,25 +74,58 @@ public class Game {
         return maxPlayers;
     }
 
+    /**
+     * Returns the board array.
+     *
+     * @return the board array
+     */
     public Node[][] getBoardArray() {
         return board.getBoardArray();
     }
 
+    /**
+     * Returns the layout of the game.
+     *
+     * @return the game layout
+     */
     public Layout getLayout() {
         return layout;
     }
 
+    /**
+     * Returns the variant of the game.
+     *
+     * @return the game variant
+     */
     public Variant getVariant() {
         return variant;
     }
 
+    /**
+     * Returns the status of the game.
+     *
+     * @return the game status
+     */
     public GameStatus getStatus() {
         return status;
     }
 
+    /**
+     * Checks if a player has won the game.
+     *
+     * @param players the list of players in the game
+     * @return the player who won, or null if no player has won
+     */
     public Player checkIfSomeoneWon(List<Player> players) {
         return board.checkIfSomeoneWon(players);
     }
 
-    // Additional game logic methods
+    /**
+     * Sets the status of the game.
+     *
+     * @param gameStatus the new game status
+     */
+    public void setStatus(GameStatus gameStatus) {
+        this.status = gameStatus;
+    }
 }

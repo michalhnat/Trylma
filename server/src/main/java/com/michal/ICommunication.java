@@ -24,8 +24,20 @@ public interface ICommunication {
      */
     void sendListMessage(List<GameInfo> message, ObjectOutputStream out);
 
+    /**
+     * Sends a GameInfo object as a message to the specified output stream.
+     *
+     * @param gameInfo the GameInfo object to send
+     * @param out the output stream to send the message to
+     */
     void sendGameInfo(GameInfo gameInfo, ObjectOutputStream out);
 
+    /**
+     * Sends the current state of the board to the specified output stream.
+     *
+     * @param board the board state to send
+     * @param out the output stream to send the board state to
+     */
     void sendBoard(String board, ObjectOutputStream out);
 
     /**
@@ -35,11 +47,4 @@ public interface ICommunication {
      * @param out the output stream to send the error message to
      */
     void sendError(String msg, ObjectOutputStream out);
-
-    /**
-     * Receives a message.
-     *
-     * @param msg the message received
-     */
-    void receive(String msg);
 }
