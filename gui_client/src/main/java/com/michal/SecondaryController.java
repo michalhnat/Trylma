@@ -26,6 +26,9 @@ public class SecondaryController implements IController, BoardControllerMediator
     private Button moveButton;
 
     @FXML
+    private Button passButton;
+
+    @FXML
     private TextField x;
 
     @FXML
@@ -45,7 +48,7 @@ public class SecondaryController implements IController, BoardControllerMediator
 
     private Board board;
 
-    // private GameManager gameManager;
+
 
     private ICommunication communication;
 
@@ -55,45 +58,10 @@ public class SecondaryController implements IController, BoardControllerMediator
         instance = this;
 
         board = new Board(15, this);
-        // board.createBoardOutOfMap("XXXXXXXXXXXXWXXXX\r\n" + //
-        // "XXXXXXXXXXXWWXXXX\r\n" + //
-        // "XXXXXXXXXXWWWXXXX\r\n" + //
-        // "XXXXXXXXXWWWWXXXX\r\n" + //
-        // "XXXXWWWWWWWWWWWWW\r\n" + //
-        // "XXXXWWWWWWWWWWWWX\r\n" + //
-        // "XXXXWWWWWWWWWWWXX\r\n" + //
-        // "XXXXWWWWWWWWWWXXX\r\n" + //
-        // "XXXXWWWWWWWWWXXXX\r\n" + //
-        // "XXXWWWWWWWWWWXXXX\r\n" + //
-        // "XXWWWWWWWWWWWXXXX\r\n" + //
-        // "XWWWWWWWWWWWWXXXX\r\n" + //
-        // "WWWWWWWWWWWWWXXXX\r\n" + //
-        // "XXXXWWWWXXXXXXXXX\r\n" + //
-        // "XXXXWWWXXXXXXXXXX\r\n" + //
-        // "XXXXWWXXXXXXXXXXX\r\n" + //
-        // "XXXXWXXXXXXXXXXXX");
-        // board.getCells().forEach(cell -> {
-        // BoardPane.getChildren().add(cell);
-        // });
-
-        // try {
-        // gameManager = new GameManager(communication.getInputStream(), communication, label,
-        // label, board, borderPane);
-        // Thread gameManagerThread = new Thread(gameManager);
-        // gameManagerThread.start();
-        // } catch (Exception e) {
-        // e.printStackTrace();
-        // }
-
-
-        // gameManager.start();
 
     }
 
     public static IController getInstance() {
-        // if (instance == null) {
-        // instance = new SecondaryController();
-        // }
         return instance;
 
     }
@@ -146,6 +114,12 @@ public class SecondaryController implements IController, BoardControllerMediator
         int y = Integer.parseInt(this.y.getText());
         int destination_x = Integer.parseInt(this.destination_x.getText());
         int destination_y = Integer.parseInt(this.destination_y.getText());
+
+        if (x < 0 || y < 0 || destination_x < 0 || destination_y < 0) {
+            showError("Invalid coordinates");
+            return;
+        }
+
         String jsonMessage = JsonBuilder.setBuilder("move").setPayloadArgument("start_x", x)
                 .setPayloadArgument("start_y", y).setPayloadArgument("end_x", destination_x)
                 .setPayloadArgument("end_y", destination_y).build();
@@ -154,6 +128,17 @@ public class SecondaryController implements IController, BoardControllerMediator
             board.restet_border_on_active_cells();
         } catch (Exception e) {
             showError("Failed to move");
+        }
+    }
+
+    @FXML
+    private void pass() {
+        String jsonMessage = JsonBuilder.setBuilder("pass").build();
+
+        try {
+            communication.sendMessage(jsonMessage);
+        } catch (Exception e) {
+            showError("Failed to pass");
         }
     }
 
