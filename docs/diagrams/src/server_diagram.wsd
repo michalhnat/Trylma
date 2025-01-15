@@ -296,11 +296,13 @@ com.michal.Game.GameSession --> com.michal.Game.GameQueue : uses
 com.michal.Game.Game --> com.michal.Game.Board : uses
 com.michal.Game.Player --> com.michal.PlayerCommunicator : communicates
 com.michal.ClientHandler -> com.michal.Utils.JsonDeserializer : uses
-com.michal.Game.Board <|-- com.michal.Game.StarBoard
 com.michal.Game.Board --> com.michal.Game.Node : contains
 com.michal.Game.Game --> com.michal.Game.GameStatus : has
 com.michal.Game.Game --> com.michal.Game.Layout : has
 com.michal.Game.Game --> com.michal.Game.Variant : has
-com.michal.Game.board --> com.michal.Game.MoveValidator : uses
+com.michal.Game.Board --> com.michal.Game.MoveValidator : uses
+com.michal.Game.Node --> com.michal.Game.Pawn : contains
+
+com.michal.Game.StarBoard --> com.michal.Utils.StarBuilder : uses
 
 @enduml
