@@ -46,7 +46,7 @@ public class Game {
      * Moves a player to a new position on the board.
      *
      * @param player the player making the move
-     * @param newPosition the new position to move the player to
+     * @param end the new position to move the player to
      * @throws Exception if the move is not valid
      */
     public void move(Player player, Position start, Position end) throws Exception {
@@ -56,7 +56,9 @@ public class Game {
         if (!valid) {
             throw new Exception("Move is not valid.");
         }
-        board.move(start, end);
+        else {
+            board.move(start, end);
+        }
     }
 
     /**
