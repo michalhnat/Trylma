@@ -4,7 +4,6 @@ import com.michal.Game.*;
 import com.michal.Utils.StarBuilder;
 
 import java.util.HashSet;
-import java.util.List;
 
 public class MoveValidatorStandardTest {
     Node[][] board = StarBuilder.buildStar(5);
@@ -54,7 +53,7 @@ public class MoveValidatorStandardTest {
         }
 
         for (Position move : validMoves) {
-            System.out.println(move.getX() + " " + move.getY());
+            System.out.println(move.x() + " " + move.y());
         }
     }
 }

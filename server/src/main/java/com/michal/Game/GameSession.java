@@ -5,12 +5,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Logger;
 
 import com.michal.GameSessionMediator;
 import com.michal.Utils.BoardStringBuilder;
-import com.michal.Utils.MyLogger;
 
+/**
+ * Manages a game session, including players, game state, and communication.
+ */
 public class GameSession {
     private static final AtomicInteger sessionCounter = new AtomicInteger(1);
     private final int sessionId;
@@ -19,14 +20,18 @@ public class GameSession {
     private final GameQueue gameQueue;
     private final GameSessionMediator server;
     private final Queue<String> availableColors;
-    Logger logger = MyLogger.logger;
-    static {
-        MyLogger.loggerConfig();
-    }
 
     private static final List<String> COLORS =
             List.of("Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Cyan", "Magenta");
 
+    /**
+     * Constructs a GameSession with the specified board, layout, variant, and server.
+     *
+     * @param board the game board
+     * @param layout the game layout
+     * @param variant the game variant
+     * @param server the server mediator
+     */
     public GameSession(Board board, Layout layout, Variant variant, GameSessionMediator server) {
         this.sessionId = sessionCounter.getAndIncrement();
         this.game = new Game(board, layout, variant);
@@ -36,10 +41,21 @@ public class GameSession {
         this.availableColors = new LinkedList<>(COLORS);
     }
 
+    /**
+     * Returns the session ID.
+     *
+     * @return the session ID
+     */
     public int getSessionId() {
         return sessionId;
     }
 
+    /**
+     * Adds a player to the game session.
+     *
+     * @param player the player to add
+     * @throws IllegalArgumentException if the session is full or no colors are available
+     */
     public synchronized void addPlayer(Player player) {
         if (players.size() >= game.getMaxPlayers()) {
             throw new IllegalArgumentException("Game session is full.");
@@ -55,7 +71,6 @@ public class GameSession {
         players.add(player);
         gameQueue.addPlayer(player);
         player.setGameSession(this);
-        // player.getClientHandler().setInGame(true);
 
         broadcastMessage("Player " + player.getName() + " has joined the game with color "
                 + assignedColor + ".");
@@ -70,11 +85,15 @@ public class GameSession {
         }
     }
 
+    /**
+     * Removes a player from the game session.
+     *
+     * @param player the player to remove
+     */
     public synchronized void removePlayer(Player player) {
         if (players.remove(player)) {
             gameQueue.removePlayer(player);
             player.setGameSession(null);
-            // player.getClientHandler().setInGame(false);
 
             String color = player.getColor();
             if (color != null) {
@@ -91,18 +110,27 @@ public class GameSession {
         }
     }
 
+    /**
+     * Starts the game if the maximum number of players has been reached.
+     */
     private synchronized void startGame() {
         game.start(players);
-        // if (game.getBoard() == null) {
-        // System.out.println("Board is null");
-        // }
+
         broadcastMessage("Game started!");
         broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoardArray()));
+
         promptNextPlayer();
     }
 
+    /**
+     * Handles a move made by a player.
+     *
+     * @param player the player making the move
+     * @param start the starting position of the pawn
+     * @param end the ending position of the pawn
+     */
     public synchronized void handleMove(Player player, Position start, Position end) {
-        if (!game.isInProgress()) {
+        if (game.isWaitingForPlayers()) {
             player.sendError("Game is not in progress.");
             return;
         }
@@ -118,6 +146,7 @@ public class GameSession {
                 gameQueue.removePlayer(winner);
                 if (gameQueue.getSize() == 1) {
                     broadcastMessage("The game has ended");
+                    game.setStatus(GameStatus.FINISHED);
                     server.removeSession(this);
                 }
             }
@@ -125,10 +154,12 @@ public class GameSession {
             promptNextPlayer();
         } catch (Exception e) {
             player.sendError("Error: " + e.getMessage());
-            e.printStackTrace();
         }
     }
 
+    /**
+     * Prompts the next player to make a move.
+     */
     private synchronized void promptNextPlayer() {
         Player nextPlayer = gameQueue.takePlayer();
         if (nextPlayer != null) {
@@ -136,12 +167,22 @@ public class GameSession {
         }
     }
 
+    /**
+     * Broadcasts a message to all players in the session.
+     *
+     * @param message the message to broadcast
+     */
     private synchronized void broadcastMessage(String message) {
         for (Player p : players) {
             p.sendMessage(message);
         }
     }
 
+    /**
+     * Broadcasts the current state of the game board to all players.
+     *
+     * @param board the board state to broadcast
+     */
     private synchronized void broadcastBoard(String board) {
         for (Player p : players) {
             p.sendGameInfo(new GameInfo(sessionId, players.size(), game.getLayout(),
@@ -150,16 +191,31 @@ public class GameSession {
         }
     }
 
+    /**
+     * Returns a list of players in the session.
+     *
+     * @return a list of players
+     */
     public synchronized List<Player> getPlayers() {
         return new ArrayList<>(players);
     }
 
+    /**
+     * Returns the game associated with this session.
+     *
+     * @return the game
+     */
     public Game getGame() {
         return game;
     }
 
+    /**
+     * Handles a pass action by a player.
+     *
+     * @param player the player passing their turn
+     */
     public void handlePass(Player player) {
-        if (!game.isInProgress()) {
+        if (game.isWaitingForPlayers()) {
             player.sendError("Game is not in progress.");
             return;
         }

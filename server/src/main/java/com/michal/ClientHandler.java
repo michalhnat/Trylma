@@ -14,6 +14,9 @@ import com.michal.Game.*;
 import com.michal.Utils.JsonDeserializer;
 import com.michal.Utils.MyLogger;
 
+/**
+ * Handles communication with a client and processes client requests.
+ */
 public class ClientHandler implements Runnable, PlayerCommunicator {
     private final Socket socket;
     private final Mediator mediator;
@@ -28,56 +31,117 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
         MyLogger.loggerConfig();
     }
 
+    /**
+     * Constructs a ClientHandler with the specified socket and mediator.
+     *
+     * @param socket the socket for client communication
+     * @param mediator the mediator for handling game actions
+     */
     public ClientHandler(Socket socket, Mediator mediator) {
         this.socket = socket;
         this.mediator = mediator;
-        this.communication = new SocketCommunication(socket);
+        this.communication = new SocketCommunication();
         this.inGame = false;
         this.id = UUID.randomUUID();
     }
 
+    /**
+     * Returns the unique identifier of the client.
+     *
+     * @return the UUID of the client
+     */
     public synchronized UUID getId() {
         return id;
     }
 
+    /**
+     * Sends a message to the client.
+     *
+     * @param msg the message to send
+     */
     @Override
     public void sendMessage(String msg) {
         communication.sendMessage(msg, out);
     }
 
+    /**
+     * Sends a list of game information to the client.
+     *
+     * @param list the list of game information to send
+     */
     public void sendListMessage(List<GameInfo> list) {
         communication.sendListMessage(list, out);
     }
 
+    /**
+     * Sends the current state of the game board to the client.
+     *
+     * @param board the board state to send
+     */
     public void sendBoard(String board) {
         communication.sendBoard(board, out);
     }
 
+    /**
+     * Sends game information to the client.
+     *
+     * @param gameInfo the game information to send
+     */
     public void sendGameInfo(GameInfo gameInfo) {
         communication.sendGameInfo(gameInfo, out);
     }
 
+    /**
+     * Sends an error message to the client.
+     *
+     * @param msg the error message to send
+     */
     @Override
     public void sendError(String msg) {
         communication.sendError(msg, out);
     }
 
+    /**
+     * Returns the player associated with the client.
+     *
+     * @return the player associated with the client
+     */
     public synchronized Player getPlayer() {
         return player;
     }
 
+    /**
+     * Sets the player associated with the client.
+     *
+     * @param player the player to associate with the client
+     */
     public synchronized void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * Checks if the client is currently in a game.
+     *
+     * @return true if the client is in a game, false otherwise
+     */
     public synchronized boolean isInGame() {
         return inGame;
     }
 
+    /**
+     * Sets the in-game status of the client.
+     *
+     * @param inGame the in-game status to set
+     */
     public synchronized void setInGame(boolean inGame) {
         this.inGame = inGame;
     }
 
+    /**
+     * Handles a message received from the client.
+     *
+     * @param msg the message received from the client
+     */
     private void handleMessage(String msg) {
         try {
             JsonDeserializer deserializer = JsonDeserializer.getInstance();
@@ -91,8 +155,6 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                 logger.warning("Error from client: " + errorMessage);
                 return;
             }
-
-            // System.out.println("Command: " + command);
 
             switch (command.toLowerCase()) {
                 case "list":
@@ -141,6 +203,9 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
         }
     }
 
+    /**
+     * Runs the client handler, processing incoming messages from the client.
+     */
     @Override
     public void run() {
         try {

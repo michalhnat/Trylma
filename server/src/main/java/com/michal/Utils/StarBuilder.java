@@ -3,14 +3,19 @@ package com.michal.Utils;
 import com.michal.Game.CornerNode;
 import com.michal.Game.Direction;
 import com.michal.Game.Node;
-import com.michal.Game.Player;
 
-import java.util.List;
-
+/**
+ * Utility class for building a star-shaped game board.
+ */
 public class StarBuilder {
 
     private static StarBuilder instance;
 
+    /**
+     * Returns the singleton instance of the StarBuilder.
+     *
+     * @return the singleton instance of the StarBuilder
+     */
     public static StarBuilder getInstance() {
         if (instance == null) {
             synchronized (StarBuilder.class) {
@@ -22,6 +27,12 @@ public class StarBuilder {
         return instance;
     }
 
+    /**
+     * Builds a star-shaped game board of the specified size.
+     *
+     * @param size the size of the star
+     * @return a 2D array representing the star-shaped game board
+     */
     public static Node[][] buildStar(int size) {
         int maxSize = 4 * size - 4;
         int midpoint = maxSize / 2;
@@ -41,7 +52,7 @@ public class StarBuilder {
         // First the big square in the middle
         for (int x = blockSize; x <= maxSize - blockSize; x++) {
             for (int y = blockSize; y <= maxSize - blockSize; y++) {
-                if (y >= x +size) { // NorthWest corner
+                if (y >= x + size) { // NorthWest corner
                     board[x][y] = new CornerNode(Direction.NORTHWEST);
                 } else if (y <= x - size) { // SouthEast corner
                     board[x][y] = new CornerNode(Direction.SOUTHEAST);
@@ -54,8 +65,8 @@ public class StarBuilder {
         // Then the four triangles
 
         // SouthWest triangle
-        for (int x=0; x < blockSize;x++) {
-            for (int y = blockSize; y < 2*blockSize; y++) {
+        for (int x = 0; x < blockSize; x++) {
+            for (int y = blockSize; y < 2 * blockSize; y++) {
                 if (y <= x + blockSize) {
                     board[x][y] = new CornerNode(Direction.SOUTHWEST);
                 }
@@ -74,7 +85,7 @@ public class StarBuilder {
         // South triangle
         for (int x = blockSize; x < midpoint; x++) {
             for (int y = 0; y < blockSize; y++) {
-                if (y >= x-blockSize) {
+                if (y >= x - blockSize) {
                     board[x][y] = new CornerNode(Direction.SOUTH);
                 }
             }
@@ -82,8 +93,8 @@ public class StarBuilder {
 
         // NorthEast triangle
         for (int x = midpoint + size; x <= maxSize; x++) {
-            for (int y = midpoint+1; y < midpoint+size; y++) {
-                if (y >= x-blockSize) {
+            for (int y = midpoint + 1; y < midpoint + size; y++) {
+                if (y >= x - blockSize) {
                     board[x][y] = new CornerNode(Direction.NORTHEAST);
                 }
             }

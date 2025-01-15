@@ -4,40 +4,48 @@ import com.michal.Utils.StarBuilder;
 
 import java.util.*;
 
+/**
+ * Represents a star-shaped game board.
+ */
 public class StarBoard extends Board {
 
-    private final int size;
     private final Node[][] board;
-    private final List<Integer> allowedPlayerNumbers = new ArrayList<>(Arrays.asList(2, 3, 4, 6));
     private final MoveValidator moveValidator;
 
+    /**
+     * Constructs a StarBoard with the specified size and move validator.
+     *
+     * @param size the size of the star-shaped board
+     * @param moveValidator the validator for moves on the board
+     */
     public StarBoard(int size, MoveValidator moveValidator) {
         super();
-        this.size = size;
         this.board = StarBuilder.buildStar(size);
         this.moveValidator = moveValidator;
     }
 
-    @Override
-    public List<Integer> getAllowedPlayerNumbers() {
-        return allowedPlayerNumbers;
-    }
-
+    /**
+     * Moves a pawn from the start position to the end position.
+     *
+     * @param start the starting position of the pawn
+     * @param end the ending position of the pawn
+     */
     @Override
     public void move(Position start, Position end) {
-        Pawn movedPawn = board[start.getX()][start.getY()].getPawn();
-        board[start.getX()][start.getY()].setPawn(null);
-        board[end.getX()][end.getY()].setPawn(movedPawn);
+        Pawn movedPawn = board[start.x()][start.y()].getPawn();
+        board[start.x()][start.y()].setPawn(null);
+        board[end.x()][end.y()].setPawn(movedPawn);
     }
 
-    @Override
-    public void print() {
-        // Print logic
-    }
-
+    /**
+     * Checks if any player has won the game.
+     *
+     * @param players the list of players in the game
+     * @return the player who won, or null if no player has won
+     */
     @Override
     public Player checkIfSomeoneWon(List<Player> players) {
-        // Map all directions to their oppoosites
+        // Map all directions to their opposites
         Map<Direction, Direction> oppositeDirections = Map.of(
                 Direction.SOUTH, Direction.NORTH,
                 Direction.NORTH, Direction.SOUTH,
@@ -81,6 +89,12 @@ public class StarBoard extends Board {
         return null;
     }
 
+    /**
+     * Initializes the board with the specified layout and players.
+     *
+     * @param layout the layout of the board
+     * @param players the list of players in the game
+     */
     @Override
     public void initialize(Layout layout, List<Player> players) {
 
@@ -112,11 +126,24 @@ public class StarBoard extends Board {
         }
     }
 
+    /**
+     * Validates a move from the start position to the end position for the specified player.
+     *
+     * @param player the player making the move
+     * @param start the starting position of the move
+     * @param end the ending position of the move
+     * @return true if the move is valid, false otherwise
+     */
     @Override
     public boolean validateMove(Player player, Position start, Position end) {
         return moveValidator.isValidMove(board, player, start, end);
     }
 
+    /**
+     * Returns the 2D array representing the game board.
+     *
+     * @return the 2D array representing the game board
+     */
     public Node[][] getBoardArray() {
         return board;
     }
