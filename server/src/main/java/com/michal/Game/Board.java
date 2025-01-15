@@ -12,7 +12,7 @@ public abstract class Board {
 
     public abstract void print();
 
-    public abstract boolean isGameOver();
+    public abstract Player checkIfSomeoneWon(List<Player> players);
 
     public abstract void initialize(Layout layout, List<Player> players);
 

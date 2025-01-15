@@ -123,6 +123,13 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                         sendError("You are not part of any game session.");
                     }
                     break;
+                case "pass":
+                    if (isInGame()) {
+                        mediator.handlePass(this);
+                    } else {
+                        sendError("You are not part of any game session.");
+                    }
+                    break;
                 default:
                     sendError("Unsupported command: " + command);
                     break;

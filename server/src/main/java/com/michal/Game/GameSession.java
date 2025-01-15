@@ -97,7 +97,7 @@ public class GameSession {
         // System.out.println("Board is null");
         // }
         broadcastMessage("Game started!");
-        broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoard()));
+        broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoardArray()));
         promptNextPlayer();
     }
 
@@ -110,8 +110,14 @@ public class GameSession {
         try {
             game.move(player, start, end);
             broadcastMessage("Player " + player.getColor() + " moved");
+            broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoardArray()));
 
-            broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoard()));
+            Player winner = game.checkIfSomeoneWon(players);
+            if (winner != null) {
+                broadcastMessage("Player " + winner.getColor() + " has won the game!");
+                gameQueue.removePlayer(winner);
+            }
+
             promptNextPlayer();
         } catch (Exception e) {
             player.sendError("Error: " + e.getMessage());
@@ -146,5 +152,15 @@ public class GameSession {
 
     public Game getGame() {
         return game;
+    }
+
+    public void handlePass(Player player) {
+        if (!game.isInProgress()) {
+            player.sendError("Game is not in progress.");
+            return;
+        }
+
+        broadcastMessage("Player " + player.getColor() + " passed.");
+        promptNextPlayer();
     }
 }
