@@ -18,11 +18,12 @@ public class App extends Application {
 
     private static Scene scene;
     private static ICommunication communication;
+    private static GeneralListener generalListener;
 
     @Override
     public void start(Stage stage) throws IOException {
         communication = new SocketCommunication();
-        scene = new Scene(loadFXML("secondary"), 600, 600);
+        scene = new Scene(loadFXML("primary"), 1000, 800);
         Application.setUserAgentStylesheet(new Dracula().getUserAgentStylesheet());
         stage.setScene(scene);
         stage.show();
@@ -34,6 +35,14 @@ public class App extends Application {
 
     static ICommunication getCommunication() {
         return communication;
+    }
+
+    static void setGeneralListener(GeneralListener generalListener) {
+        App.generalListener = generalListener;
+    }
+
+    static GeneralListener getGeneralListener() {
+        return generalListener;
     }
 
     private static Parent loadFXML(String fxml) throws IOException {

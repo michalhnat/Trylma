@@ -1,7 +1,9 @@
 package com.michal.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -114,13 +116,36 @@ public class JsonDeserializer {
         JsonArray games = obj.get("payload").getAsJsonArray();
         for (JsonElement game : games) {
             JsonObject gameObj = game.getAsJsonObject();
+
             String gameString = String.format("Game #%d (%d/%d players)",
                     gameObj.get("gameId").getAsInt(), gameObj.get("currentPlayers").getAsInt(),
                     gameObj.get("maxPlayers").getAsInt());
+            // System.out.println(gameString);
             gamesList.add(gameString);
         }
 
         return gamesList;
+    }
+
+    public HashMap<String, String> getGameInfoMap(String json) throws JsonSyntaxException {
+        JsonObject obj = deserialize(json);
+        HashMap<String, String> gameInfo = new HashMap<>();
+
+        if (!obj.has("payload")) {
+            return gameInfo;
+        }
+
+        JsonObject payload = obj.get("payload").getAsJsonObject();
+        for (Map.Entry<String, JsonElement> entry : payload.entrySet()) {
+            String key = entry.getKey();
+            JsonElement element = entry.getValue();
+            if (element.isJsonPrimitive()) {
+                String value = element.getAsString();
+                gameInfo.put(key, value);
+            }
+        }
+
+        return gameInfo;
     }
 
     // public boolean isError(String json) throws JsonSyntaxException {

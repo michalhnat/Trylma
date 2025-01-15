@@ -49,7 +49,9 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
         communication.sendListMessage(list, out);
     }
 
-    public void sendBoard(String board) { communication.sendBoard(board, out); }
+    public void sendBoard(String board) {
+        communication.sendBoard(board, out);
+    }
 
     public void sendGameInfo(GameInfo gameInfo) {
         communication.sendGameInfo(gameInfo, out);
@@ -89,6 +91,8 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                 logger.warning("Error from client: " + errorMessage);
                 return;
             }
+
+            // System.out.println("Command: " + command);
 
             switch (command.toLowerCase()) {
                 case "list":

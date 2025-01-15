@@ -10,6 +10,8 @@ public class GameInfo {
     private int maxPlayers;
     private Layout layout;
     private Variant variant;
+    private GameStatus status;
+    private String players_color;
 
     /**
      * Constructs a GameInfo object with the specified ID, current number of players, and maximum
@@ -19,12 +21,31 @@ public class GameInfo {
      * @param currentPlayers the current number of players in the game
      * @param maxPlayers the maximum number of players allowed in the game
      */
-    public GameInfo(int id, int currentPlayers, Layout layout, Variant variant) {
+    public GameInfo(int id, int currentPlayers, Layout layout, Variant variant, GameStatus status,
+            String players_color) {
         this.id = id;
         this.currentPlayers = currentPlayers;
         this.maxPlayers = layout.getPlayers();
         this.layout = layout;
         this.variant = variant;
+        this.status = status;
+        this.players_color = players_color;
+    }
+
+    public GameStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(GameStatus status) {
+        this.status = status;
+    }
+
+    public String getPlayers_color() {
+        return players_color;
+    }
+
+    public void setPlayers_color(String players_color) {
+        this.players_color = players_color;
     }
 
     /**

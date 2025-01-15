@@ -1,42 +1,8 @@
-Jan 13, 2025 4:12:40 PM com.michal.ClientHandler run
+Jan 15, 2025 1:52:03 PM com.michal.ClientHandler run
 INFO: Client connected: /127.0.0.1
-Jan 13, 2025 4:12:40 PM com.michal.ClientHandler run
+Jan 15, 2025 1:52:03 PM com.michal.ClientHandler run
 INFO: Received: {"command":"list","payload":{}}
-Jan 13, 2025 4:12:40 PM com.michal.ClientHandler run
+Jan 15, 2025 1:52:03 PM com.michal.ClientHandler run
 INFO: Received: {"command":"list","payload":{}}
-Jan 13, 2025 4:12:44 PM com.michal.ClientHandler run
-INFO: Received: {"command":"create","payload":{"players":4}}
-Jan 13, 2025 4:12:44 PM com.michal.ClientHandler run
-INFO: Received: {"command":"list","payload":{}}
-Jan 13, 2025 4:12:45 PM com.michal.ClientHandler run
-INFO: Received: {"command":"join","payload":{"gameID":"1"}}
-Jan 13, 2025 4:13:47 PM com.michal.ClientHandler run
-WARNING: Client disconnected
-Jan 13, 2025 4:13:57 PM com.michal.ClientHandler run
-INFO: Client connected: /127.0.0.1
-Jan 13, 2025 4:13:57 PM com.michal.ClientHandler run
-INFO: Received: {"command":"list","payload":{}}
-Jan 13, 2025 4:13:57 PM com.michal.ClientHandler run
-INFO: Received: {"command":"list","payload":{}}
-Jan 13, 2025 4:13:59 PM com.michal.ClientHandler run
-INFO: Received: {"command":"create","payload":{"players":4}}
-Jan 13, 2025 4:13:59 PM com.michal.ClientHandler run
-INFO: Received: {"command":"list","payload":{}}
-Jan 13, 2025 4:14:00 PM com.michal.ClientHandler run
-INFO: Received: {"command":"join","payload":{"gameID":"2"}}
-Jan 13, 2025 4:18:49 PM com.michal.ClientHandler run
-WARNING: Client disconnected
-Jan 13, 2025 4:19:01 PM com.michal.ClientHandler run
-INFO: Client connected: /127.0.0.1
-Jan 13, 2025 4:19:01 PM com.michal.ClientHandler run
-INFO: Received: {"command":"list","payload":{}}
-Jan 13, 2025 4:19:01 PM com.michal.ClientHandler run
-INFO: Received: {"command":"list","payload":{}}
-Jan 13, 2025 4:19:13 PM com.michal.ClientHandler run
-INFO: Received: {"command":"create","payload":{"players":4}}
-Jan 13, 2025 4:19:13 PM com.michal.ClientHandler run
-INFO: Received: {"command":"list","payload":{}}
-Jan 13, 2025 4:19:05 PM com.michal.ClientHandler run
-INFO: Received: {"command":"join","payload":{"gameID":"3"}}
-Jan 13, 2025 4:21:05 PM com.michal.ClientHandler run
-WARNING: Client disconnected
+Jan 15, 2025 1:52:04 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}

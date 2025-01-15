@@ -60,8 +60,10 @@ public class GameSession {
         broadcastMessage("Player " + player.getName() + " has joined the game with color "
                 + assignedColor + ".");
 
-        player.sendGameInfo(new GameInfo(this.getSessionId(), this.getPlayers().size(),
-                this.getGame().getLayout(), this.getGame().getVariant()));
+        for (Player p : players) {
+            p.sendGameInfo(new GameInfo(sessionId, players.size(), game.getLayout(),
+                    game.getVariant(), game.getStatus(), p.getColor()));
+        }
 
         if (players.size() == game.getMaxPlayers()) {
             startGame();
@@ -91,9 +93,9 @@ public class GameSession {
 
     private synchronized void startGame() {
         game.start(players);
-//        if (game.getBoard() == null) {
-//            System.out.println("Board is null");
-//        }
+        // if (game.getBoard() == null) {
+        // System.out.println("Board is null");
+        // }
         broadcastMessage("Game started!");
         broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoard()));
         promptNextPlayer();
@@ -132,6 +134,8 @@ public class GameSession {
 
     private synchronized void broadcastBoard(String board) {
         for (Player p : players) {
+            p.sendGameInfo(new GameInfo(sessionId, players.size(), game.getLayout(),
+                    game.getVariant(), game.getStatus(), p.getColor()));
             p.sendBoard(board);
         }
     }
