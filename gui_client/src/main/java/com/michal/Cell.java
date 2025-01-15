@@ -1,4 +1,3 @@
-
 package com.michal;
 
 import javafx.scene.input.MouseEvent;
@@ -9,14 +8,36 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+/**
+ * Represents a single cell in the game board implemented as a StackPane. Each cell is a clickable,
+ * interactive hexagonal element that displays coordinates and responds to mouse events with visual
+ * feedback.
+ */
 public class Cell extends StackPane {
+    /** X-coordinate in the board grid */
     private int i;
+    /** Y-coordinate in the board grid */
     private int j;
+    /** Visual circle representation of the cell */
     private Circle circle;
+    /** Text displaying coordinates */
     private Text text;
+    /** Reference to the parent board */
     private Board board;
+    /** Cell's color */
     private Color color;
 
+    /**
+     * Creates a new cell with specified position and appearance.
+     *
+     * @param centerX The X position of the cell center
+     * @param centerY The Y position of the cell center
+     * @param i The grid X-coordinate
+     * @param j The grid Y-coordinate
+     * @param radius The radius of the cell
+     * @param color The color of the cell
+     * @param board Reference to the parent board
+     */
     public Cell(double centerX, double centerY, int i, int j, double radius, Color color,
             Board board) {
         this.i = i;
@@ -41,100 +62,107 @@ public class Cell extends StackPane {
         this.setOnMouseClicked(event -> handleMouseClicked(event));
     }
 
+    /**
+     * Handles mouse enter events by changing opacity and showing coordinates.
+     *
+     * @param event The mouse event
+     */
     private void handleMouseEntered(MouseEvent event) {
         circle.setOpacity(0.7);
-        // circle.setStroke(Paint.valueOf("black"));
-        // circle.setStrokeWidth(1);
         text.setVisible(true);
     }
 
+    /**
+     * Handles mouse exit events by restoring opacity and hiding coordinates.
+     *
+     * @param event The mouse event
+     */
     private void handleMouseExited(MouseEvent event) {
         circle.setOpacity(1.0);
         // circle.setStrokeWidth(0);
         text.setVisible(false);
     }
 
+    /**
+     * Handles mouse click events by notifying the board and updating visual state.
+     *
+     * @param event The mouse event
+     */
     private void handleMouseClicked(MouseEvent event) {
         board.handleCellClick(i, j);
         circle.setStrokeWidth(1);
         circle.setStroke(color.invert());
-        // System.out.println("Clicked on cell: " + i + ", " + j);
     }
 
+    /**
+     * Resets the cell's border to its default state.
+     */
     public void resetBorder() {
         circle.setStrokeWidth(0);
     }
 
+    /**
+     * Sets the cell's position in the layout.
+     *
+     * @param x The new X position
+     * @param y The new Y position
+     */
     public void setXY(double x, double y) {
         this.setLayoutX(x);
         this.setLayoutY(y);
     }
 
+    /**
+     * Gets the cell's center X coordinate.
+     *
+     * @return The X coordinate of the cell's center
+     */
     public double getX() {
         return this.getLayoutX() + circle.getRadius();
     }
 
+    /**
+     * Gets the cell's center Y coordinate.
+     *
+     * @return The Y coordinate of the cell's center
+     */
     public double getY() {
         return this.getLayoutY() + circle.getRadius();
     }
 
+    /**
+     * Gets the cell's grid X-coordinate.
+     *
+     * @return The grid X-coordinate
+     */
     public int getI() {
         return i;
     }
 
+    /**
+     * Gets the cell's grid Y-coordinate.
+     *
+     * @return The grid Y-coordinate
+     */
     public int getJ() {
         return j;
     }
 
+    /**
+     * Sets the fill color of the cell.
+     *
+     * @param color The new fill color
+     */
     public void setFill(Paint color) {
         circle.setFill(color);
     }
 
+    /**
+     * Gets the current fill color of the cell.
+     *
+     * @return The current fill color
+     */
     public Paint getFill() {
         return circle.getFill();
     }
 }
-
-// package com.michal;
-
-// import java.io.ObjectInputStream.GetField;
-// import javafx.scene.paint.Paint;
-// import javafx.scene.shape.Circle;
-
-// public class Cell extends Circle {
-// private int i;
-// private int j;
-
-// public Cell(double centerX, double centerY, int i, int j, double radius, Paint color) {
-// super(centerX, centerY, radius, color);
-// this.i = i;
-// this.j = j;
-
-
-// this.setOnMouseEntered(event -> {
-// this.setOpacity(0.7);
-// this.setStroke(Paint.valueOf("black"));
-// this.setStrokeWidth(1);
-// this.setUserData("(" + i + "," + j + ")");
-// });
-
-// this.setOnMouseExited(event -> {
-// this.setOpacity(1.0);
-// this.setStrokeWidth(0);
-// });
-// }
-
-// public void setXY(double x, double y) {
-// this.setCenterX(x);
-// this.setCenterY(y);
-// }
-
-// public double getX() {
-// return this.getCenterX();
-// }
-
-// public double getY() {
-// return this.getCenterY();
-// }
-
-// }

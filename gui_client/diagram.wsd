@@ -1,0 +1,104 @@
+@startuml
+
+' Interfaces
+interface ICommunication {
+  +connectToServer(address: InetAddress, port: int)
+  +sendMessage(message: String)
+  +getInputStream(): ObjectInputStream
+  +isConnected(): boolean
+}
+
+interface IController {
+  +showInfo(message: String)
+  +showError(message: String) 
+  +handleMessage(message: String)
+}
+
+interface BoardControllerMediator {
+  +setStartXY(x: int, y: int)
+  +setEndXY(x: int, y: int)
+}
+
+' Classes
+class App {
+  -static Scene scene
+  -static ICommunication communication
+  -static GeneralListener generalListener
+  +start(stage: Stage)
+  +static setRoot(fxml: String)
+  +static getCommunication(): ICommunication
+  +static setGeneralListener(listener: GeneralListener)
+  +static getGeneralListener(): GeneralListener
+}
+
+class SocketCommunication {
+  -Socket socket
+  -ObjectInputStream in
+  -ObjectOutputStream out
+  -boolean connected
+}
+
+class Board {
+  -List<Cell> cells
+  -int radius
+  -String currentMap
+  -Map<String,Color> colorMap
+  -BoardControllerMediator controller
+}
+
+class Cell {
+  -int i
+  -int j
+  -Circle circle
+  -Text text
+  -Board board
+  -Color color
+}
+
+class GeneralListener {
+  -IController controller
+  -ObjectInputStream in
+  -ICommunication communication
+}
+
+class PrimaryController {
+  -static IController instance
+  -ICommunication communication
+  -GeneralListener listener
+}
+
+class SecondaryController {
+  -static IController instance
+  -Board board
+  -ICommunication communication
+}
+
+' Custom UI Components
+class HboxCell {
+  -Label label
+}
+
+class Hboxtwolabel {
+  -Label label1
+  -Label label2
+}
+
+' Relationships
+App --> ICommunication
+App --> GeneralListener
+
+SocketCommunication ..|> ICommunication
+
+PrimaryController ..|> IController
+SecondaryController ..|> IController
+SecondaryController ..|> BoardControllerMediator
+
+Board --> BoardControllerMediator
+Board --> Cell
+
+Cell --> Board
+
+GeneralListener --> IController
+GeneralListener --> ICommunication
+
+@enduml

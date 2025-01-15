@@ -77,7 +77,7 @@ public class SocketCommunication implements ICommunication {
         try {
             out.writeObject(JsonBuilder.setBuilder("gameInfo")
                     .setPayloadArgument("gameId", gameInfo.getId())
-                    .setPayloadArgument("maxPlayers", gameInfo.getMaxPlayers())
+                    .setPayloadArgument("players", gameInfo.getCurrentPlayers())
                     .setPayloadArgument("layout", gameInfo.getLayout())
                     .setPayloadArgument("variant", gameInfo.getVariant())
                     .setPayloadArgument("status", gameInfo.getStatus().toString())
