@@ -149,12 +149,11 @@ public class GameSession {
             Player winner = game.checkIfSomeoneWon(gameQueue.getPlayers());
             if (winner != null) {
                 broadcastMessage("Player " + winner.getColor() + " has won!");
-                gameQueue.removePlayer(winner);
-                if (gameQueue.getSize() == 1) {
-                    broadcastMessage("The game has ended");
-                    game.setStatus(GameStatus.FINISHED);
-                    server.removeSession(this);
-                }
+
+                game.setStatus(GameStatus.FINISHED);
+                server.removeSession(this);
+
+                return;
             }
 
             promptNextPlayer();
