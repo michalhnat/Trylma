@@ -26,6 +26,9 @@ public class Board {
     private int[] first_clicked = new int[2];
     /** Coordinates of the second clicked cell [x,y] */
     private int[] second_clicked = new int[2];
+    /** Flag indicating if the user is selecting the end cell */
+    private boolean isSelectingEnd = false;
+
 
     /**
      * Constructs a new Board with specified radius and controller.
@@ -141,30 +144,34 @@ public class Board {
      * @param j The y-coordinate of the clicked cell
      */
     public void handleCellClick(int i, int j) {
-        if (first_clicked[0] == 0 && first_clicked[1] == 0) {
+        if (!isSelectingEnd) {
+            Cell firstCell = getCellByCoordinates(first_clicked[0], first_clicked[1]);
+            Cell secondCell = getCellByCoordinates(second_clicked[0], second_clicked[1]);
+
+            if (firstCell != null) {
+                firstCell.resetBorder();
+            }
+
+            if (secondCell != null) {
+                secondCell.resetBorder();
+            }
+
             first_clicked[0] = i;
             first_clicked[1] = j;
+            second_clicked[0] = 0;
+            second_clicked[1] = 0;
+
             controller.setStartXY(i, j);
-        } else if (second_clicked[0] == 0 && second_clicked[1] == 0) {
+
+            controller.setEndXY(0, 0);
+
+            isSelectingEnd = true;
+
+        } else {
             second_clicked[0] = i;
             second_clicked[1] = j;
             controller.setEndXY(i, j);
-        } else {
-            first_clicked[0] = i;
-            first_clicked[1] = j;
-            controller.setStartXY(i, j);
-            second_clicked[0] = 0;
-            second_clicked[1] = 0;
-            controller.setEndXY(0, 0);
-        }
-        Cell firstCell = getCellByCoordinates(first_clicked[0], first_clicked[1]);
-        Cell secondCell = getCellByCoordinates(second_clicked[0], second_clicked[1]);
-
-        if (firstCell != null) {
-            firstCell.resetBorder();
-        }
-        if (secondCell != null) {
-            secondCell.resetBorder();
+            isSelectingEnd = false;
         }
     }
 
