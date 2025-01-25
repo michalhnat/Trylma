@@ -43,14 +43,15 @@ public class SecondaryController implements IController, BoardControllerMediator
 
     @FXML
     private StackPane centerStackPane;
+
     @FXML
-    private AnchorPane BoardPane;
+    private VBox BoardPane;
     /** Main layout container */
     @FXML
     private BorderPane root;
 
     @FXML
-    private AnchorPane notificationPane;
+    private VBox notificationPane;
     /** Button to confirm move */
     @FXML
     private Button moveButton;
@@ -90,8 +91,6 @@ public class SecondaryController implements IController, BoardControllerMediator
         instance = this;
 
         board = new Board(15, this);
-        BoardPane.setStyle("-fx-border-color: black; -fx-border-width: 2;");
-
     }
 
     /**
@@ -110,46 +109,19 @@ public class SecondaryController implements IController, BoardControllerMediator
      */
     @Override
     public void showInfo(String message) {
-        // Remove existing notifications
+        message = message.toUpperCase();
         notificationPane.getChildren().removeIf(child -> child instanceof Notification);
-
         var info = new Notification(message);
         info.getStyleClass().add(Styles.ELEVATED_1);
-        info.getStyleClass().add(Styles.ACCENT);
-        info.setOnClose(e -> {
-            var fadeOut = Animations.fadeOut(info, Duration.seconds(0.5));
-            fadeOut.setOnFinished(event -> notificationPane.getChildren().remove(info));
-            fadeOut.playFromStart();
-        });
+        info.getStyleClass().add(Styles.SUCCESS);
+        // info.setOnClose(e -> {
+        // var fadeOut = Animations.fadeOut(info, Duration.seconds(0.5));
+        // fadeOut.setOnFinished(event -> notificationPane.getChildren().remove(info));
+        // fadeOut.playFromStart();
+        // });
 
         notificationPane.getChildren().add(info);
-
-        System.out.println("Info: " + message);
     }
-    // @Override
-    // public void showInfo(String message) {
-    // BoardPane.getChildren().removeIf(child -> child instanceof Notification);
-
-    // var info = new Notification(message);
-    // info.getStyleClass().add(Styles.ELEVATED_1);
-    // info.getStyleClass().add(Styles.SUCCESS);
-    // info.setOnClose(e -> {
-    // var fadeOut = Animations.fadeOut(info, Duration.seconds(0.5));
-    // fadeOut.setOnFinished(event -> BoardPane.getChildren().remove(info));
-    // fadeOut.playFromStart();
-    // });
-
-    // // info_list.getItems()
-    // BoardPane.getChildren().add(info);
-
-    // System.out.println("Info: " + message);
-
-    // // message = message.toUpperCase();
-    // // label.setStyle("-fx-font-weight: bold");
-    // // System.out.println("Info: " + message);
-    // // label.setText(message);
-    // // label.setTextFill(Color.GREEN);
-    // }
 
     /**
      * Displays error message with red color.
@@ -159,10 +131,17 @@ public class SecondaryController implements IController, BoardControllerMediator
     @Override
     public void showError(String message) {
         message = message.toUpperCase();
-        label.setStyle("-fx-font-weight: bold");
-        label.setText(message);
-        label.setTextFill(Color.RED);
-        System.out.println("Error: " + message);
+        notificationPane.getChildren().removeIf(child -> child instanceof Notification);
+        var info = new Notification(message);
+        info.getStyleClass().add(Styles.ELEVATED_1);
+        info.getStyleClass().add(Styles.DANGER);
+        notificationPane.getChildren().add(info);
+
+        // message = message.toUpperCase();
+        // label.setStyle("-fx-font-weight: bold");
+        // label.setText(message);
+        // label.setTextFill(Color.RED);
+        // System.out.println("Error: " + message);
     }
 
     @Override
@@ -256,23 +235,29 @@ public class SecondaryController implements IController, BoardControllerMediator
             Group group = new Group();
             group.getChildren().addAll(board.getCells());
 
+            // Add border styles to the group
+            group.setStyle("-fx-border-color: red; -fx-border-width: 2; -fx-border-style: solid;");
+
             // Add the group to the BoardPane
             BoardPane.getChildren().add(group);
 
+            StackPane.setAlignment(group, Pos.CENTER);
+
             // Center the board using StackPane properties
             Platform.runLater(() -> {
-                double boardWidth = BoardPane.getWidth();
-                double boardHeight = BoardPane.getHeight();
-                double groupWidth = group.getLayoutBounds().getWidth();
-                double groupHeight = group.getLayoutBounds().getHeight();
+                // double boardWidth = BoardPane.getWidth();
+                // double boardHeight = BoardPane.getHeight();
+                // double groupWidth = group.getLayoutBounds().getWidth();
+                // double groupHeight = group.getLayoutBounds().getHeight();
 
-                System.out.println("BoardPane.getWidth(): " + boardWidth);
-                System.out.println("BoardPane.getHeight(): " + boardHeight);
-                System.out.println("group.getLayoutBounds().getWidth(): " + groupWidth);
-                System.out.println("group.getLayoutBounds().getHeight(): " + groupHeight);
+                // System.out.println("BoardPane.getWidth(): " + boardWidth);
+                // System.out.println("BoardPane.getHeight(): " + boardHeight);
+                // System.out.println("group.getLayoutBounds().getWidth(): " + groupWidth);
+                // System.out.println("group.getLayoutBounds().getHeight(): " + groupHeight);
 
                 // group.setLayoutX((boardWidth - groupWidth) / 2);
                 // group.setLayoutY((boardHeight - groupHeight) / 2);
+
             });
             // board.createBoardOutOfMap(map);
 

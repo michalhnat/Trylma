@@ -7,6 +7,7 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.StackPane?>
 
@@ -18,14 +19,9 @@
     <center>
         <StackPane fx:id="centerStackPane" AnchorPane.topAnchor="0.0"
             AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-            <!-- Notification Pane -->
-            <AnchorPane fx:id="notificationPane" />
-            <!-- Board Pane -->
-            <AnchorPane fx:id="BoardPane" />
+            <VBox fx:id="notificationPane" />
+            <VBox alignment="CENTER" fx:id="BoardPane" />
         </StackPane>
-        <!-- <AnchorPane fx:id="notificationPane" AnchorPane.topAnchor="0.0"
-            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-        <AnchorPane fx:id="BoardPane" /> -->
     </center>
     <bottom>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -40,10 +36,11 @@
         </ButtonBar>
     </bottom>
     <top>
-        <HBox alignment="CENTER" prefHeight="35.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+        <!-- <HBox alignment="CENTER" prefHeight="35.0" prefWidth="600.0"
+        BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="label" />
             </children>
-        </HBox>
+        </HBox> -->
     </top>
 </BorderPane>
