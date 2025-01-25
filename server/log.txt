@@ -1,8 +1,786 @@
-Jan 15, 2025 1:52:03 PM com.michal.ClientHandler run
+Jan 25, 2025 12:48:35 PM com.michal.ClientHandler run
 INFO: Client connected: /127.0.0.1
-Jan 15, 2025 1:52:03 PM com.michal.ClientHandler run
+Jan 25, 2025 12:48:35 PM com.michal.ClientHandler run
 INFO: Received: {"command":"list","payload":{}}
-Jan 15, 2025 1:52:03 PM com.michal.ClientHandler run
+Jan 25, 2025 12:48:35 PM com.michal.ClientHandler run
 INFO: Received: {"command":"list","payload":{}}
-Jan 15, 2025 1:52:04 PM com.michal.ClientHandler run
+Jan 25, 2025 12:48:36 PM com.michal.ClientHandler run
 INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 12:48:36 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:48:37 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"1"}}
+Jan 25, 2025 12:48:39 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 12:48:39 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:48:39 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:48:39 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"1"}}
+Jan 25, 2025 12:48:45 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 12:48:46 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 12:48:56 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 12:48:56 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:48:56 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:49:02 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":3}}
+Jan 25, 2025 12:49:02 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:49:06 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 12:49:06 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:49:06 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:49:06 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"2"}}
+Jan 25, 2025 12:49:08 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"2"}}
+Jan 25, 2025 12:49:14 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":3,"start_y":9,"end_x":4,"end_y":10}}
+Jan 25, 2025 12:49:18 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":6,"start_y":15,"end_x":5,"end_y":14}}
+Jan 25, 2025 12:49:26 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 12:49:27 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 12:51:21 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 12:51:21 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:51:21 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:51:23 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 12:51:23 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:51:26 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 12:51:26 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:51:26 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:51:29 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":3}}
+Jan 25, 2025 12:51:29 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:51:32 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:51:33 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"4"}}
+Jan 25, 2025 12:51:34 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"4"}}
+Jan 25, 2025 12:52:08 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":3,"start_y":2,"end_x":4,"end_y":3}}
+Jan 25, 2025 12:53:22 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 12:53:23 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 12:53:31 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 12:53:31 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:53:31 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:53:34 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"3"}}
+Jan 25, 2025 12:53:37 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 12:53:37 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:53:37 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:53:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"3"}}
+Jan 25, 2025 12:53:50 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":7,"start_y":4,"end_x":8,"end_y":5}}
+Jan 25, 2025 12:54:33 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 12:54:33 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 12:54:57 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 12:54:57 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:54:57 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:55:05 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":3}}
+Jan 25, 2025 12:55:05 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:55:17 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 12:55:17 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:55:17 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 12:55:18 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"5"}}
+Jan 25, 2025 12:55:20 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"5"}}
+Jan 25, 2025 12:55:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":3,"start_y":1,"end_x":4,"end_y":2}}
+Jan 25, 2025 12:55:48 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":6,"start_y":7,"end_x":5,"end_y":6}}
+Jan 25, 2025 12:56:00 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":4,"start_y":2,"end_x":5,"end_y":3}}
+Jan 25, 2025 12:56:03 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":4,"start_y":2,"end_x":5,"end_y":3}}
+Jan 25, 2025 12:56:11 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":7,"end_x":4,"end_y":6}}
+Jan 25, 2025 12:56:25 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":2,"start_y":1,"end_x":3,"end_y":2}}
+Jan 25, 2025 12:56:30 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":3,"start_y":5,"end_x":4,"end_y":6}}
+Jan 25, 2025 12:56:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":6,"start_y":8,"end_x":3,"end_y":5}}
+Jan 25, 2025 12:56:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":6,"start_y":8,"end_x":5,"end_y":7}}
+Jan 25, 2025 12:56:48 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":2,"start_y":0,"end_x":3,"end_y":1}}
+Jan 25, 2025 12:56:52 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":7,"end_x":3,"end_y":5}}
+Jan 25, 2025 12:57:00 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":3,"start_y":1,"end_x":4,"end_y":3}}
+Jan 25, 2025 12:57:04 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":3,"start_y":2,"end_x":4,"end_y":3}}
+Jan 25, 2025 12:57:05 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:57:08 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":3,"start_y":1,"end_x":3,"end_y":2}}
+Jan 25, 2025 12:57:09 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:57:12 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":3,"start_y":2,"end_x":5,"end_y":4}}
+Jan 25, 2025 12:57:18 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:57:21 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":3,"end_x":5,"end_y":5}}
+Jan 25, 2025 12:57:24 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:57:28 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":4,"start_y":3,"end_x":6,"end_y":5}}
+Jan 25, 2025 12:57:35 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:57:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":5,"end_x":5,"end_y":7}}
+Jan 25, 2025 12:57:39 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:57:44 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":4,"end_x":5,"end_y":5}}
+Jan 25, 2025 12:57:49 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:57:52 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":5,"end_x":6,"end_y":7}}
+Jan 25, 2025 12:57:56 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":6,"start_y":5,"end_x":6,"end_y":6}}
+Jan 25, 2025 12:57:57 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:57:59 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":5,"end_x":6,"end_y":7}}
+Jan 25, 2025 12:58:01 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:58:04 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":5,"end_x":6,"end_y":7}}
+Jan 25, 2025 12:58:07 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":6,"start_y":6,"end_x":6,"end_y":7}}
+Jan 25, 2025 12:58:09 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:58:11 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":5,"end_x":6,"end_y":7}}
+Jan 25, 2025 12:58:32 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":6,"start_y":6,"end_x":6,"end_y":7}}
+Jan 25, 2025 12:58:35 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:58:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":5,"end_x":7,"end_y":6}}
+Jan 25, 2025 12:58:41 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":5,"start_y":5,"end_x":6,"end_y":6}}
+Jan 25, 2025 12:58:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 12:58:47 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":6,"start_y":6,"end_x":6,"end_y":8}}
+Jan 25, 2025 12:58:59 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 12:59:00 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:13:57 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:13:57 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:13:57 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:13:59 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:13:59 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:13:59 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:14:00 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:14:00 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:14:01 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:14:01 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:14:02 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"6"}}
+Jan 25, 2025 1:14:05 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:14:06 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"6"}}
+Jan 25, 2025 1:14:26 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:14:27 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:14:45 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:14:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:14:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:14:46 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"7"}}
+Jan 25, 2025 1:14:47 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:14:47 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:14:47 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:14:48 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"7"}}
+Jan 25, 2025 1:15:02 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:15:03 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:24:13 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:24:13 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:24:13 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:24:14 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:24:14 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:24:15 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"8"}}
+Jan 25, 2025 1:24:16 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:24:16 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:24:16 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:24:17 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:24:17 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:24:18 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"8"}}
+Jan 25, 2025 1:24:20 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 1:24:22 PM com.michal.ClientHandler run
+INFO: Received: {"command":"pass","payload":{}}
+Jan 25, 2025 1:24:26 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:24:26 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:25:00 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:25:00 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:25:00 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:25:01 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"9"}}
+Jan 25, 2025 1:25:36 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:25:44 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:25:44 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:25:44 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:25:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:25:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:25:46 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"10"}}
+Jan 25, 2025 1:30:39 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:30:45 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:30:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:30:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:30:46 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:30:46 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:30:47 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"11"}}
+Jan 25, 2025 1:31:09 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:31:15 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:31:15 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:31:15 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:31:16 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:31:16 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:31:17 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"12"}}
+Jan 25, 2025 1:36:30 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:36:36 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:36:36 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:36:36 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:36:37 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:36:37 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:36:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"13"}}
+Jan 25, 2025 1:44:25 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:44:31 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:44:31 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:44:31 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:44:32 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:44:32 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:44:33 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"14"}}
+Jan 25, 2025 1:44:45 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:44:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:44:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:44:47 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"14"}}
+Jan 25, 2025 1:44:57 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:44:57 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:50:01 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:50:02 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:50:02 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:50:03 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:50:03 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:50:03 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:50:04 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:50:04 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:50:05 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"15"}}
+Jan 25, 2025 1:50:06 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:50:06 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:50:06 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:50:07 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:50:07 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:50:10 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"15"}}
+Jan 25, 2025 1:58:54 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:58:54 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:58:55 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:59:03 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:59:03 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:59:03 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:59:04 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"16"}}
+Jan 25, 2025 1:59:16 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 1:59:40 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 1:59:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:59:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:59:41 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 1:59:41 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 1:59:43 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"17"}}
+Jan 25, 2025 2:00:33 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:00:39 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:00:39 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:00:39 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:00:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:00:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:00:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"18"}}
+Jan 25, 2025 2:00:50 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:01:59 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:01:59 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:01:59 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:02:00 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:02:00 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:02:02 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"19"}}
+Jan 25, 2025 2:02:14 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:04:32 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:04:32 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:04:32 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:04:33 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:04:33 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:04:37 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"20"}}
+Jan 25, 2025 2:04:40 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:04:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:04:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:04:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:04:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:04:42 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"20"}}
+Jan 25, 2025 2:05:16 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:05:16 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:05:59 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:05:59 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:05:59 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:06:01 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"21"}}
+Jan 25, 2025 2:06:03 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:06:03 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:06:03 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:06:04 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"21"}}
+Jan 25, 2025 2:06:14 PM com.michal.ClientHandler run
+INFO: Received: {"command":"move","payload":{"start_x":7,"start_y":3,"end_x":8,"end_y":4}}
+Jan 25, 2025 2:06:24 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:09:55 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:10:04 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:10:04 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:10:04 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:10:05 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:10:05 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:10:06 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"22"}}
+Jan 25, 2025 2:10:20 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:10:20 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:10:20 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:10:21 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"22"}}
+Jan 25, 2025 2:11:20 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:11:21 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:11:33 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:11:33 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:11:33 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:11:34 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:11:34 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:11:35 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"23"}}
+Jan 25, 2025 2:11:38 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:11:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:11:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:11:39 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"23"}}
+Jan 25, 2025 2:13:29 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:13:30 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:13:38 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:13:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:13:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:13:39 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:13:39 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:13:40 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"24"}}
+Jan 25, 2025 2:13:44 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:13:44 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:13:44 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:13:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"24"}}
+Jan 25, 2025 2:15:56 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:15:56 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:16:05 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:16:05 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:16:05 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:16:06 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:16:06 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:16:07 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"25"}}
+Jan 25, 2025 2:16:13 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:16:13 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:16:13 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:16:14 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"25"}}
+Jan 25, 2025 2:16:35 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:16:36 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:32:33 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:32:33 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:32:33 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:32:35 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:32:35 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:32:36 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"26"}}
+Jan 25, 2025 2:32:37 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:32:37 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:32:37 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:32:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:32:38 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:32:39 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"26"}}
+Jan 25, 2025 2:34:49 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:34:50 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:34:59 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:34:59 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:34:59 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:35:00 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"27"}}
+Jan 25, 2025 2:35:02 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:35:02 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:35:02 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:35:02 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"27"}}
+Jan 25, 2025 2:35:14 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:35:15 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:42:13 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:42:13 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:42:13 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:42:13 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:42:13 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:42:14 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"28"}}
+Jan 25, 2025 2:42:16 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:42:16 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:42:16 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:42:18 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"28"}}
+Jan 25, 2025 2:42:31 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:42:32 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:43:12 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:43:12 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:43:12 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:43:13 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:43:13 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:43:14 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"29"}}
+Jan 25, 2025 2:43:15 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:43:15 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:43:15 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:43:16 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"29"}}
+Jan 25, 2025 2:43:29 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:43:29 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:46:51 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:46:51 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:46:51 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:46:53 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:46:53 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:46:54 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"30"}}
+Jan 25, 2025 2:46:56 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:46:56 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:46:56 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:46:57 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"30"}}
+Jan 25, 2025 2:48:32 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:48:32 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:48:41 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:48:41 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:48:41 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:48:43 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:48:43 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:48:43 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"31"}}
+Jan 25, 2025 2:48:44 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:48:44 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:48:44 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:48:45 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"31"}}
+Jan 25, 2025 2:49:08 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:49:09 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:49:17 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:49:17 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:49:17 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:49:19 PM com.michal.ClientHandler run
+INFO: Received: {"command":"create","payload":{"layout":"TWOPLAYERS_ONESET","variant":"STANDARD","boardSize":5}}
+Jan 25, 2025 2:49:19 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:49:20 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"32"}}
+Jan 25, 2025 2:49:21 PM com.michal.ClientHandler run
+INFO: Client connected: /127.0.0.1
+Jan 25, 2025 2:49:21 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:49:21 PM com.michal.ClientHandler run
+INFO: Received: {"command":"list","payload":{}}
+Jan 25, 2025 2:49:22 PM com.michal.ClientHandler run
+INFO: Received: {"command":"join","payload":{"gameID":"32"}}
+Jan 25, 2025 2:49:38 PM com.michal.ClientHandler run
+WARNING: Client disconnected
+Jan 25, 2025 2:49:39 PM com.michal.ClientHandler run
+WARNING: Client disconnected

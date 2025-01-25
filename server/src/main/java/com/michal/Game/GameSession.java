@@ -151,6 +151,19 @@ public class GameSession {
                 broadcastMessage("Player " + winner.getColor() + " has won!");
 
                 game.setStatus(GameStatus.FINISHED);
+
+                for (Player p : players) {
+                    p.sendGameInfo(new GameInfo(sessionId, players.size(), game.getLayout(),
+                            game.getVariant(), game.getStatus(), winner.getColor())); // cheated
+                                                                                      // gameinfo to
+                                                                                      // send winner
+                                                                                      // color,
+                                                                                      // should be
+                                                                                      // dedicated
+                                                                                      // method for
+                                                                                      // that
+                }
+
                 server.removeSession(this);
 
                 return;

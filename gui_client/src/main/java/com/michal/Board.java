@@ -67,7 +67,8 @@ public class Board {
                 double x = radius * j * 2 + radius + i * radius;
                 double y = radius * 2 * i + radius;
                 if (!(row[j].equals("X"))) {
-                    cells.add(new Cell(x, y, j, 16 - i, radius, colorMap.get(row[j]), this));
+                    cells.add(new Cell(x, y, j, mapArray.length - i - 1, radius,
+                            colorMap.get(row[j]), this));
                 }
 
             }
@@ -127,7 +128,7 @@ public class Board {
 
             for (int j = 0; j < newRow.length; j++) {
                 if (!newRow[j].equals(currentRow[j])) {
-                    int[] location = {j, 16 - i};
+                    int[] location = {j, newMapArray.length - i - 1};
                     Color newColor = colorMap.get(newRow[j]);
                     changes.put(location, newColor);
                 }
@@ -206,5 +207,13 @@ public class Board {
      */
     public List<Cell> getCells() {
         return cells;
+    }
+
+    public double getBoardWidth() {
+        return radius * 2 * (currentMap.split("\n")[0].length() + 1);
+    }
+
+    public double getBoardHeight() {
+        return radius * 2 * (currentMap.split("\n").length + 1);
     }
 }

@@ -3,14 +3,32 @@ package com.michal;
 import java.util.HashMap;
 import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.JsonDeserializer;
+import atlantafx.base.controls.Notification;
+import atlantafx.base.theme.Styles;
+import atlantafx.base.util.Animations;
+import javafx.application.Platform;
+import javafx.beans.binding.Binding;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * Controller for the game board view. Handles game state, board visualization, and player moves.
@@ -22,11 +40,17 @@ public class SecondaryController implements IController, BoardControllerMediator
 
     // FXML Injected Components
     /** Pane containing the game board */
+
+    @FXML
+    private StackPane centerStackPane;
     @FXML
     private AnchorPane BoardPane;
     /** Main layout container */
     @FXML
-    private BorderPane borderPane;
+    private BorderPane root;
+
+    @FXML
+    private AnchorPane notificationPane;
     /** Button to confirm move */
     @FXML
     private Button moveButton;
@@ -66,6 +90,8 @@ public class SecondaryController implements IController, BoardControllerMediator
         instance = this;
 
         board = new Board(15, this);
+        BoardPane.setStyle("-fx-border-color: black; -fx-border-width: 2;");
+
     }
 
     /**
@@ -84,12 +110,46 @@ public class SecondaryController implements IController, BoardControllerMediator
      */
     @Override
     public void showInfo(String message) {
-        message = message.toUpperCase();
-        label.setStyle("-fx-font-weight: bold");
+        // Remove existing notifications
+        notificationPane.getChildren().removeIf(child -> child instanceof Notification);
+
+        var info = new Notification(message);
+        info.getStyleClass().add(Styles.ELEVATED_1);
+        info.getStyleClass().add(Styles.ACCENT);
+        info.setOnClose(e -> {
+            var fadeOut = Animations.fadeOut(info, Duration.seconds(0.5));
+            fadeOut.setOnFinished(event -> notificationPane.getChildren().remove(info));
+            fadeOut.playFromStart();
+        });
+
+        notificationPane.getChildren().add(info);
+
         System.out.println("Info: " + message);
-        label.setText(message);
-        label.setTextFill(Color.GREEN);
     }
+    // @Override
+    // public void showInfo(String message) {
+    // BoardPane.getChildren().removeIf(child -> child instanceof Notification);
+
+    // var info = new Notification(message);
+    // info.getStyleClass().add(Styles.ELEVATED_1);
+    // info.getStyleClass().add(Styles.SUCCESS);
+    // info.setOnClose(e -> {
+    // var fadeOut = Animations.fadeOut(info, Duration.seconds(0.5));
+    // fadeOut.setOnFinished(event -> BoardPane.getChildren().remove(info));
+    // fadeOut.playFromStart();
+    // });
+
+    // // info_list.getItems()
+    // BoardPane.getChildren().add(info);
+
+    // System.out.println("Info: " + message);
+
+    // // message = message.toUpperCase();
+    // // label.setStyle("-fx-font-weight: bold");
+    // // System.out.println("Info: " + message);
+    // // label.setText(message);
+    // // label.setTextFill(Color.GREEN);
+    // }
 
     /**
      * Displays error message with red color.
@@ -117,11 +177,19 @@ public class SecondaryController implements IController, BoardControllerMediator
                 break;
             case "gameInfo":
                 HashMap<String, String> gameInfo = jsonDeserializer.getGameInfoMap(message);
+
+                if (gameInfo.get("status").equals("FINISHED")) {
+                    Stage popup = winningPopup(gameInfo.get("winner"));
+                    popup.show();
+                    return;
+                }
+
                 if (gameInfo.get("players").equals("1")
                         && gameInfo.get("status").equals("IN_PROGRESS")) {
                     showError("No more players");
                     return;
                 }
+
                 info_list.getItems().clear();
                 gameInfo.forEach((key, value) -> {
                     Hboxtwolabel hbox = new Hboxtwolabel(key, value);
@@ -165,6 +233,7 @@ public class SecondaryController implements IController, BoardControllerMediator
      */
     @FXML
     private void pass() {
+
         String jsonMessage = JsonBuilder.setBuilder("pass").build();
 
         try {
@@ -183,13 +252,101 @@ public class SecondaryController implements IController, BoardControllerMediator
     private void updateBoard(String map) {
         if (board.isEmpty()) {
             board.createBoardOutOfMap(map);
-            board.getCells().forEach(cell -> {
-                BoardPane.getChildren().add(cell);
+
+            Group group = new Group();
+            group.getChildren().addAll(board.getCells());
+
+            // Add the group to the BoardPane
+            BoardPane.getChildren().add(group);
+
+            // Center the board using StackPane properties
+            Platform.runLater(() -> {
+                double boardWidth = BoardPane.getWidth();
+                double boardHeight = BoardPane.getHeight();
+                double groupWidth = group.getLayoutBounds().getWidth();
+                double groupHeight = group.getLayoutBounds().getHeight();
+
+                System.out.println("BoardPane.getWidth(): " + boardWidth);
+                System.out.println("BoardPane.getHeight(): " + boardHeight);
+                System.out.println("group.getLayoutBounds().getWidth(): " + groupWidth);
+                System.out.println("group.getLayoutBounds().getHeight(): " + groupHeight);
+
+                // group.setLayoutX((boardWidth - groupWidth) / 2);
+                // group.setLayoutY((boardHeight - groupHeight) / 2);
             });
+            // board.createBoardOutOfMap(map);
+
+            // Group group = new Group();
+
+            // System.out.println("BoardPane.getPrefWidth(): " + BoardPane.getPrefWidth());
+            // System.out.println("BoardPane.getPrefHeight(): " + BoardPane.getPrefHeight());
+            // System.out.println(
+            // "group.getLayoutBounds().getWidth(): " + group.getLayoutBounds().getWidth());
+            // System.out.println(
+            // "group.getLayoutBounds().getHeight(): " + group.getLayoutBounds().getHeight());
+
+            // group.setLayoutX((BoardPane.getPrefWidth() - group.getLayoutBounds().getWidth()) /
+            // 2);
+            // group.setLayoutY((BoardPane.getPrefHeight() - group.getLayoutBounds().getWidth()) /
+            // 2);
+            // group.getChildren().addAll(board.getCells());
+
+            // BoardPane.getChildren().add(group);
+
+            // group.layoutXProperty().bind(
+            // Bindings.createDoubleBinding(
+            // () -> (BoardPane.getWidth() - group.getLayoutBounds().getWidth()) / 2,
+            // BoardPane.widthProperty(),
+            // group.layoutBoundsProperty()
+            // )
+            // );
+
+            // group.layoutYProperty().bind(
+            // Bindings.createDoubleBinding(
+            // () -> (anchorPane.getHeight() - group.getLayoutBounds().getHeight()) / 2,
+            // anchorPane.heightProperty(),
+            // group.layoutBoundsProperty()
+            // )
+            // );
+            // board.getCells().forEach(cell -> {
+            // BoardPane.getChildren().add(cell);
+            // });
         } else {
             // System.out.println("Edit board");
             board.editBoardOutOfMap(map);
         }
+    }
+
+    private Stage winningPopup(String winners_color) {
+        Stage stage = new Stage();
+        Label label = new Label(winners_color + " wins!");
+        label.setStyle(
+                "-fx-font-size: 24px;" + "-fx-font-family: 'Arial';" + "-fx-text-fill: #333333;" +
+
+                        "-fx-background-color: linear-gradient(to bottom, #f0f0f0, #d9d9d9);" +
+
+                        "-fx-border-color: #b3b3b3;" + "-fx-border-radius: 10px;"
+                        + "-fx-background-radius: 10px;" + "-fx-padding: 10px;"
+                        + "-fx-alignment: center;");
+        label.setAlignment(Pos.CENTER);
+
+        // Fix the resource path:
+        Image bgImage = new Image(
+                getClass().getResource("/com/michal/graphics/victory.png").toExternalForm());
+        BackgroundImage backgroundImage =
+                new BackgroundImage(bgImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.CENTER, new BackgroundSize(BackgroundSize.AUTO,
+                                BackgroundSize.AUTO, false, false, true, false));
+
+        VBox root = new VBox(label);
+        root.setAlignment(Pos.TOP_CENTER);
+        root.setBackground(new Background(backgroundImage));
+
+        Scene scene = new Scene(root, 512, 512);
+        stage.setScene(scene);
+        stage.setTitle("Game Result");
+        stage.show();
+        return stage;
     }
 
     /**

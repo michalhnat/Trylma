@@ -8,13 +8,24 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.StackPane?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.michal.SecondaryController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.michal.SecondaryController"
+    fx:id="root">
     <left>
         <ListView fx:id="info_list" />
     </left>
     <center>
-        <AnchorPane fx:id="BoardPane" />
+        <StackPane fx:id="centerStackPane" AnchorPane.topAnchor="0.0"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <!-- Notification Pane -->
+            <AnchorPane fx:id="notificationPane" />
+            <!-- Board Pane -->
+            <AnchorPane fx:id="BoardPane" />
+        </StackPane>
+        <!-- <AnchorPane fx:id="notificationPane" AnchorPane.topAnchor="0.0"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+        <AnchorPane fx:id="BoardPane" /> -->
     </center>
     <bottom>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
