@@ -1,13 +1,16 @@
 package com.michal.Models;
 
+import java.time.LocalDateTime;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
+import jakarta.persistence.Version;
 
 @Entity
 @Table(name = "game_moves")
@@ -20,9 +23,16 @@ public class GameMoves {
     @JoinColumn(name = "game_id", nullable = false)
     private GameModel game;
 
+    @Version
+    private Long version;
+
     private int move_number;
+
+    // @Lob
+    @Column(name = "board_after_move", columnDefinition = "TEXT", length = 65536)
     private String board_after_move;
-    private int player_number;
+
+    private String player_color;
     private LocalDateTime move_time;
 
     public void setId(Long id) {
@@ -41,8 +51,8 @@ public class GameMoves {
         this.board_after_move = board_after_move;
     }
 
-    public void setPlayerNumber(int player_number) {
-        this.player_number = player_number;
+    public void setPlayerColor(String player_color) {
+        this.player_color = player_color;
     }
 
     public void setMoveTime(LocalDateTime move_time) {

@@ -1,5 +1,6 @@
 package com.michal;
 
+import com.michal.Database.DatabaseConnector;
 import com.michal.Game.Layout;
 import com.michal.Game.Position;
 import com.michal.Game.Variant;
@@ -32,7 +33,8 @@ public interface Mediator {
      * @param layout the layout of the game board
      * @param variant the variant of the game
      */
-    void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout, Variant variant);
+    void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout,
+            Variant variant);
 
     /**
      * Handles the request to make a move in the game for the specified client.

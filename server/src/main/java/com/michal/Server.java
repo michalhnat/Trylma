@@ -6,25 +6,41 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import com.michal.Game.*;
+import javax.xml.crypto.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.michal.Database.DatabaseConnector;
+import com.michal.Game.Board;
+import com.michal.Game.GameInfo;
+import com.michal.Game.GameSession;
+import com.michal.Game.Layout;
+import com.michal.Game.MoveValidator;
+import com.michal.Game.MoveValidatorStandard;
+import com.michal.Game.MoveValidatorSuper;
+import com.michal.Game.Player;
+import com.michal.Game.Position;
+import com.michal.Game.StarBoard;
+import com.michal.Game.Variant;
 
 /**
- * The Server class implements the Mediator and GameSessionMediator interfaces
- * to manage game sessions and client connections.
+ * The Server class implements the Mediator and GameSessionMediator interfaces to manage game
+ * sessions and client connections.
  */
+@Service
 public class Server implements Mediator, GameSessionMediator {
     private static final int PORT = 8085;
 
     private final List<GameSession> gameSessions = Collections.synchronizedList(new ArrayList<>());
     private final List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
 
+    @Autowired
+    private DatabaseConnector databaseConnector;
+
     /**
      * Starts the server and listens for client connections.
      */
     public void startServer() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server started on port " + PORT);
 
             while (true) {
@@ -57,7 +73,7 @@ public class Server implements Mediator, GameSessionMediator {
      */
     @Override
     public void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout,
-                                 Variant variant) {
+            Variant variant) {
         synchronized (gameSessions) {
             if (clientHandler.isInGame()) {
                 clientHandler.sendError("Error: You are already in a game session.");
@@ -67,14 +83,17 @@ public class Server implements Mediator, GameSessionMediator {
             MoveValidator moveValidator;
             if (variant == Variant.SUPER) {
                 moveValidator = new MoveValidatorSuper();
-            }
-            else {
+            } else {
                 moveValidator = new MoveValidatorStandard();
             }
             Board board = new StarBoard(boardSize, moveValidator);
 
             try {
-                GameSession session = new GameSession(board, layout, variant, this);
+                GameSession session =
+                        new GameSession(board, layout, variant, this, databaseConnector); // databse
+                                                                                          // should
+                                                                                          // be
+                                                                                          // injected
                 synchronized (gameSessions) {
                     gameSessions.add(session);
                 }

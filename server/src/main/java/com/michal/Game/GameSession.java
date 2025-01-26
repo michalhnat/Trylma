@@ -1,13 +1,17 @@
 package com.michal.Game;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import com.michal.GameSessionMediator;
+import com.michal.Database.DatabaseConnector;
+import com.michal.Models.GameModel;
+import com.michal.Models.GameMoves;
 import com.michal.Utils.BoardStringBuilder;
+import jakarta.persistence.OptimisticLockException;
 
 /**
  * Manages a game session, including players, game state, and communication.
@@ -20,7 +24,10 @@ public class GameSession {
     private final GameQueue gameQueue;
     private final GameSessionMediator server;
     private final Queue<String> availableColors;
+    private final DatabaseConnector databaseConnector;
     private Player currentPlayer;
+    private int currentMoveNumber = 0;
+    private GameModel gameModel;
 
     private static final List<String> COLORS =
             List.of("Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Cyan", "Magenta");
@@ -32,14 +39,17 @@ public class GameSession {
      * @param layout the game layout
      * @param variant the game variant
      * @param server the server mediator
+     * @param databaseConnector databaseConnector the database connector
      */
-    public GameSession(Board board, Layout layout, Variant variant, GameSessionMediator server) {
+    public GameSession(Board board, Layout layout, Variant variant, GameSessionMediator server,
+            DatabaseConnector databaseConnector) {
         this.sessionId = sessionCounter.getAndIncrement();
         this.game = new Game(board, layout, variant);
         this.players = new ArrayList<>();
         this.gameQueue = new GameQueue();
         this.server = server;
         this.availableColors = new LinkedList<>(COLORS);
+        this.databaseConnector = databaseConnector;
     }
 
     /**
@@ -72,6 +82,7 @@ public class GameSession {
         players.add(player);
         gameQueue.addPlayer(player);
         player.setGameSession(this);
+
 
         broadcastMessage("Player " + player.getName() + " has joined the game with color "
                 + assignedColor + ".");
@@ -117,6 +128,15 @@ public class GameSession {
     private synchronized void startGame() {
         game.start(players);
 
+        GameModel gameModel = new GameModel();
+        gameModel.setLayout(game.getLayout().toString());
+        gameModel.setVariant(game.getVariant().toString());
+        gameModel.setPlayer_count(players.size());
+        gameModel.setStartTime(LocalDateTime.now());
+
+        this.gameModel = gameModel;
+        databaseConnector.saveGame(gameModel);
+
         broadcastMessage("Game started!");
         broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoardArray()));
 
@@ -146,18 +166,37 @@ public class GameSession {
             broadcastMessage("Player " + player.getColor() + " moved");
             broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoardArray()));
 
+            currentMoveNumber++;
+            GameMoves move = new GameMoves();
+            move.setGame(gameModel);
+            move.setMoveNumber(currentMoveNumber);
+            move.setPlayerColor(player.getColor());
+            move.setBoardAfterMove(BoardStringBuilder.buildBoardString(game.getBoardArray()));
+            System.out.println(BoardStringBuilder.buildBoardString(game.getBoardArray()));
+            move.setMoveTime(LocalDateTime.now());
+
+            databaseConnector.saveGameMove(move);
+
             Player winner = game.checkIfSomeoneWon(gameQueue.getPlayers());
             if (winner != null) {
                 broadcastMessage("Player " + winner.getColor() + " has won!");
                 gameQueue.removePlayer(winner);
                 if (gameQueue.getSize() == 1) {
                     broadcastMessage("The game has ended");
+
+                    gameModel.setEndTime(LocalDateTime.now());
+                    databaseConnector.saveGame(gameModel);
+
                     game.setStatus(GameStatus.FINISHED);
                     server.removeSession(this);
                 }
             }
 
             promptNextPlayer();
+
+        } catch (OptimisticLockException e) {
+            player.sendError("conflict at saving to db, retrying");
+
         } catch (Exception e) {
             player.sendError("Error: " + e.getMessage());
         }
