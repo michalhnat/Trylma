@@ -152,12 +152,24 @@ public class GameSession {
             Player winner = game.checkIfSomeoneWon(gameQueue.getPlayers());
             if (winner != null) {
                 broadcastMessage("Player " + winner.getColor() + " has won!");
-                gameQueue.removePlayer(winner);
-                if (gameQueue.getSize() == 1) {
-                    broadcastMessage("The game has ended");
-                    game.setStatus(GameStatus.FINISHED);
-                    server.removeSession(this);
+
+                game.setStatus(GameStatus.FINISHED);
+
+                for (Player p : players) {
+                    p.sendGameInfo(new GameInfo(sessionId, players.size(), game.getLayout(),
+                            game.getVariant(), game.getStatus(), winner.getColor())); // cheated
+                                                                                      // gameinfo to
+                                                                                      // send winner
+                                                                                      // color,
+                                                                                      // should be
+                                                                                      // dedicated
+                                                                                      // method for
+                                                                                      // that
                 }
+
+                server.removeSession(this);
+
+                return;
             }
 
             promptNextPlayer();

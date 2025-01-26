@@ -123,9 +123,6 @@ public class MoveValidatorSuper implements MoveValidator {
                 }
             }
 
-            if (jump.x() < 0 || jump.y() < 0 || jump.x() >= board.length || jump.y() >= board[0].length) {
-                continue;
-            }
             if (board[jump.x()][jump.y()] != null && board[jump.x()][jump.y()].getPawn() == null) {
                 if (!validMoves.contains(jump)) {
                     validMoves.add(jump);

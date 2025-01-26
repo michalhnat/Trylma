@@ -1,17 +1,13 @@
 package com.michal;
 
-import com.michal.Game.Board.Node;
-import com.michal.Game.Board.Pawn;
-import com.michal.Game.Board.Position;
-import com.michal.Game.MoveValidation.MoveValidator;
-import com.michal.Game.MoveValidation.MoveValidatorStandard;
+import com.michal.Game.*;
 import com.michal.Utils.StarBuilder;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 
-public class MoveValidatorStandardTest {
+public class MoveValidatorSuperTest {
     Node[][] board = StarBuilder.buildStar(5);
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLACK = "\u001B[30m";
@@ -35,8 +31,10 @@ public class MoveValidatorStandardTest {
         board[12][10].setPawn(new Pawn(null));
         board[11][10].setPawn(new Pawn(null));
         board[4][4].setPawn(new Pawn(null));
+        board[6][7].setPawn(new Pawn(null));
+        board[7][5].setPawn(new Pawn(null));
 
-        MoveValidator moveValidator = new MoveValidatorStandard();
+        MoveValidator moveValidator = new MoveValidatorSuper();
 
         HashSet<Position> validMoves = moveValidator.getValidMoves(board, new Position(5, 5));
 
@@ -64,10 +62,10 @@ public class MoveValidatorStandardTest {
         }
 
         Position expectedValidMove = new Position(0, 0);
-        if (validMoves.contains(new Position(13, 11))) {
-            expectedValidMove = new Position(13, 11);
+        if (validMoves.contains(new Position(9, 10))) {
+            expectedValidMove = new Position(9, 10);
         }
-        Assertions.assertEquals(expectedValidMove, new Position(13, 11));
+        Assertions.assertEquals(expectedValidMove, new Position(9, 10));
 
     }
 }

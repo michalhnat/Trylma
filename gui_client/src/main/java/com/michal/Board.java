@@ -26,6 +26,9 @@ public class Board {
     private int[] first_clicked = new int[2];
     /** Coordinates of the second clicked cell [x,y] */
     private int[] second_clicked = new int[2];
+    /** Flag indicating if the user is selecting the end cell */
+    private boolean isSelectingEnd = false;
+
 
     /**
      * Constructs a new Board with specified radius and controller.
@@ -64,7 +67,8 @@ public class Board {
                 double x = radius * j * 2 + radius + i * radius;
                 double y = radius * 2 * i + radius;
                 if (!(row[j].equals("X"))) {
-                    cells.add(new Cell(x, y, j, 16 - i, radius, colorMap.get(row[j]), this));
+                    cells.add(new Cell(x, y, j, mapArray.length - i - 1, radius,
+                            colorMap.get(row[j]), this));
                 }
 
             }
@@ -124,7 +128,7 @@ public class Board {
 
             for (int j = 0; j < newRow.length; j++) {
                 if (!newRow[j].equals(currentRow[j])) {
-                    int[] location = {j, 16 - i};
+                    int[] location = {j, newMapArray.length - i - 1};
                     Color newColor = colorMap.get(newRow[j]);
                     changes.put(location, newColor);
                 }
@@ -141,30 +145,34 @@ public class Board {
      * @param j The y-coordinate of the clicked cell
      */
     public void handleCellClick(int i, int j) {
-        if (first_clicked[0] == 0 && first_clicked[1] == 0) {
+        if (!isSelectingEnd) {
+            Cell firstCell = getCellByCoordinates(first_clicked[0], first_clicked[1]);
+            Cell secondCell = getCellByCoordinates(second_clicked[0], second_clicked[1]);
+
+            if (firstCell != null) {
+                firstCell.resetBorder();
+            }
+
+            if (secondCell != null) {
+                secondCell.resetBorder();
+            }
+
             first_clicked[0] = i;
             first_clicked[1] = j;
+            second_clicked[0] = 0;
+            second_clicked[1] = 0;
+
             controller.setStartXY(i, j);
-        } else if (second_clicked[0] == 0 && second_clicked[1] == 0) {
+
+            controller.setEndXY(0, 0);
+
+            isSelectingEnd = true;
+
+        } else {
             second_clicked[0] = i;
             second_clicked[1] = j;
             controller.setEndXY(i, j);
-        } else {
-            first_clicked[0] = i;
-            first_clicked[1] = j;
-            controller.setStartXY(i, j);
-            second_clicked[0] = 0;
-            second_clicked[1] = 0;
-            controller.setEndXY(0, 0);
-        }
-        Cell firstCell = getCellByCoordinates(first_clicked[0], first_clicked[1]);
-        Cell secondCell = getCellByCoordinates(second_clicked[0], second_clicked[1]);
-
-        if (firstCell != null) {
-            firstCell.resetBorder();
-        }
-        if (secondCell != null) {
-            secondCell.resetBorder();
+            isSelectingEnd = false;
         }
     }
 
@@ -199,5 +207,13 @@ public class Board {
      */
     public List<Cell> getCells() {
         return cells;
+    }
+
+    public double getBoardWidth() {
+        return radius * 2 * (currentMap.split("\n")[0].length() + 1);
+    }
+
+    public double getBoardHeight() {
+        return radius * 2 * (currentMap.split("\n").length + 1);
     }
 }
