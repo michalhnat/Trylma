@@ -1,6 +1,10 @@
 package com.michal;
 
-import com.michal.Game.*;
+import com.michal.Game.Board.Node;
+import com.michal.Game.Board.Pawn;
+import com.michal.Game.Board.Position;
+import com.michal.Game.MoveValidation.MoveValidator;
+import com.michal.Game.MoveValidation.MoveValidatorStandard;
 import com.michal.Utils.StarBuilder;
 
 import java.util.HashSet;

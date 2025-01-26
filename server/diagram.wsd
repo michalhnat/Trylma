@@ -207,9 +207,9 @@ com.michal.Server --> com.michal.Game.GameSession : manages
 com.michal.Game.GameSession --> com.michal.Game.Game : has
 com.michal.Game.GameSession --> com.michal.Game.Player : manages
 com.michal.Game.GameSession --> com.michal.Game.GameQueue : uses
-com.michal.Game.Game --> com.michal.Game.Board : uses
+com.michal.Game.Game --> com.michal.Game.Board.Board : uses
 com.michal.Game.Player --> com.michal.PlayerCommunicator : communicates
 com.michal.ClientHandler -> com.michal.Utils.JsonDeserializer : uses
-com.michal.Game.Board <|-- com.michal.Game.MockBoard
+com.michal.Game.Board.Board <|-- com.michal.Game.MockBoard
 
 @enduml

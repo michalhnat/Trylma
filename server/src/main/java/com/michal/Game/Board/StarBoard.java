@@ -1,5 +1,7 @@
-package com.michal.Game;
+package com.michal.Game.Board;
 
+import com.michal.Game.*;
+import com.michal.Game.MoveValidation.MoveValidator;
 import com.michal.Utils.StarBuilder;
 
 import java.util.*;

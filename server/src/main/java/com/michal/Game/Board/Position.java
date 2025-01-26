@@ -1,4 +1,4 @@
-package com.michal.Game;
+package com.michal.Game.Board;
 
 /**
  * Represents a position on the game board with x and y coordinates.

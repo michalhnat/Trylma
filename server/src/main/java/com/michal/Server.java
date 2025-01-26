@@ -8,6 +8,13 @@ import java.util.List;
 import java.util.Optional;
 
 import com.michal.Game.*;
+import com.michal.Game.Board.Board;
+import com.michal.Game.Board.Layout;
+import com.michal.Game.Board.Position;
+import com.michal.Game.Board.StarBoard;
+import com.michal.Game.MoveValidation.MoveValidator;
+import com.michal.Game.MoveValidation.MoveValidatorStandard;
+import com.michal.Game.MoveValidation.MoveValidatorSuper;
 
 /**
  * The Server class implements the Mediator and GameSessionMediator interfaces
@@ -229,6 +236,27 @@ public class Server implements Mediator, GameSessionMediator {
             if (sessionOptional.isPresent()) {
                 GameSession session = sessionOptional.get();
                 session.handlePass(player);
+            } else {
+                clientHandler.sendError("You are not part of any game session.");
+            }
+        }
+    }
+
+    @Override
+    public void handleAddBot(ClientHandler clientHandler) {
+        if (!clientHandler.isInGame()) {
+            clientHandler.sendError("You are not part of any game session.");
+            return;
+        }
+
+        synchronized (gameSessions) {
+            Player player = clientHandler.getPlayer();
+            Optional<GameSession> sessionOptional = gameSessions.stream()
+                    .filter(session -> session.getPlayers().contains(player)).findFirst();
+
+            if (sessionOptional.isPresent()) {
+                GameSession session = sessionOptional.get();
+                session.addBot();
             } else {
                 clientHandler.sendError("You are not part of any game session.");
             }

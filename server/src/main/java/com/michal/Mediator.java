@@ -1,7 +1,7 @@
 package com.michal;
 
-import com.michal.Game.Layout;
-import com.michal.Game.Position;
+import com.michal.Game.Board.Layout;
+import com.michal.Game.Board.Position;
 import com.michal.Game.Variant;
 
 /**
@@ -56,4 +56,6 @@ public interface Mediator {
      * @param clientHandler the client handler passing their turn
      */
     void handlePass(ClientHandler clientHandler);
+
+    void handleAddBot(ClientHandler clientHandler);
 }

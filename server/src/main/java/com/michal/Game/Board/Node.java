@@ -1,5 +1,7 @@
-package com.michal.Game;
+package com.michal.Game.Board;
 
+
+import com.michal.Game.Player;
 
 /**
  * Represents a node on the game board.

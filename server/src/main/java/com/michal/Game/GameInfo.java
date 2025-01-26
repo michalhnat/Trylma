@@ -1,5 +1,7 @@
 package com.michal.Game;
 
+import com.michal.Game.Board.Layout;
+
 /**
  * Represents information about a game, including its ID, current number of players, and maximum
  * number of players.

@@ -1,4 +1,6 @@
-package com.michal.Game;
+package com.michal.Game.Board;
+
+import com.michal.Game.Player;
 
 /**
  * Represents a pawn in the game with a color and position.
