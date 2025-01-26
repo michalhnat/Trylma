@@ -28,6 +28,14 @@ public class GameMoves {
 
     private int move_number;
 
+    private int start_x;
+
+    private int start_y;
+
+    private int end_x;
+
+    private int end_y;
+
     // @Lob
     @Column(name = "board_after_move", columnDefinition = "TEXT", length = 65536)
     private String board_after_move;
@@ -57,5 +65,21 @@ public class GameMoves {
 
     public void setMoveTime(LocalDateTime move_time) {
         this.move_time = move_time;
+    }
+
+    public void setStartX(int start_x) {
+        this.start_x = start_x;
+    }
+
+    public void setStartY(int start_y) {
+        this.start_y = start_y;
+    }
+
+    public void setEndX(int end_x) {
+        this.end_x = end_x;
+    }
+
+    public void setEndY(int end_y) {
+        this.end_y = end_y;
     }
 }

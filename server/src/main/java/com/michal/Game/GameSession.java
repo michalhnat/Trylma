@@ -170,9 +170,12 @@ public class GameSession {
             GameMoves move = new GameMoves();
             move.setGame(gameModel);
             move.setMoveNumber(currentMoveNumber);
+            move.setStartX(start.x());
+            move.setStartY(start.y());
+            move.setEndX(end.x());
+            move.setEndY(end.y());
             move.setPlayerColor(player.getColor());
             move.setBoardAfterMove(BoardStringBuilder.buildBoardString(game.getBoardArray()));
-            System.out.println(BoardStringBuilder.buildBoardString(game.getBoardArray()));
             move.setMoveTime(LocalDateTime.now());
 
             databaseConnector.saveGameMove(move);
