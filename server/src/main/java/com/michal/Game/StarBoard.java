@@ -58,11 +58,11 @@ public class StarBoard extends Board {
         // For each player, check if they won
         for (Player p : players) {
             String playerColor = p.getColor();
-            Direction playerDestination = null;
+            HashSet<Direction> playerDestinations = new HashSet<>();
             for (Node[] row : board) {
                 for (Node node : row) {
                     if (node instanceof CornerNode cornerNode && cornerNode.getOwner() == p) {
-                        playerDestination = oppositeDirections.get(cornerNode.getDirection());
+                        playerDestinations.add(oppositeDirections.get(cornerNode.getDirection()));
                         break;
                     }
                 }
@@ -72,7 +72,7 @@ public class StarBoard extends Board {
             boolean won = true;
             for (Node[] row : board) {
                 for (Node node : row) {
-                    if (node instanceof CornerNode cornerNode && cornerNode.getDirection() == playerDestination) {
+                    if (node instanceof CornerNode cornerNode && playerDestinations.contains(cornerNode.getDirection())) {
                         if (cornerNode.getPawn() == null || !Objects.equals(cornerNode.getPawn().getPlayer().getColor(), playerColor)) {
                             won = false;
                             break;
@@ -102,7 +102,7 @@ public class StarBoard extends Board {
                 Layout.SIXPLAYERS, List.of(Direction.SOUTH, Direction.SOUTHWEST, Direction.NORTHWEST, Direction.NORTH, Direction.NORTHEAST, Direction.SOUTHEAST),
                 Layout.FOURPLAYERS, List.of(Direction.SOUTHWEST, Direction.NORTHWEST, Direction.NORTHEAST, Direction.SOUTHEAST),
                 Layout.THREEPLAYERS_ONESET, List.of(Direction.SOUTH, Direction.NORTHWEST, Direction.NORTHEAST),
-                Layout.THREEPLAYERS_TWOSETS, List.of(Direction.SOUTH, Direction.SOUTHWEST, Direction.NORTHWEST, Direction.NORTH, Direction.NORTHEAST, Direction.SOUTHEAST),
+                Layout.THREEPLAYERS_TWOSETS, List.of(Direction.SOUTH, Direction.NORTHWEST, Direction.NORTHEAST, Direction.SOUTHWEST, Direction.NORTH, Direction.SOUTHEAST),
                 Layout.TWOPLAYERS_ONESET, List.of(Direction.SOUTH, Direction.NORTH),
                 Layout.TWOPLAYERS_TWOSETS_ADJACENT, List.of(Direction.SOUTHWEST, Direction.NORTHEAST, Direction.NORTHWEST, Direction.SOUTHEAST),
                 Layout.TWOPLAYERS_TWOSETS_OPPOSITE, List.of(Direction.SOUTHWEST, Direction.NORTHWEST, Direction.SOUTHEAST, Direction.NORTHEAST),

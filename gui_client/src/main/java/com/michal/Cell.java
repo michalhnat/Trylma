@@ -91,7 +91,7 @@ public class Cell extends StackPane {
     private void handleMouseClicked(MouseEvent event) {
         board.handleCellClick(i, j);
         circle.setStrokeWidth(1);
-        circle.setStroke(color.invert());
+        circle.setStroke(Color.WHITE);
     }
 
     /**
