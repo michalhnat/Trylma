@@ -111,6 +111,12 @@ public class GameSession {
                     server.removeSession(this);
                 }
             }
+            // If every player in players is instanceof BotPlayer
+            if (players.stream().allMatch(p -> p instanceof BotPlayer)) {
+                if (server != null) {
+                    server.removeSession(this);
+                }
+            }
         }
     }
 
@@ -258,6 +264,14 @@ public class GameSession {
     }
 
     public void addBot() {
+        if (players.size() >= game.getMaxPlayers()) {
+            throw new IllegalArgumentException("Game session is full.");
+        }
+
+        if (availableColors.isEmpty()) {
+            throw new IllegalArgumentException("No available colors for new players.");
+        }
+
         BotPlayer bot = new BotPlayer(UUID.randomUUID(), new BotAlgorithmSmart());
         Variant variant = game.getVariant();
         bot.setVariant(variant);
