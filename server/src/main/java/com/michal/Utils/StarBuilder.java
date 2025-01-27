@@ -1,8 +1,8 @@
 package com.michal.Utils;
 
-import com.michal.Game.CornerNode;
+import com.michal.Game.Board.CornerNode;
 import com.michal.Game.Direction;
-import com.michal.Game.Node;
+import com.michal.Game.Board.Node;
 
 /**
  * Utility class for building a star-shaped game board.

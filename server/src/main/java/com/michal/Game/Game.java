@@ -1,5 +1,10 @@
 package com.michal.Game;
 
+import com.michal.Game.Board.Board;
+import com.michal.Game.Board.Layout;
+import com.michal.Game.Board.Node;
+import com.michal.Game.Board.Position;
+
 import java.util.List;
 
 /**

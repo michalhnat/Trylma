@@ -11,6 +11,8 @@ import java.util.logging.Logger;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.michal.Game.*;
+import com.michal.Game.Board.Layout;
+import com.michal.Game.Board.Position;
 import com.michal.Utils.JsonDeserializer;
 import com.michal.Utils.MyLogger;
 
@@ -188,6 +190,13 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                 case "pass":
                     if (isInGame()) {
                         mediator.handlePass(this);
+                    } else {
+                        sendError("You are not part of any game session.");
+                    }
+                    break;
+                case "add_bot":
+                    if (isInGame()) {
+                        mediator.handleAddBot(this);
                     } else {
                         sendError("You are not part of any game session.");
                     }

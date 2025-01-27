@@ -1,11 +1,18 @@
 package com.michal.Game;
 
+import java.util.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
+import com.michal.Game.Board.Board;
+import com.michal.Game.Board.Layout;
+import com.michal.Game.Board.Move;
+import com.michal.Game.Board.Position;
+import com.michal.Game.Bots.BotAlgorithmSmart;
+import com.michal.Game.Bots.BotPlayer;
 import com.michal.GameSessionMediator;
 import com.michal.Database.DatabaseConnector;
 import com.michal.Models.GameModel;
@@ -212,6 +219,8 @@ public class GameSession {
 
         } catch (Exception e) {
             player.sendError("Error: " + e.getMessage());
+            // TEMP
+            e.printStackTrace();
         }
     }
 
@@ -221,9 +230,12 @@ public class GameSession {
     private synchronized void promptNextPlayer() {
         Player nextPlayer = gameQueue.takePlayer();
         currentPlayer = nextPlayer;
-        if (nextPlayer != null) {
+        if (nextPlayer != null && !(nextPlayer instanceof BotPlayer)) {
             nextPlayer.sendMessage("Your turn to move.");
-
+            return;
+        } else if (nextPlayer != null) {
+            Move move = ((BotPlayer) nextPlayer).makeMove(game.getBoardArray());
+            handleMove(nextPlayer, move.getFrom(), move.getTo());
         }
     }
 
@@ -280,7 +292,31 @@ public class GameSession {
             return;
         }
 
+        if (currentPlayer != player) {
+            player.sendError("It's not your turn to move.");
+            return;
+        }
+
         broadcastMessage("Player " + player.getColor() + " passed.");
         promptNextPlayer();
+    }
+
+    public void addBot() {
+        BotPlayer bot = new BotPlayer(UUID.randomUUID(), new BotAlgorithmSmart());
+        Variant variant = game.getVariant();
+        bot.setVariant(variant);
+
+        String botColor = availableColors.poll();
+        bot.setColor(botColor);
+
+        players.add(bot);
+        gameQueue.addPlayer(bot);
+
+        bot.setGameSession(this);
+        broadcastMessage("Bot has joined the game with color " + botColor + ".");
+
+        if (players.size() == game.getMaxPlayers()) {
+            startGame();
+        }
     }
 }

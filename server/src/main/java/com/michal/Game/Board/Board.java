@@ -1,4 +1,6 @@
-package com.michal.Game;
+package com.michal.Game.Board;
+
+import com.michal.Game.Player;
 
 import java.util.List;
 

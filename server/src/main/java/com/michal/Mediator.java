@@ -58,4 +58,6 @@ public interface Mediator {
      * @param clientHandler the client handler passing their turn
      */
     void handlePass(ClientHandler clientHandler);
+
+    void handleAddBot(ClientHandler clientHandler);
 }

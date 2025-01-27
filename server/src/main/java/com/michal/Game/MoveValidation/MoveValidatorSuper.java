@@ -1,4 +1,7 @@
-package com.michal.Game;
+package com.michal.Game.MoveValidation;
+
+import com.michal.Game.Board.Node;
+import com.michal.Game.Board.Position;
 
 import java.util.HashSet;
 import java.util.List;

@@ -1,4 +1,7 @@
-package com.michal.Game;
+package com.michal.Game.MoveValidation;
+
+import com.michal.Game.Board.Node;
+import com.michal.Game.Board.Position;
 
 import java.util.HashSet;
 import java.util.List;
@@ -52,14 +55,14 @@ public class MoveValidatorStandard implements MoveValidator {
                     // For every neighbouring pawn, check if the tile behind it is empty
                     Position jump = new Position(2 * n.x() - current.x(), 2 * n.y() - current.y());
 
-                    // check if the jump coordinates fit in the board array
-                    if (jump.x() >= 0 && jump.y() >= 0 && jump.x() < board.length && jump.y() < board.length) {
-                        if (board[jump.x()][jump.y()] != null) {  // If the tile is on the board
-                            if (board[jump.x()][jump.y()].getPawn() == null) {  // If the tile is empty
-                                if (!validMoves.contains(jump)) {
-                                    validMoves.add(jump);
-                                    recursiveJump(board, jump, validMoves); // recursively check for more jumps
-                                }
+                    if (jump.x() < 0 || jump.y() < 0 || jump.x() >= board.length || jump.y() >= board.length) {
+                        continue;
+                    }
+                    if (board[jump.x()][jump.y()] != null) {  // If the tile is on the board
+                        if (board[jump.x()][jump.y()].getPawn() == null) {  // If the tile is empty
+                            if (!validMoves.contains(jump)) {
+                                validMoves.add(jump);
+                                recursiveJump(board, jump, validMoves); // recursively check for more jumps
                             }
                         }
                     }
