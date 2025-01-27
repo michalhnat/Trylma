@@ -57,6 +57,9 @@ public class SecondaryController implements IController, BoardControllerMediator
     private Button moveButton;
     /** Button to pass turn */
     @FXML
+    private Button addBot;
+    /* Button to add bot to the session */
+    @FXML
     private Button passButton;
     /** Start X coordinate input */
     @FXML
@@ -222,6 +225,16 @@ public class SecondaryController implements IController, BoardControllerMediator
         }
     }
 
+    @FXML
+    private void addBot() {
+        String jsonMessage = JsonBuilder.setBuilder("add_bot").build();
+        try {
+            communication.sendMessage(jsonMessage);
+        } catch (Exception e) {
+            showError("Failed to add bot");
+        }
+    }
+
     /**
      * Updates game board based on server map data. Creates new board if empty, updates existing
      * board otherwise.
@@ -235,69 +248,13 @@ public class SecondaryController implements IController, BoardControllerMediator
             Group group = new Group();
             group.getChildren().addAll(board.getCells());
 
-            // Add border styles to the group
             group.setStyle("-fx-border-color: red; -fx-border-width: 2; -fx-border-style: solid;");
 
-            // Add the group to the BoardPane
             BoardPane.getChildren().add(group);
 
             StackPane.setAlignment(group, Pos.CENTER);
 
-            // Center the board using StackPane properties
-            Platform.runLater(() -> {
-                // double boardWidth = BoardPane.getWidth();
-                // double boardHeight = BoardPane.getHeight();
-                // double groupWidth = group.getLayoutBounds().getWidth();
-                // double groupHeight = group.getLayoutBounds().getHeight();
-
-                // System.out.println("BoardPane.getWidth(): " + boardWidth);
-                // System.out.println("BoardPane.getHeight(): " + boardHeight);
-                // System.out.println("group.getLayoutBounds().getWidth(): " + groupWidth);
-                // System.out.println("group.getLayoutBounds().getHeight(): " + groupHeight);
-
-                // group.setLayoutX((boardWidth - groupWidth) / 2);
-                // group.setLayoutY((boardHeight - groupHeight) / 2);
-
-            });
-            // board.createBoardOutOfMap(map);
-
-            // Group group = new Group();
-
-            // System.out.println("BoardPane.getPrefWidth(): " + BoardPane.getPrefWidth());
-            // System.out.println("BoardPane.getPrefHeight(): " + BoardPane.getPrefHeight());
-            // System.out.println(
-            // "group.getLayoutBounds().getWidth(): " + group.getLayoutBounds().getWidth());
-            // System.out.println(
-            // "group.getLayoutBounds().getHeight(): " + group.getLayoutBounds().getHeight());
-
-            // group.setLayoutX((BoardPane.getPrefWidth() - group.getLayoutBounds().getWidth()) /
-            // 2);
-            // group.setLayoutY((BoardPane.getPrefHeight() - group.getLayoutBounds().getWidth()) /
-            // 2);
-            // group.getChildren().addAll(board.getCells());
-
-            // BoardPane.getChildren().add(group);
-
-            // group.layoutXProperty().bind(
-            // Bindings.createDoubleBinding(
-            // () -> (BoardPane.getWidth() - group.getLayoutBounds().getWidth()) / 2,
-            // BoardPane.widthProperty(),
-            // group.layoutBoundsProperty()
-            // )
-            // );
-
-            // group.layoutYProperty().bind(
-            // Bindings.createDoubleBinding(
-            // () -> (anchorPane.getHeight() - group.getLayoutBounds().getHeight()) / 2,
-            // anchorPane.heightProperty(),
-            // group.layoutBoundsProperty()
-            // )
-            // );
-            // board.getCells().forEach(cell -> {
-            // BoardPane.getChildren().add(cell);
-            // });
         } else {
-            // System.out.println("Edit board");
             board.editBoardOutOfMap(map);
         }
     }
