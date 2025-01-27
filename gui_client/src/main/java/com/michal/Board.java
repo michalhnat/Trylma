@@ -52,6 +52,21 @@ public class Board {
         colorMap.put("M", Color.MAGENTA);
     }
 
+    public Board(int radius) {
+        this.cells = new ArrayList<>();
+        this.radius = radius;
+
+        colorMap.put("W", Color.GRAY);
+        colorMap.put("B", Color.BLUE);
+        colorMap.put("R", Color.RED);
+        colorMap.put("Y", Color.YELLOW);
+        colorMap.put("G", Color.GREEN);
+        colorMap.put("P", Color.PURPLE);
+        colorMap.put("O", Color.ORANGE);
+        colorMap.put("C", Color.CYAN);
+        colorMap.put("M", Color.MAGENTA);
+    }
+
     /**
      * Creates the board layout from a string map representation. Each character in the map
      * represents a cell color or empty space.
@@ -197,6 +212,12 @@ public class Board {
         }
         if (secondCell != null) {
             secondCell.resetBorder();
+        }
+    }
+
+    public void disactivate_all_cells() {
+        for (Cell cell : cells) {
+            cell.disactivate();
         }
     }
 

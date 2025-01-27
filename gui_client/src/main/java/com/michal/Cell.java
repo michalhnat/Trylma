@@ -165,4 +165,10 @@ public class Cell extends StackPane {
     public Paint getFill() {
         return circle.getFill();
     }
+
+    public void disactivate() {
+        this.setOnMouseEntered(null);
+        this.setOnMouseExited(null);
+        this.setOnMouseClicked(null);
+    }
 }

@@ -4,16 +4,23 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
-
 import com.michal.Exceptions.FailedConnectingToServerException;
 import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.JsonDeserializer;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  * Primary controller for the main application window. Handles server connection, game listing, and
@@ -161,6 +168,63 @@ public class PrimaryController implements IController {
 
     }
 
+    @FXML
+    private void read_save() {
+        try {
+            // String jsonMessage = JsonBuilder.setBuilder("list_saves").build();
+            // App.getCommunication().sendMessage(jsonMessage);
+            Stage stage = save_window();
+
+
+            stage.show();
+        } catch (Exception e) {
+            info_label.setText("Failed to save game");
+        }
+    }
+
+    private Stage save_window() {
+        Stage stage = new Stage();
+        stage.setTitle("Saved game");
+        stage.initModality(Modality.APPLICATION_MODAL);
+
+        VBox vbox = new VBox();
+        vbox.setAlignment(Pos.CENTER);
+        VBox game_preview = new VBox();
+        game_preview.setAlignment(Pos.CENTER);
+        vbox.setSpacing(10);
+        vbox.setPadding(new Insets(10, 10, 10, 10));
+
+        ListView<HboxCell> saves_list = new ListView<>();
+        saves_list.getItems().addAll(new HboxCell("Save 1", new Button("Load")),
+                new HboxCell("Save 2", new Button("Load")));
+
+        vbox.getChildren().addAll(saves_list);
+
+        Board board = new Board(10);
+        board.disactivate_all_cells();
+        board.createBoardOutOfMap("XXXXXXXXXXXXWXXXX\r\n" + "XXXXXXXXXXXBWXXXX\r\n"
+                + "XXXXXXXXXXWWWXXXX\r\n" + "XXXXXXXXXWWWWXXXX\r\n" + "XXXXWWWWBWWWWWWWW\r\n"
+                + "XXXXWWWWWWWWBWWWX\r\n" + "XXXXWWWWBWWWBWWXX\r\n" + "XXXXWWWBWWWWWWXXX\r\n"
+                + "XXXXWWWWWWWWWXXXX\r\n" + "XXXWWWWWWWWWWXXXX\r\n" + "XXWWBWWWWWWWWXXXX\r\n"
+                + "XWWWWBWWWWWWWXXXX\r\n" + "WWWBWWRWRWWWWXXXX\r\n" + "XXXXRRBWXXXXXXXXX\r\n"
+                + "XXXXRRRXXXXXXXXXX\r\n" + "XXXXRRXXXXXXXXXXX\r\n" + "XXXXRXXXXXXXXXXXX");
+
+        Group group = new Group();
+        group.getChildren().addAll(board.getCells());
+
+        StackPane centeredPreview = new StackPane();
+        centeredPreview.getChildren().add(group);
+        StackPane.setAlignment(group, Pos.CENTER);
+
+        game_preview.getChildren().add(centeredPreview);
+        vbox.getChildren().add(game_preview);
+
+        Scene scene = new Scene(vbox, 400, 700);
+        stage.setScene(scene);
+
+        return stage;
+    }
+
     /**
      * Displays informational message in the UI.
      * 
@@ -197,11 +261,14 @@ public class PrimaryController implements IController {
                 games_list.getItems().clear();
                 games_list.getItems().addAll(cells);
                 break;
+            case "saves_list":
+                break;
             default:
                 showError("Unknown message type: " + jsonDeserializer.getType(message));
                 break;
         }
     }
+
 
     /**
      * Creates HboxCell list items for games list view.
@@ -235,6 +302,7 @@ public class PrimaryController implements IController {
         }
         return cells;
     }
+
 
     /**
      * Extracts game ID from game description label.

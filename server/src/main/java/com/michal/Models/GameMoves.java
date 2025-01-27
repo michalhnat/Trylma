@@ -81,4 +81,40 @@ public class GameMoves {
     public void setEndY(int end_y) {
         this.end_y = end_y;
     }
+
+    public GameModel getGame() {
+        return game;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public int getMove_number() {
+        return move_number;
+    }
+
+    public int getStart_x() {
+        return start_x;
+    }
+
+    public int getStart_y() {
+        return start_y;
+    }
+
+    public int getEnd_x() {
+        return end_x;
+    }
+
+    public int getEnd_y() {
+        return end_y;
+    }
+
+    public String getBoard_after_move() {
+        return board_after_move;
+    }
+
+    public String getPlayer_color() {
+        return player_color;
+    }
 }

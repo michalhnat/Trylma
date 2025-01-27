@@ -20,6 +20,7 @@ import com.michal.Game.Board.StarBoard;
 import com.michal.Game.MoveValidation.MoveValidator;
 import com.michal.Game.MoveValidation.MoveValidatorStandard;
 import com.michal.Game.MoveValidation.MoveValidatorSuper;
+import com.michal.Models.GameModel;
 
 /**
  * The Server class implements the Mediator and GameSessionMediator interfaces to manage game
@@ -301,5 +302,15 @@ public class Server implements Mediator, GameSessionMediator {
                 clientHandler.sendError("You are not part of any game session.");
             }
         }
+    }
+
+    @Override
+    public void handleListSaves(ClientHandler clientHandler) {
+        if (clientHandler.isInGame()) {
+            clientHandler.sendError("Cannot list saves while in a game session.");
+            return;
+        }
+
+        List<GameModel> savedGames = databaseConnector.getAllGames();
     }
 }

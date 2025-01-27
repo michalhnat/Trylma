@@ -1,5 +1,6 @@
 package com.michal.Database;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
@@ -33,4 +34,7 @@ public class DatabaseConnector {
         gameMovesRepository.save(gameMove);
     }
 
+    public List<GameModel> getAllGames() {
+        return gameRepository.findAll();
+    }
 }

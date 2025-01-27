@@ -34,23 +34,6 @@ public class GameModel {
 
     private int save_count;
 
-    // private LocalDateTime startTime;
-
-    // private LocalDateTime endTime;
-
-
-    // public void setId(Long id) {
-    // this.id = id;
-    // }
-
-    // public void setStartTime(LocalDateTime startTime) {
-    // this.startTime = startTime;
-    // }
-
-    // public void setEndTime(LocalDateTime endTime) {
-    // this.endTime = endTime;
-    // }
-
     public void setPlayer_count(int player_count) {
         this.player_count = player_count;
     }
@@ -78,9 +61,37 @@ public class GameModel {
     public void setSave_count(int save_count) {
         this.save_count = save_count;
     }
-    // public void setEndTime(LocalDateTime endTime) {
-    // this.endTime = endTime;
-    // }
+
+    public int getPlayer_count() {
+        return player_count;
+    }
+
+    public String getLayout() {
+        return layout;
+    }
+
+    public String getVariant() {
+        return variant;
+    }
+
+    public String[] getPlaying_colors() {
+        return playing_colors;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public String getPlayer_taking_next_move() {
+        return player_taking_next_move;
+    }
+
+    public int getSave_count() {
+        return save_count;
+    }
+
+
+
 }
 
 
