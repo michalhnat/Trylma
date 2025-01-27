@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public class BotPlayer extends Player {
     BotAlgorithm botAlgorithm;
+    private String color;
 
     public BotPlayer(UUID id, BotAlgorithm botAlgorithm) {
         super(id, null);
@@ -47,5 +48,25 @@ public class BotPlayer extends Player {
         else {
             botAlgorithm.setMoveValidator(new MoveValidatorStandard());
         }
+    }
+
+    /**
+     * Returns the color assigned to the player.
+     *
+     * @return the color assigned to the player
+     */
+    @Override
+    public String getColor() {
+        return color;
+    }
+
+    /**
+     * Sets the color for the player.
+     *
+     * @param color the color to set
+     */
+    @Override
+    public void setColor(String color) {
+        this.color = color;
     }
 }

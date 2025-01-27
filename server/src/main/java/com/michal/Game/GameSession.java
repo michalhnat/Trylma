@@ -196,7 +196,7 @@ public class GameSession {
             Player winner = game.checkIfSomeoneWon(gameQueue.getPlayers());
             if (winner != null) {
                 broadcastMessage("Player " + winner.getColor() + " has won!");
-
+                System.out.println("Player " + winner.getColor() + " has won!");
                 game.setStatus(GameStatus.FINISHED);
 
                 for (Player p : players) {

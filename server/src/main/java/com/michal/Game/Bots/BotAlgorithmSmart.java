@@ -110,12 +110,11 @@ public class BotAlgorithmSmart implements BotAlgorithm {
                                 cornerNode.getDirection());
                         score += 5 + depthBonus;
                     } else {
-                        if (node instanceof CornerNode cornerNode && cornerNode.getOwner() == null) {
-                            continue;
-                        }
-                        if (node instanceof CornerNode cornerNode && Objects.equals(cornerNode.getOwner().getColor(), player.getColor())) {
-                            int depthPenalty = calculateDepthBonus(new Position(x, y), board.length, cornerNode.getDirection());
-                            score -= 3 + depthPenalty;
+                        if (node instanceof CornerNode cornerNode && cornerNode.getOwner() != null) {
+                            if (Objects.equals(cornerNode.getOwner().getColor(), player.getColor())) {
+                                int depthPenalty = calculateDepthBonus(new Position(x, y), board.length, cornerNode.getDirection());
+                                score -= 3 + depthPenalty;
+                            }
                         }
                         int minDistance = Integer.MAX_VALUE;
                         for (Position dest : destinationPositions) {
