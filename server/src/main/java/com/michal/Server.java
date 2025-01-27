@@ -292,6 +292,7 @@ public class Server implements Mediator, GameSessionMediator {
 
                 try {
                     session.saveGame();
+                    clientHandler.sendMessage("Game saved successfully.");
                 } catch (IllegalStateException e) {
                     clientHandler.sendError("Failed to save game: " + e.getMessage());
                 }

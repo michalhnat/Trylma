@@ -30,7 +30,7 @@ public class GameSession {
     private final DatabaseConnector databaseConnector;
     private Player currentPlayer;
     private int currentMoveNumber = 0;
-    private GameModel gameModel;
+    private int save_count = 0;
     private final List<GameMoves> gameMoves = new ArrayList<>();
 
 
@@ -139,18 +139,6 @@ public class GameSession {
     private synchronized void startGame() {
         game.start(players);
 
-        GameModel gameModel = new GameModel();
-        gameModel.setLayout(game.getLayout().toString());
-        gameModel.setVariant(game.getVariant().toString());
-        gameModel.setPlayer_count(players.size());
-        gameModel.setPlaying_colors(players.stream().map(Player::getColor).toArray(String[]::new));
-        gameModel.setState(game.getStatus().toString());
-        gameModel.setPlayer_taking_next_move(currentPlayer.getColor());
-        // gameModel.setStartTime(LocalDateTime.now());
-
-        this.gameModel = gameModel;
-        // databaseConnector.saveGame(gameModel);
-
         broadcastMessage("Game started!");
         broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoardArray()));
 
@@ -182,7 +170,6 @@ public class GameSession {
 
             currentMoveNumber++;
             GameMoves move = new GameMoves();
-            move.setGame(gameModel);
             move.setMoveNumber(currentMoveNumber);
             move.setStartX(start.x());
             move.setStartY(start.y());
@@ -305,6 +292,8 @@ public class GameSession {
             return;
         }
 
+        currentMoveNumber++;
+
         broadcastMessage("Player " + player.getColor() + " passed.");
         promptNextPlayer();
     }
@@ -337,15 +326,25 @@ public class GameSession {
     }
 
     public synchronized void saveGame() {
+        GameModel gameModel = new GameModel();
+        gameModel.setLayout(game.getLayout().toString());
+        gameModel.setVariant(game.getVariant().toString());
+        gameModel.setPlayer_count(players.size());
+        gameModel.setPlaying_colors(players.stream().map(Player::getColor).toArray(String[]::new));
+        gameModel.setState(game.getStatus().toString());
+        gameModel.setPlayer_taking_next_move(currentPlayer.getColor());
+
         if (gameModel == null) {
             throw new IllegalStateException("Game has not started yet.");
         }
 
-        gameModel.setPlayer_taking_next_move(currentPlayer.getColor());
+        // gameModel.setPlayer_taking_next_move(currentPlayer.getColor());
         try {
-
+            gameModel.setSave_count(save_count);
             databaseConnector.saveGame(gameModel);
+            save_count++;
             for (GameMoves move : gameMoves) {
+                move.setGame(gameModel);
                 databaseConnector.saveGameMove(move);
             }
         } catch (OptimisticLockException e) {

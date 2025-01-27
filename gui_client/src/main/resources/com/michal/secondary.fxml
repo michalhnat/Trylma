@@ -33,6 +33,7 @@
                 <Button fx:id="moveButton" text="Move" onAction="#move" />
                 <Button fx:id="passButton" text="Pass" onAction="#pass" />
                 <Button fx:id="addBot" text="Add Bot" onAction="#addBot" />
+                <Button fx:id="save" text="Save" onAction="#save" />
             </buttons>
         </ButtonBar>
     </bottom>

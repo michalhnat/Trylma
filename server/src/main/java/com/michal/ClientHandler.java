@@ -216,6 +216,7 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
             sendError("Invalid JSON format: " + e.getMessage());
         } catch (Exception e) {
             sendError("Error processing message: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

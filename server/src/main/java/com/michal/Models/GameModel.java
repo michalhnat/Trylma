@@ -32,7 +32,7 @@ public class GameModel {
 
     private String player_taking_next_move;
 
-
+    private int save_count;
 
     // private LocalDateTime startTime;
 
@@ -73,6 +73,10 @@ public class GameModel {
 
     public void setPlayer_taking_next_move(String player_taking_next_move) {
         this.player_taking_next_move = player_taking_next_move;
+    }
+
+    public void setSave_count(int save_count) {
+        this.save_count = save_count;
     }
     // public void setEndTime(LocalDateTime endTime) {
     // this.endTime = endTime;

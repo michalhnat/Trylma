@@ -5,9 +5,6 @@ import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.JsonDeserializer;
 import atlantafx.base.controls.Notification;
 import atlantafx.base.theme.Styles;
-import atlantafx.base.util.Animations;
-import javafx.application.Platform;
-import javafx.beans.binding.Binding;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -17,7 +14,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -26,9 +22,7 @@ import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  * Controller for the game board view. Handles game state, board visualization, and player moves.
@@ -59,6 +53,8 @@ public class SecondaryController implements IController, BoardControllerMediator
     @FXML
     private Button addBot;
     /* Button to add bot to the session */
+    @FXML
+    private Button save;
     @FXML
     private Button passButton;
     /** Start X coordinate input */
@@ -232,6 +228,16 @@ public class SecondaryController implements IController, BoardControllerMediator
             communication.sendMessage(jsonMessage);
         } catch (Exception e) {
             showError("Failed to add bot");
+        }
+    }
+
+    @FXML
+    private void save() {
+        String jsonMessage = JsonBuilder.setBuilder("save_game").build();
+        try {
+            communication.sendMessage(jsonMessage);
+        } catch (Exception e) {
+            showError("Failed to save");
         }
     }
 
