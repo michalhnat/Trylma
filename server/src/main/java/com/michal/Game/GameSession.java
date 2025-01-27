@@ -2,10 +2,6 @@ package com.michal.Game;
 
 import java.util.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.atomic.AtomicInteger;
 import com.michal.Game.Board.Board;
 import com.michal.Game.Board.Layout;
@@ -35,6 +31,8 @@ public class GameSession {
     private Player currentPlayer;
     private int currentMoveNumber = 0;
     private GameModel gameModel;
+    private final List<GameMoves> gameMoves = new ArrayList<>();
+
 
     private static final List<String> COLORS =
             List.of("Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Cyan", "Magenta");
@@ -145,10 +143,13 @@ public class GameSession {
         gameModel.setLayout(game.getLayout().toString());
         gameModel.setVariant(game.getVariant().toString());
         gameModel.setPlayer_count(players.size());
-        gameModel.setStartTime(LocalDateTime.now());
+        gameModel.setPlaying_colors(players.stream().map(Player::getColor).toArray(String[]::new));
+        gameModel.setState(game.getStatus().toString());
+        gameModel.setPlayer_taking_next_move(currentPlayer.getColor());
+        // gameModel.setStartTime(LocalDateTime.now());
 
         this.gameModel = gameModel;
-        databaseConnector.saveGame(gameModel);
+        // databaseConnector.saveGame(gameModel);
 
         broadcastMessage("Game started!");
         broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoardArray()));
@@ -189,9 +190,10 @@ public class GameSession {
             move.setEndY(end.y());
             move.setPlayerColor(player.getColor());
             move.setBoardAfterMove(BoardStringBuilder.buildBoardString(game.getBoardArray()));
-            move.setMoveTime(LocalDateTime.now());
+            // move.setMoveTime(LocalDateTime.now());
 
-            databaseConnector.saveGameMove(move);
+            gameMoves.add(move);
+            // databaseConnector.saveGameMove(move);
 
             Player winner = game.checkIfSomeoneWon(gameQueue.getPlayers());
             if (winner != null) {
@@ -209,8 +211,8 @@ public class GameSession {
                                                                                       // dedicated
                                                                                       // method for
                                                                                       // that
-                    gameModel.setEndTime(LocalDateTime.now());
-                    databaseConnector.saveGame(gameModel);
+                    // gameModel.setEndTime(LocalDateTime.now());
+                    // databaseConnector.saveGame(gameModel);
                 }
 
                 server.removeSession(this);
@@ -332,5 +334,24 @@ public class GameSession {
         if (players.size() == game.getMaxPlayers()) {
             startGame();
         }
+    }
+
+    public synchronized void saveGame() {
+        if (gameModel == null) {
+            throw new IllegalStateException("Game has not started yet.");
+        }
+
+        gameModel.setPlayer_taking_next_move(currentPlayer.getColor());
+        try {
+
+            databaseConnector.saveGame(gameModel);
+            for (GameMoves move : gameMoves) {
+                databaseConnector.saveGameMove(move);
+            }
+        } catch (OptimisticLockException e) {
+            throw new IllegalStateException("conflict at saving to db, retrying");
+        }
+
+
     }
 }

@@ -59,4 +59,6 @@ public interface Mediator {
     void handlePass(ClientHandler clientHandler);
 
     void handleAddBot(ClientHandler clientHandler);
+
+    void saveGame(ClientHandler clientHandler);
 }
