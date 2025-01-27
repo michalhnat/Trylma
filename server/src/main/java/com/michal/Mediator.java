@@ -1,9 +1,8 @@
 package com.michal;
 
-import com.michal.Database.DatabaseConnector;
-import com.michal.Game.Layout;
-import com.michal.Game.Position;
 import com.michal.Game.Variant;
+import com.michal.Game.Board.Layout;
+import com.michal.Game.Board.Position;
 
 /**
  * An interface for handling various client actions in the game.

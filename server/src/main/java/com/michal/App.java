@@ -1,17 +1,14 @@
 package com.michal;
 
-import com.michal.Database.DatabaseConnector;
-import com.michal.Models.GameModel;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.retry.annotation.EnableRetry;
-import java.time.LocalDateTime;
+import com.michal.Database.DatabaseConnector;
 
 @SpringBootApplication
 @EntityScan(basePackages = {"com.michal.Models"})

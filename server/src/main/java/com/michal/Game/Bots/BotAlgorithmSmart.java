@@ -26,10 +26,13 @@ public class BotAlgorithmSmart implements BotAlgorithm {
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[x].length; y++) {
                 Node node = board[x][y];
-                if (node != null && node.getPawn() != null && node.getPawn().getPlayer() == botPlayer) {
+                if (node != null && node.getPawn() != null
+                        && node.getPawn().getPlayer() == botPlayer) {
                     int finalX = x;
                     int finalY = y;
-                    List<Move> validMoves = moveValidator.getValidMoves(board, new Position(x, y)).stream().map(end -> new Move(new Position(finalX, finalY), end)).toList();
+                    List<Move> validMoves = moveValidator.getValidMoves(board, new Position(x, y))
+                            .stream().map(end -> new Move(new Position(finalX, finalY), end))
+                            .toList();
                     for (Move move : validMoves) {
                         Node[][] boardCopy = deepCopyBoard(board);
                         applyMove(boardCopy, move);
@@ -54,14 +57,10 @@ public class BotAlgorithmSmart implements BotAlgorithm {
 
     private int evaluateBoard(Node[][] board, Player player) {
         // Precompute destination positions
-        Map<Direction, Direction> oppositeDirections = Map.of(
-                Direction.SOUTH, Direction.NORTH,
-                Direction.NORTH, Direction.SOUTH,
-                Direction.SOUTHWEST, Direction.NORTHEAST,
-                Direction.NORTHEAST, Direction.SOUTHWEST,
-                Direction.NORTHWEST, Direction.SOUTHEAST,
-                Direction.SOUTHEAST, Direction.NORTHWEST
-        );
+        Map<Direction, Direction> oppositeDirections = Map.of(Direction.SOUTH, Direction.NORTH,
+                Direction.NORTH, Direction.SOUTH, Direction.SOUTHWEST, Direction.NORTHEAST,
+                Direction.NORTHEAST, Direction.SOUTHWEST, Direction.NORTHWEST, Direction.SOUTHEAST,
+                Direction.SOUTHEAST, Direction.NORTHWEST);
 
         HashSet<Direction> playerDestinations = new HashSet<>();
         List<Position> destinationPositions = new ArrayList<>();
@@ -75,18 +74,22 @@ public class BotAlgorithmSmart implements BotAlgorithm {
                     case CornerNode cornerNode when cornerNode.getOwner() == null -> {
                         continue;
                     }
-                    case CornerNode cornerNode when Objects.equals(cornerNode.getOwner().getColor(), player.getColor()) -> {
-                        Direction targetDirection = oppositeDirections.get(cornerNode.getDirection());
-                        playerDestinations.add(targetDirection);System.out.println("PlayerDestination: " + targetDirection.toString());
+                    case CornerNode cornerNode when Objects.equals(cornerNode.getOwner().getColor(),
+                            player.getColor()) -> {
+                        Direction targetDirection =
+                                oppositeDirections.get(cornerNode.getDirection());
+                        playerDestinations.add(targetDirection);
                     }
-                    default -> {}
+                    default -> {
+                    }
                 }
             }
         }
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 Node node = board[i][j];
-                if (node instanceof CornerNode cornerNode && playerDestinations.contains(cornerNode.getDirection())) {
+                if (node instanceof CornerNode cornerNode
+                        && playerDestinations.contains(cornerNode.getDirection())) {
                     destinationPositions.add(new Position(i, j));
                 }
             }
@@ -97,15 +100,20 @@ public class BotAlgorithmSmart implements BotAlgorithm {
         for (int x = 0; x < board.length; x++) {
             for (int y = 0; y < board[x].length; y++) {
                 Node node = board[x][y];
-                if (node == null || node.getPawn() == null) continue;
+                if (node == null || node.getPawn() == null)
+                    continue;
 
                 if (Objects.equals(node.getPawn().getPlayer().getColor(), player.getColor())) {
-                    if (node instanceof CornerNode cornerNode && playerDestinations.contains(cornerNode.getDirection())) {
-                        int depthBonus = calculateDepthBonus(new Position(x, y), board.length, cornerNode.getDirection());
+                    if (node instanceof CornerNode cornerNode
+                            && playerDestinations.contains(cornerNode.getDirection())) {
+                        int depthBonus = calculateDepthBonus(new Position(x, y), board.length,
+                                cornerNode.getDirection());
                         score += 5 + depthBonus;
                     } else {
-                        if (node instanceof CornerNode cornerNode && Objects.equals(cornerNode.getOwner().getColor(), player.getColor())) {
-                            int depthPenalty = calculateDepthBonus(new Position(x, y), board.length, cornerNode.getDirection());
+                        if (node instanceof CornerNode cornerNode && Objects
+                                .equals(cornerNode.getOwner().getColor(), player.getColor())) {
+                            int depthPenalty = calculateDepthBonus(new Position(x, y), board.length,
+                                    cornerNode.getDirection());
                             score -= 3 + depthPenalty;
                         }
                         int minDistance = Integer.MAX_VALUE;
@@ -126,12 +134,17 @@ public class BotAlgorithmSmart implements BotAlgorithm {
         int distanceFromEnd = 0;
         int blockSize = (length - 1) / 4;
         switch (direction) {
-            case NORTH -> distanceFromEnd = calculateDistance(position, new Position(length - 1 - blockSize, length - 1));
+            case NORTH -> distanceFromEnd =
+                    calculateDistance(position, new Position(length - 1 - blockSize, length - 1));
             case SOUTH -> distanceFromEnd = calculateDistance(position, new Position(blockSize, 0));
-            case NORTHEAST -> distanceFromEnd = calculateDistance(position, new Position(length - 1, length - blockSize - 1));
-            case NORTHWEST -> distanceFromEnd = calculateDistance(position, new Position(blockSize, length - blockSize - 1));
-            case SOUTHEAST -> distanceFromEnd = calculateDistance(position, new Position(length - blockSize - 1, blockSize));
-            case SOUTHWEST -> distanceFromEnd = calculateDistance(position, new Position(0, blockSize));
+            case NORTHEAST -> distanceFromEnd =
+                    calculateDistance(position, new Position(length - 1, length - blockSize - 1));
+            case NORTHWEST -> distanceFromEnd =
+                    calculateDistance(position, new Position(blockSize, length - blockSize - 1));
+            case SOUTHEAST -> distanceFromEnd =
+                    calculateDistance(position, new Position(length - blockSize - 1, blockSize));
+            case SOUTHWEST -> distanceFromEnd =
+                    calculateDistance(position, new Position(0, blockSize));
         }
         return blockSize - distanceFromEnd;
     }
@@ -164,7 +177,7 @@ public class BotAlgorithmSmart implements BotAlgorithm {
      * Applies the given move to the board.
      *
      * @param board the current game board
-     * @param move  the move to apply
+     * @param move the move to apply
      */
     private void applyMove(Node[][] board, Move move) {
         Node fromNode = board[move.getFrom().x()][move.getFrom().y()];
