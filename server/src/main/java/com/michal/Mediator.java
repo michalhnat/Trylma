@@ -1,8 +1,8 @@
 package com.michal;
 
+import com.michal.Game.Variant;
 import com.michal.Game.Board.Layout;
 import com.michal.Game.Board.Position;
-import com.michal.Game.Variant;
 
 /**
  * An interface for handling various client actions in the game.
@@ -32,7 +32,8 @@ public interface Mediator {
      * @param layout the layout of the game board
      * @param variant the variant of the game
      */
-    void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout, Variant variant);
+    void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout,
+            Variant variant);
 
     /**
      * Handles the request to make a move in the game for the specified client.

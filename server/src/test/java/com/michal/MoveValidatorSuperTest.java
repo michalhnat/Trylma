@@ -1,11 +1,14 @@
 package com.michal;
 
-import com.michal.Game.*;
-import com.michal.Utils.StarBuilder;
+import java.util.HashSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import java.util.HashSet;
+import com.michal.Game.Board.Node;
+import com.michal.Game.Board.Pawn;
+import com.michal.Game.Board.Position;
+import com.michal.Game.MoveValidation.MoveValidator;
+import com.michal.Game.MoveValidation.MoveValidatorSuper;
+import com.michal.Utils.StarBuilder;
 
 public class MoveValidatorSuperTest {
     Node[][] board = StarBuilder.buildStar(5);

@@ -32,6 +32,7 @@
                 <TextField fx:id="destination_y" promptText="destination_y" />
                 <Button fx:id="moveButton" text="Move" onAction="#move" />
                 <Button fx:id="passButton" text="Pass" onAction="#pass" />
+                <Button fx:id="addBot" text="Add Bot" onAction="#addBot" />
             </buttons>
         </ButtonBar>
     </bottom>
