@@ -273,4 +273,32 @@ public class Server implements Mediator, GameSessionMediator {
             }
         }
     }
+
+
+    @Override
+    public void saveGame(ClientHandler clientHandler) {
+        if (!clientHandler.isInGame()) {
+            clientHandler.sendError("You are not part of any game session.");
+            return;
+        }
+
+        synchronized (gameSessions) {
+            Player player = clientHandler.getPlayer();
+            Optional<GameSession> sessionOptional = gameSessions.stream()
+                    .filter(session -> session.getPlayers().contains(player)).findFirst();
+
+            if (sessionOptional.isPresent()) {
+                GameSession session = sessionOptional.get();
+
+                try {
+                    session.saveGame();
+                } catch (IllegalStateException e) {
+                    clientHandler.sendError("Failed to save game: " + e.getMessage());
+                }
+
+            } else {
+                clientHandler.sendError("You are not part of any game session.");
+            }
+        }
+    }
 }

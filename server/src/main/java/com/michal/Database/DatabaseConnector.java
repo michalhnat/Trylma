@@ -33,5 +33,4 @@ public class DatabaseConnector {
         gameMovesRepository.save(gameMove);
     }
 
-    // Add more methods as needed
 }

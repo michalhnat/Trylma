@@ -26,18 +26,26 @@ public class GameModel {
 
     private String variant;
 
-    private LocalDateTime startTime;
+    private String[] playing_colors;
 
-    private LocalDateTime endTime;
+    private String state;
+
+    private String player_taking_next_move;
+
+
+
+    // private LocalDateTime startTime;
+
+    // private LocalDateTime endTime;
 
 
     // public void setId(Long id) {
     // this.id = id;
     // }
 
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
+    // public void setStartTime(LocalDateTime startTime) {
+    // this.startTime = startTime;
+    // }
 
     // public void setEndTime(LocalDateTime endTime) {
     // this.endTime = endTime;
@@ -55,9 +63,20 @@ public class GameModel {
         this.variant = variant;
     }
 
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
+    public void setPlaying_colors(String[] playing_colors) {
+        this.playing_colors = playing_colors;
     }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setPlayer_taking_next_move(String player_taking_next_move) {
+        this.player_taking_next_move = player_taking_next_move;
+    }
+    // public void setEndTime(LocalDateTime endTime) {
+    // this.endTime = endTime;
+    // }
 }
 
 

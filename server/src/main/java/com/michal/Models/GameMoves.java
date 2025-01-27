@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
@@ -41,7 +40,7 @@ public class GameMoves {
     private String board_after_move;
 
     private String player_color;
-    private LocalDateTime move_time;
+    // private LocalDateTime move_time;
 
     public void setId(Long id) {
         this.id = id;
@@ -63,9 +62,9 @@ public class GameMoves {
         this.player_color = player_color;
     }
 
-    public void setMoveTime(LocalDateTime move_time) {
-        this.move_time = move_time;
-    }
+    // public void setMoveTime(LocalDateTime move_time) {
+    // this.move_time = move_time;
+    // }
 
     public void setStartX(int start_x) {
         this.start_x = start_x;
