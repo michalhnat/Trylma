@@ -141,7 +141,7 @@ public class JsonDeserializer {
 
             String[] gameString = new String[2];
 
-            gameString[0] = String.format("Save #%d", saveObj.get("id").getAsInt());
+            gameString[0] = String.format("%d", saveObj.get("id").getAsInt());
             gameString[1] = saveObj.get("board").getAsString();
 
             savesList.add(gameString);

@@ -213,7 +213,20 @@ public class PrimaryController implements IController {
         saves.forEach(save -> {
             Button button = new Button();
             button.setText("Load");
-            saves_list.getItems().add(new HboxCell(save[0], button));
+
+            button.setOnAction(e -> {
+                try {
+                    String jsonMessage = JsonBuilder.setBuilder("load_game")
+                            .setPayloadArgument("saveID", String.valueOf(save[0])).build();
+                    communication.sendMessage(jsonMessage);
+                    stage.close();
+                    request_games_list();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    showError(("Failed to read game"));
+                }
+            });
+            saves_list.getItems().add(new HboxCell("Game #" + save[0], button));
         });
 
         saves_list.getSelectionModel().selectedItemProperty()
