@@ -1,6 +1,7 @@
 package com.michal.Models;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,24 +19,31 @@ public class GameModel {
     @Version
     private Long version;
 
-    private int player_count;
+    @Column(name = "playerCount")
+    private int playerCount;
 
     // private int in_game_id; // to reconsider
 
+    @Column(name = "layout")
     private String layout;
 
+    @Column(name = "variant")
     private String variant;
 
-    private String[] playing_colors;
+    @Column(name = "playingColors")
+    private String[] playingColors;
 
+    @Column(name = "state")
     private String state;
 
-    private String player_taking_next_move;
+    @Column(name = "playerTakingNextMove")
+    private String playerTakingNextMove;
 
-    private int save_count;
+    @Column(name = "saveCount")
+    private int saveCount;
 
-    public void setPlayer_count(int player_count) {
-        this.player_count = player_count;
+    public void setPlayerCount(int playerCount) {
+        this.playerCount = playerCount;
     }
 
     public void setLayout(String layout) {
@@ -46,48 +54,52 @@ public class GameModel {
         this.variant = variant;
     }
 
-    public void setPlaying_colors(String[] playing_colors) {
-        this.playing_colors = playing_colors;
+    public void setPlayingColors(String[] playingColors) {
+        this.playingColors = playingColors;
     }
 
     public void setState(String state) {
         this.state = state;
     }
 
-    public void setPlayer_taking_next_move(String player_taking_next_move) {
-        this.player_taking_next_move = player_taking_next_move;
+    public void setPlayerTakingNextMove(String playerTakingNextMove) {
+        this.playerTakingNextMove = playerTakingNextMove;
     }
 
-    public void setSave_count(int save_count) {
-        this.save_count = save_count;
+    public void setSaveCount(int saveCount) {
+        this.saveCount = saveCount;
     }
 
-    public int getPlayer_count() {
-        return player_count;
+    public int getPlayerCount() {
+        return playerCount;
     }
 
     public String getLayout() {
         return layout;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getVariant() {
         return variant;
     }
 
-    public String[] getPlaying_colors() {
-        return playing_colors;
+    public String[] getPlayingColors() {
+        return playingColors;
     }
 
     public String getState() {
         return state;
     }
 
-    public String getPlayer_taking_next_move() {
-        return player_taking_next_move;
+    public String getPlayerTakingNextMove() {
+        return playerTakingNextMove;
     }
 
-    public int getSave_count() {
-        return save_count;
+    public int getSaveCount() {
+        return saveCount;
     }
 
 

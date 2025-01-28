@@ -3,6 +3,7 @@ package com.michal;
 import java.io.ObjectOutputStream;
 import java.util.List;
 import com.michal.Game.GameInfo;
+import com.michal.Models.GameModel;
 
 /**
  * An interface for communication operations.
@@ -47,4 +48,6 @@ public interface ICommunication {
      * @param out the output stream to send the error message to
      */
     void sendError(String msg, ObjectOutputStream out);
+
+    void sendSaveListMessage(List<GameSave> list, ObjectOutputStream out);
 }

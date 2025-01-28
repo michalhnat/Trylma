@@ -127,6 +127,29 @@ public class JsonDeserializer {
         return gamesList;
     }
 
+    public List<String[]> getSavesAsList(String json) throws JsonSyntaxException {
+        JsonObject obj = deserialize(json);
+        List<String[]> savesList = new ArrayList<>();
+
+        if (!obj.has("payload")) {
+            return savesList;
+        }
+
+        JsonArray saves = obj.get("payload").getAsJsonArray();
+        for (JsonElement save : saves) {
+            JsonObject saveObj = save.getAsJsonObject();
+
+            String[] gameString = new String[2];
+
+            gameString[0] = String.format("Save #%d", saveObj.get("id").getAsInt());
+            gameString[1] = saveObj.get("board").getAsString();
+
+            savesList.add(gameString);
+        }
+
+        return savesList;
+    }
+
     public HashMap<String, String> getGameInfoMap(String json) throws JsonSyntaxException {
         JsonObject obj = deserialize(json);
         HashMap<String, String> gameInfo = new HashMap<>();

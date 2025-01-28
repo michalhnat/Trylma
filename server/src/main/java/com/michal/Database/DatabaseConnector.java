@@ -1,6 +1,7 @@
 package com.michal.Database;
 
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
@@ -36,5 +37,9 @@ public class DatabaseConnector {
 
     public List<GameModel> getAllGames() {
         return gameRepository.findAll();
+    }
+
+    public Optional<GameMoves> getLastGameMove(Long gameId) {
+        return gameMovesRepository.findTopByGame_IdOrderByMoveNumberDesc(gameId);
     }
 }

@@ -21,6 +21,7 @@ import com.michal.Game.MoveValidation.MoveValidator;
 import com.michal.Game.MoveValidation.MoveValidatorStandard;
 import com.michal.Game.MoveValidation.MoveValidatorSuper;
 import com.michal.Models.GameModel;
+import com.michal.Models.GameMoves;
 
 /**
  * The Server class implements the Mediator and GameSessionMediator interfaces to manage game
@@ -312,5 +313,20 @@ public class Server implements Mediator, GameSessionMediator {
         }
 
         List<GameModel> savedGames = databaseConnector.getAllGames();
+        List<GameSave> gameSaves = new ArrayList<>();
+
+        for (GameModel game : savedGames) {
+            Long id = game.getId();
+            Optional<GameMoves> lastMove = databaseConnector.getLastGameMove(id);
+            if (lastMove.isPresent()) {
+                String board = lastMove.get().getBoardAfterMove();
+                gameSaves.add(new GameSave(id.toString(), board));
+                continue;
+            } else {
+                clientHandler.sendError("No moves found for game with ID: " + id);
+            }
+        }
+
+        clientHandler.sendSaveListMessage(gameSaves);
     }
 }

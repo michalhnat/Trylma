@@ -30,4 +30,10 @@ public class HboxCell extends HBox {
 
     this.getChildren().addAll(label, button);
   }
+
+  public Label getLabel() {
+    return label;
+  }
+
+
 }

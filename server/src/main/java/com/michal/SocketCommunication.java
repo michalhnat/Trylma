@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import com.google.gson.JsonObject;
 import com.michal.Game.GameInfo;
+import com.michal.Models.GameModel;
 import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.MyLogger;
 
@@ -20,8 +21,7 @@ public class SocketCommunication implements ICommunication {
      * Constructs a new SocketCommunication instance with the specified socket.
      *
      */
-    public SocketCommunication() {
-    }
+    public SocketCommunication() {}
 
     /**
      * Sends a message to the specified output stream.
@@ -62,6 +62,24 @@ public class SocketCommunication implements ICommunication {
             }).collect(Collectors.toList());
 
             builder.setPayloadArray(gameObjects);
+            out.writeObject(builder.build());
+        } catch (IOException e) {
+            logger.warning("Error sending message: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public synchronized void sendSaveListMessage(List<GameSave> list, ObjectOutputStream out) {
+        try {
+            JsonBuilder builder = JsonBuilder.setBuilder("save_list");
+            List<JsonObject> saveObjects = list.stream().map((GameSave save) -> {
+                JsonObject saveObj = new JsonObject();
+                saveObj.addProperty("id", save.getId());
+                saveObj.addProperty("board", save.getBoard());
+                return saveObj;
+            }).collect(Collectors.toList());
+
+            builder.setPayloadArray(saveObjects);
             out.writeObject(builder.build());
         } catch (IOException e) {
             logger.warning("Error sending message: " + e.getMessage());

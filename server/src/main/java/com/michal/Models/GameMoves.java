@@ -14,10 +14,12 @@ import jakarta.persistence.Version;
 @Entity
 @Table(name = "game_moves")
 public class GameMoves {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // @Column(name = "game")
     @ManyToOne
     @JoinColumn(name = "game_id", nullable = false)
     private GameModel game;
@@ -25,22 +27,29 @@ public class GameMoves {
     @Version
     private Long version;
 
-    private int move_number;
+    @Column(name = "moveNumber")
+    private int moveNumber;
 
-    private int start_x;
+    @Column(name = "startX")
+    private int startX;
 
-    private int start_y;
+    @Column(name = "startY")
+    private int startY;
 
-    private int end_x;
+    @Column(name = "endX")
+    private int endX;
 
-    private int end_y;
+    @Column(name = "endY")
+    private int endY;
 
     // @Lob
-    @Column(name = "board_after_move", columnDefinition = "TEXT", length = 65536)
-    private String board_after_move;
+    @Column(name = "boardAfterMove", columnDefinition = "TEXT", length = 65536)
+    private String boardAfterMove;
 
-    private String player_color;
+    @Column(name = "playerColor")
+    private String playerColor;
     // private LocalDateTime move_time;
+
 
     public void setId(Long id) {
         this.id = id;
@@ -50,36 +59,38 @@ public class GameMoves {
         this.game = game;
     }
 
-    public void setMoveNumber(int move_number) {
-        this.move_number = move_number;
+
+    public void setMoveNumber(int moveNumber) {
+        this.moveNumber = moveNumber;
     }
 
-    public void setBoardAfterMove(String board_after_move) {
-        this.board_after_move = board_after_move;
+    public void setBoardAfterMove(String boardAfterMove) {
+        this.boardAfterMove = boardAfterMove;
     }
 
-    public void setPlayerColor(String player_color) {
-        this.player_color = player_color;
+
+    public void setPlayerColor(String playerColor) {
+        this.playerColor = playerColor;
     }
 
     // public void setMoveTime(LocalDateTime move_time) {
     // this.move_time = move_time;
     // }
 
-    public void setStartX(int start_x) {
-        this.start_x = start_x;
+    public void setStartX(int startX) {
+        this.startX = startX;
     }
 
-    public void setStartY(int start_y) {
-        this.start_y = start_y;
+    public void setStartY(int startY) {
+        this.startY = startY;
     }
 
-    public void setEndX(int end_x) {
-        this.end_x = end_x;
+    public void setEndX(int endX) {
+        this.endX = endX;
     }
 
-    public void setEndY(int end_y) {
-        this.end_y = end_y;
+    public void setEndY(int endY) {
+        this.endY = endY;
     }
 
     public GameModel getGame() {
@@ -90,31 +101,35 @@ public class GameMoves {
         return version;
     }
 
-    public int getMove_number() {
-        return move_number;
+    public int getMoveNumber() {
+        return moveNumber;
     }
 
-    public int getStart_x() {
-        return start_x;
+    public int getStartX() {
+        return startX;
     }
 
-    public int getStart_y() {
-        return start_y;
+    public int getStartY() {
+        return startY;
     }
 
-    public int getEnd_x() {
-        return end_x;
+    public int getEndX() {
+        return endX;
     }
 
-    public int getEnd_y() {
-        return end_y;
+    public int getEndY() {
+        return endY;
     }
 
-    public String getBoard_after_move() {
-        return board_after_move;
+    public String getBoardAfterMove() {
+        return boardAfterMove;
     }
 
-    public String getPlayer_color() {
-        return player_color;
+    public String getPlayerColor() {
+        return playerColor;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

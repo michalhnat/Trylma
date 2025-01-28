@@ -13,6 +13,7 @@ import com.google.gson.JsonSyntaxException;
 import com.michal.Game.*;
 import com.michal.Game.Board.Layout;
 import com.michal.Game.Board.Position;
+import com.michal.Models.GameModel;
 import com.michal.Utils.JsonDeserializer;
 import com.michal.Utils.MyLogger;
 
@@ -73,6 +74,10 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
      */
     public void sendListMessage(List<GameInfo> list) {
         communication.sendListMessage(list, out);
+    }
+
+    public void sendSaveListMessage(List<GameSave> list) {
+        communication.sendSaveListMessage(list, out);
     }
 
     /**

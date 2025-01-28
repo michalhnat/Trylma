@@ -326,31 +326,47 @@ public class GameSession {
     }
 
     public synchronized void saveGame() {
-        GameModel gameModel = new GameModel();
-        gameModel.setLayout(game.getLayout().toString());
-        gameModel.setVariant(game.getVariant().toString());
-        gameModel.setPlayer_count(players.size());
-        gameModel.setPlaying_colors(players.stream().map(Player::getColor).toArray(String[]::new));
-        gameModel.setState(game.getStatus().toString());
-        gameModel.setPlayer_taking_next_move(currentPlayer.getColor());
+        // Create a new GameModel for this save
+        GameModel newGameModel = new GameModel();
+        newGameModel.setLayout(game.getLayout().toString());
+        newGameModel.setVariant(game.getVariant().toString());
+        newGameModel.setPlayerCount(players.size());
+        newGameModel
+                .setPlayingColors(players.stream().map(Player::getColor).toArray(String[]::new));
+        newGameModel.setState(game.getStatus().toString());
+        newGameModel.setPlayerTakingNextMove(currentPlayer.getColor());
+        newGameModel.setSaveCount(save_count);
 
-        if (gameModel == null) {
+        if (newGameModel == null) {
             throw new IllegalStateException("Game has not started yet.");
         }
 
-        // gameModel.setPlayer_taking_next_move(currentPlayer.getColor());
         try {
-            gameModel.setSave_count(save_count);
-            databaseConnector.saveGame(gameModel);
+            databaseConnector.saveGame(newGameModel);
             save_count++;
-            for (GameMoves move : gameMoves) {
-                move.setGame(gameModel);
+
+            List<GameMoves> movesToSave = new ArrayList<>();
+            for (GameMoves originalMove : gameMoves) {
+                GameMoves newMove = new GameMoves();
+                newMove.setStartX(originalMove.getStartX());
+                newMove.setStartY(originalMove.getStartY());
+                newMove.setEndX(originalMove.getEndX());
+                newMove.setEndY(originalMove.getEndY());
+                newMove.setMoveNumber(originalMove.getMoveNumber());
+                newMove.setBoardAfterMove(originalMove.getBoardAfterMove());
+                newMove.setPlayerColor(originalMove.getPlayerColor());
+                newMove.setGame(newGameModel);
+                movesToSave.add(newMove);
+            }
+
+            for (GameMoves move : movesToSave) {
                 databaseConnector.saveGameMove(move);
             }
+
+            gameMoves.clear();
+
         } catch (OptimisticLockException e) {
-            throw new IllegalStateException("conflict at saving to db, retrying");
+            throw new IllegalStateException("Conflict at saving to DB. Retrying...");
         }
-
-
     }
 }
