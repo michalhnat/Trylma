@@ -191,7 +191,7 @@ public class PrimaryController implements IController {
 
 
         saves.forEach(save -> {
-            idBoard_map.put(save[0], save[1]);
+            idBoard_map.put("Game #" + save[0], save[1]);
         });
 
         Stage stage = new Stage();
@@ -298,9 +298,9 @@ public class PrimaryController implements IController {
                 break;
             case "save_list":
                 List<String[]> saves = jsonDeserializer.getSavesAsList(message);
-                // for (String[] save : saves) {
-                // System.out.println(save[0] + " " + save[1]);
-                // }
+                for (String[] save : saves) {
+                    System.out.println(save[0] + " " + save[1]);
+                }
                 Stage stage = save_window(saves);
                 stage.show();
                 break;
