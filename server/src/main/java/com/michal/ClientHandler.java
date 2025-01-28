@@ -175,7 +175,7 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                     Layout layout = Layout.valueOf(payload.get("layout").getAsString());
                     Variant variant = Variant.valueOf(payload.get("variant").getAsString());
                     int boardSize = payload.get("boardSize").getAsInt();
-                    mediator.handleCreateGame(this, boardSize, layout, variant);
+                    mediator.handleCreateGame(this, boardSize, layout, variant, null);
                     break;
                 case "move":
                     int start_x = payload.get("start_x").getAsInt();
@@ -215,6 +215,10 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                     break;
                 case "list_saves":
                     mediator.handleListSaves(this);
+                    break;
+                case "load_game":
+                    int saveId = payload.get("saveID").getAsInt();
+                    mediator.loadGame(this, saveId);
                     break;
                 default:
                     sendError("Unsupported command: " + command);

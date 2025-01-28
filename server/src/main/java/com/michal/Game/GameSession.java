@@ -32,6 +32,7 @@ public class GameSession {
     private int currentMoveNumber = 0;
     private int save_count = 0;
     private final List<GameMoves> gameMoves = new ArrayList<>();
+    private final GameMoves loadedLastMove; // If null, it's a new game
 
 
     private static final List<String> COLORS =
@@ -47,7 +48,8 @@ public class GameSession {
      * @param databaseConnector databaseConnector the database connector
      */
     public GameSession(Board board, Layout layout, Variant variant, GameSessionMediator server,
-            DatabaseConnector databaseConnector) {
+                       DatabaseConnector databaseConnector, GameMoves loadedLastMove) {
+        this.loadedLastMove = loadedLastMove;
         this.sessionId = sessionCounter.getAndIncrement();
         this.game = new Game(board, layout, variant);
         this.players = new ArrayList<>();
@@ -137,7 +139,16 @@ public class GameSession {
      * Starts the game if the maximum number of players has been reached.
      */
     private synchronized void startGame() {
-        game.start(players);
+        game.start(players, loadedLastMove);
+
+        // Ensure the right color is on the top of the queue if the game is loaded
+        if (loadedLastMove != null) {
+            String lastPlayerColor = loadedLastMove.getPlayerColor();
+            while (!gameQueue.peekPlayer().getColor().equals(lastPlayerColor)) {
+                gameQueue.takePlayer();
+            }
+            gameQueue.takePlayer();
+        }
 
         broadcastMessage("Game started!");
         broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoardArray()));
@@ -186,6 +197,7 @@ public class GameSession {
             if (winner != null) {
                 broadcastMessage("Player " + winner.getColor() + " has won!");
                 System.out.println("Player " + winner.getColor() + " has won!");
+                System.out.println(BoardStringBuilder.buildBoardString(game.getBoardArray()));
                 game.setStatus(GameStatus.FINISHED);
 
                 for (Player p : players) {

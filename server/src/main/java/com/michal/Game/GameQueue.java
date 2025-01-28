@@ -29,6 +29,11 @@ public class GameQueue {
         return player;
     }
 
+    // Peek at the first player in the queue
+    public synchronized Player peekPlayer() {
+        return players.peek();
+    }
+
     /**
      * Adds a player to the queue.
      *

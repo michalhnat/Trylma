@@ -74,7 +74,7 @@ public class Server implements Mediator, GameSessionMediator {
      */
     @Override
     public void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout,
-            Variant variant) {
+            Variant variant, GameMoves loadedGameMovesInfo) {
         synchronized (gameSessions) {
             if (clientHandler.isInGame()) {
                 clientHandler.sendError("Error: You are already in a game session.");
@@ -91,7 +91,7 @@ public class Server implements Mediator, GameSessionMediator {
 
             try {
                 GameSession session =
-                        new GameSession(board, layout, variant, this, databaseConnector); // databse
+                        new GameSession(board, layout, variant, this, databaseConnector, loadedGameMovesInfo); // databse
                                                                                           // should
                                                                                           // be
                                                                                           // injected
@@ -328,5 +328,37 @@ public class Server implements Mediator, GameSessionMediator {
         }
 
         clientHandler.sendSaveListMessage(gameSaves);
+    }
+
+    @Override
+    public void loadGame(ClientHandler clientHandler, int saveId) {
+        if (clientHandler.isInGame()) {
+            clientHandler.sendError("Cannot load a game while in a game session.");
+            return;
+        }
+
+        List<GameModel> savedGames = databaseConnector.getAllGames();
+        Optional<GameModel> gameOptional = savedGames.stream()
+                .filter(game -> game.getId().equals((long) saveId)).findFirst();
+
+        if (gameOptional.isPresent()) {
+            GameModel game = gameOptional.get();
+            long gameId = game.getId();
+            Layout layout = Layout.valueOf(game.getLayout());
+            Variant variant = Variant.valueOf(game.getVariant());
+            int boardSize = 5; // Need to store board size in database
+
+            Optional<GameMoves> lastMove = databaseConnector.getLastGameMove(gameId);
+            if (lastMove.isEmpty()) {
+                clientHandler.sendError("No moves found for game with ID: " + gameId);
+                return;
+            }
+
+            // Creating a new game of the variant and layout of the loaded game
+            handleCreateGame(clientHandler, boardSize, layout, variant, lastMove.get());
+
+        } else {
+            clientHandler.sendError("Game with ID " + saveId + " not found.");
+        }
     }
 }

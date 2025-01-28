@@ -2,6 +2,7 @@ package com.michal.Game.Board;
 
 import com.michal.Game.*;
 import com.michal.Game.MoveValidation.MoveValidator;
+import com.michal.Models.GameMoves;
 import com.michal.Utils.StarBuilder;
 
 import java.util.*;
@@ -11,7 +12,7 @@ import java.util.*;
  */
 public class StarBoard extends Board {
 
-    private final Node[][] board;
+    private Node[][] board;
     private final MoveValidator moveValidator;
 
     /**
@@ -148,5 +149,45 @@ public class StarBoard extends Board {
      */
     public Node[][] getBoardArray() {
         return board;
+    }
+
+    @Override
+    public void loadPawns(GameMoves loadedLastMove, List<Player> players) {
+        String boardString = loadedLastMove.getBoardAfterMove();
+
+        // convert string to 2D array of characters
+        String[] rows = boardString.split("\n");
+        String[][] stringBoard = new String[rows.length][rows[0].length()];
+
+        for (int i = 0; i < rows.length; i++) {
+            stringBoard[i] = rows[i].split("");
+        }
+
+        // Remove every pawn from the board
+        for (Node[] row : board) {
+            for (Node node : row) {
+                if (node instanceof CornerNode cornerNode) {
+                    cornerNode.setPawn(null);
+                }
+            }
+        }
+
+        // Insert pawns into the Node[][] board
+        int length = rows.length;
+        int size = (length - 1) / 4 + 1;
+
+        for (int y = 0; y < length; y++) {
+            for (int x = 0; x < length; x++) {
+                if (stringBoard[length - y - 1][x].equals("W") || stringBoard[length - y - 1][x].equals("X")) {
+                    continue;
+                } else {
+                    for (Player player : players) {
+                        if (stringBoard[length - y - 1][x].equals(player.getColor().substring(0, 1))) {
+                            board[x][y].setPawn(new Pawn(player));
+                        }
+                    }
+                }
+            }
+        }
     }
 }
