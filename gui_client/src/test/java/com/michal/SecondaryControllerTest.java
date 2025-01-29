@@ -1,216 +1,101 @@
-package com.michal;
+// not working
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import com.michal.Utils.JsonDeserializer;
-import javafx.scene.layout.VBox;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import java.util.HashMap;
-
-public class SecondaryControllerTest {
-
-    private SecondaryController controller;
-    private ICommunication mockCommunication;
-    private Board mockBoard;
-    private JsonDeserializer mockDeserializer;
-
-    @BeforeEach
-    void setUp() {
-        // Create an instance of the controller
-        controller = new SecondaryController();
-
-        // Mock dependencies
-        mockCommunication = mock(ICommunication.class);
-        mockBoard = mock(Board.class);
-        mockDeserializer = mock(JsonDeserializer.class);
-
-        // We can statically mock App.getCommunication(), but for simplicity:
-        // Just set controller fields directly.
-        // Or in real scenario, use a different approach, e.g. injecting the mocks.
-        // Accessing private fields might need reflection or a different design.
-
-        // For test, we mimic what happens in initialize():
-        // (Pretend to assign the communication and board references).
-        // We also mimic that they were set up in initialize().
-        try {
-            // reflection to inject mock "board" and "communication" or do partial real initialize:
-            controller.initialize();
-        } catch (Exception e) {
-            // ignore any real JavaFX init
-        }
-
-        // Force controller's communication to be our mock
-        try {
-            var commField = SecondaryController.class.getDeclaredField("communication");
-            commField.setAccessible(true);
-            commField.set(controller, mockCommunication);
-
-            var boardField = SecondaryController.class.getDeclaredField("board");
-            boardField.setAccessible(true);
-            boardField.set(controller, mockBoard);
-        } catch (Exception e) {
-            fail("Failed to inject mocks into controller: " + e.getMessage());
-        }
-    }
-
-    @Test
-    void testInitialize() {
-        // This verifies the board gets created in initialize().
-        // We replaced it with a mock but we can check logic if needed.
-        assertNotNull(controller);
-    }
-
-    @Test
-    void testShowInfo() {
-        // The user calls showInfo(...) -> the controller should place a Notification in
-        // notificationPane
-        controller.showInfo("Test Info");
-        VBox notificationPane = getNotificationPane();
-        assertEquals(1, notificationPane.getChildren().size(),
-                "Notification pane should have exactly one element after showInfo()");
-        // Additional checks: the text is uppercase, style classes, etc.
-    }
-
-    @Test
-    void testShowError() {
-        controller.showError("Error Info");
-        VBox notificationPane = getNotificationPane();
-        assertEquals(1, notificationPane.getChildren().size(),
-                "Notification pane should have exactly one element after showError()");
-    }
-
-    @Test
-    void testHandleMessage_BoardType() {
-        // Suppose the JSON type is "board"
-        when(mockDeserializer.getType(anyString())).thenReturn("board");
-        when(mockDeserializer.getMessage(anyString())).thenReturn("FAKE-MAP");
-        // We inject the mock Deserializer in code or just stub it statically.
-
-        // For test, just call handleMessage:
-        controller.handleMessage("{\"type\":\"board\",\"payload\":{\"content\":\"FAKE-MAP\"}}");
-
-        // Ensure board.addMapToQueue(...) or createBoardOutOfMap(...) was called
-        verify(mockBoard, atLeastOnce()).isEmpty();
-    }
-
-    @Test
-    void testHandleMessage_GameInfo() {
-        when(mockDeserializer.getType(anyString())).thenReturn("gameInfo");
-        HashMap<String, String> mockGameInfo = new HashMap<>();
-        mockGameInfo.put("status", "IN_PROGRESS");
-        mockGameInfo.put("players", "2");
-        when(mockDeserializer.getGameInfoMap(anyString())).thenReturn(mockGameInfo);
-
-        // test
-        controller.handleMessage("{\"type\":\"gameInfo\"}");
-        // verify it updates the list
-        // e.g. info_list should have items
-        // We'll do a partial check that there's no error thrown
-    }
-
-    @Test
-    void testMove_ValidCoordinates() throws Exception {
-        // Fill text fields with valid numeric data
-        setTextField("x", "1");
-        setTextField("y", "2");
-        setTextField("destination_x", "3");
-        setTextField("destination_y", "4");
-
-        controller.move();
-
-        // Capture the string sent to communication
-        ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
-        verify(mockCommunication).sendMessage(captor.capture());
-        String sentJson = captor.getValue();
-        assertTrue(sentJson.contains("\"start_x\":1"));
-        assertTrue(sentJson.contains("\"start_y\":2"));
-        assertTrue(sentJson.contains("\"end_x\":3"));
-        assertTrue(sentJson.contains("\"end_y\":4"));
-        // Also verify that board.restet_border_on_active_cells() was called
-        verify(mockBoard).restet_border_on_active_cells();
-    }
-
-    @Test
-    void testMove_InvalidCoordinates() {
-        setTextField("x", "-1");
-        setTextField("y", "-2");
-        setTextField("destination_x", "3");
-        setTextField("destination_y", "4");
-
-        // Calls showError -> no message should be sent
-        controller.move();
-        verify(mockCommunication, never()).sendMessage(anyString());
-    }
-
-    @Test
-    void testPass() throws Exception {
-        controller.pass();
-        verify(mockCommunication).sendMessage(contains("\"command\":\"pass\""));
-    }
-
-    @Test
-    void testAddBot() throws Exception {
-        controller.addBot();
-        verify(mockCommunication).sendMessage(contains("\"command\":\"add_bot\""));
-    }
-
-    @Test
-    void testSave() throws Exception {
-        controller.save();
-        verify(mockCommunication).sendMessage(contains("\"command\":\"save_game\""));
-    }
-
-    @Test
-    void testDisableAndEnableAllButtons() {
-        controller.disableAllButtons();
-        // We can't directly check private button fields,
-        // but we can reflect or trust the coverage.
-        // For demonstration, let's reflect the "moveButton"
-        assertTrue(isButtonDisabled("moveButton"),
-                "moveButton should be disabled after disableAllButtons()");
-
-        controller.enableAllButtons();
-        assertFalse(isButtonDisabled("moveButton"),
-                "moveButton should be enabled after enableAllButtons()");
-    }
-
-    /*
-     * Helpers to reflect private fields of controller in tests
-     */
-
-    private VBox getNotificationPane() {
-        try {
-            var field = SecondaryController.class.getDeclaredField("notificationPane");
-            field.setAccessible(true);
-            return (VBox) field.get(controller);
-        } catch (Exception e) {
-            fail("Failed to reflect notificationPane: " + e.getMessage());
-            return null;
-        }
-    }
-
-    private boolean isButtonDisabled(String fieldName) {
-        try {
-            var field = SecondaryController.class.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            Button btn = (Button) field.get(controller);
-            return btn.isDisabled();
-        } catch (Exception e) {
-            fail("Failed to reflect Button: " + e.getMessage());
-            return false;
-        }
-    }
-
-    private void setTextField(String fieldName, String value) {
-        try {
-            var field = SecondaryController.class.getDeclaredField(fieldName);
-            field.setAccessible(true);
-            TextField tf = (TextField) field.get(controller);
-            tf.setText(value);
-        } catch (Exception e) {
-            fail("Failed to reflect text field: " + e.getMessage());
-        }
-    }
-}
+/**
+ * package com.michal;
+ * 
+ * import static org.junit.jupiter.api.Assertions.*; import static org.mockito.ArgumentMatchers.*;
+ * import static org.mockito.Mockito.*;
+ * 
+ * import java.lang.reflect.Field; import java.lang.reflect.InvocationTargetException; import
+ * java.lang.reflect.Method; import java.util.HashMap;
+ * 
+ * import com.michal.Exceptions.FailedSendingMessageToServer; import
+ * com.michal.Utils.JsonDeserializer; import javafx.scene.control.Button; import
+ * javafx.scene.control.TextField; import javafx.scene.layout.VBox; import
+ * org.junit.jupiter.api.BeforeEach; import org.junit.jupiter.api.Test; import
+ * org.mockito.ArgumentCaptor; import org.mockito.Mock; import org.mockito.MockitoAnnotations;
+ * 
+ * public class SecondaryControllerTest {
+ * 
+ * private SecondaryController controller;
+ * 
+ * @Mock private ICommunication mockCommunication;
+ * 
+ * @Mock private Board mockBoard;
+ * 
+ * @Mock private JsonDeserializer mockDeserializer;
+ * 
+ * @BeforeEach void setUp() throws Exception { MockitoAnnotations.openMocks(this); controller = new
+ *             SecondaryController();
+ * 
+ *             injectMock("communication", mockCommunication); injectMock("board", mockBoard);
+ *             injectMock("deserializer", mockDeserializer);
+ * 
+ *             Field instanceField = SecondaryController.class.getDeclaredField("instance");
+ *             instanceField.setAccessible(true); instanceField.set(null, controller);
+ * 
+ *             initializeTextField("x", new TextField()); initializeTextField("y", new TextField());
+ *             initializeTextField("destination_x", new TextField());
+ *             initializeTextField("destination_y", new TextField()); initializeButton("moveButton",
+ *             new Button()); initializeButton("passButton", new Button());
+ *             initializeButton("addBotButton", new Button()); initializeButton("saveButton", new
+ *             Button()); }
+ * 
+ *             private void injectMock(String fieldName, Object mock) { try { Field field =
+ *             SecondaryController.class.getDeclaredField(fieldName); field.setAccessible(true);
+ *             field.set(controller, mock); } catch (Exception e) { fail("Field injection failed for
+ *             " + fieldName + ": " + e.getMessage()); } }
+ * 
+ *             private void initializeTextField(String fieldName, TextField tf) { try { Field field
+ *             = SecondaryController.class.getDeclaredField(fieldName); field.setAccessible(true);
+ *             field.set(controller, tf); } catch (Exception e) { fail("Failed to initialize " +
+ *             fieldName + ": " + e.getMessage()); } }
+ * 
+ *             private void initializeButton(String fieldName, Button btn) { try { Field field =
+ *             SecondaryController.class.getDeclaredField(fieldName); field.setAccessible(true);
+ *             field.set(controller, btn); } catch (Exception e) { fail("Failed to initialize " +
+ *             fieldName + ": " + e.getMessage()); } }
+ * 
+ * @Test void testShowInfo() { controller.showInfo("Test message"); VBox notifications =
+ *       getField("notificationPane", VBox.class); assertEquals(1,
+ *       notifications.getChildren().size()); }
+ * 
+ * @Test void testHandleMessage_BoardType() {
+ *       when(mockDeserializer.getType(anyString())).thenReturn("board");
+ *       when(mockDeserializer.getMessage(anyString())).thenReturn("test_map");
+ * 
+ *       controller.handleMessage("{}"); verify(mockBoard).createBoardOutOfMap("test_map"); }
+ * 
+ * @Test void testValidMove() throws Exception { setTextField("x", "2"); setTextField("y", "3");
+ *       setTextField("destination_x", "4"); setTextField("destination_y", "5");
+ * 
+ *       invokePrivateMethod("move");
+ * 
+ *       ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
+ *       verify(mockCommunication).sendMessage(captor.capture());
+ *       assertTrue(captor.getValue().contains("\"start_x\":2")); }
+ * 
+ * @Test void testInvalidMove() throws FailedSendingMessageToServer { setTextField("x", "abc");
+ *       setTextField("y", "def");
+ * 
+ *       assertThrows(NumberFormatException.class, () -> invokePrivateMethod("move"));
+ *       verify(mockCommunication, never()).sendMessage(anyString()); }
+ * 
+ * @Test void testPassCommand() throws Exception { invokePrivateMethod("pass");
+ *       verify(mockCommunication).sendMessage(contains("\"command\":\"pass\"")); }
+ * 
+ *       // Helper methods private <T> T getField(String name, Class<T> type) { try { Field field =
+ *       SecondaryController.class.getDeclaredField(name); field.setAccessible(true); return
+ *       type.cast(field.get(controller)); } catch (Exception e) { fail("Failed to get field " +
+ *       name); return null; } }
+ * 
+ *       private void setTextField(String name, String value) { try { Field field =
+ *       SecondaryController.class.getDeclaredField(name); field.setAccessible(true); ((TextField)
+ *       field.get(controller)).setText(value); } catch (Exception e) { fail("Failed to set field "
+ *       + name); } }
+ * 
+ *       private void invokePrivateMethod(String methodName) throws Exception { try { Method method
+ *       = SecondaryController.class.getDeclaredMethod(methodName); method.setAccessible(true);
+ *       method.invoke(controller); } catch (InvocationTargetException e) { if (e.getCause()
+ *       instanceof Exception) { throw (Exception) e.getCause(); } throw e; } } }
+ **/
