@@ -167,6 +167,8 @@ public class Cell extends StackPane {
     }
 
     public void disactivate() {
+        this.circle.setOpacity(1.0);;
+        this.text.setVisible(false);
         this.setOnMouseEntered(null);
         this.setOnMouseExited(null);
         this.setOnMouseClicked(null);

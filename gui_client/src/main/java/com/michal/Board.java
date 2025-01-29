@@ -37,7 +37,7 @@ public class Board {
 
     private Queue<String> mapQueue = new LinkedList<>();
     private Timeline mapUpdateTimeline;
-    private static final int UPDATE_INTERVAL_MILLIS = 500;
+    private static final int UPDATE_INTERVAL_MILLIS = 700;
 
 
     /**
@@ -230,6 +230,12 @@ public class Board {
     }
 
     public void disactivate_all_cells() {
+        this.first_clicked[0] = 0;
+        this.first_clicked[1] = 0;
+        this.second_clicked[0] = 0;
+        this.second_clicked[1] = 0;
+        this.isSelectingEnd = false;
+
         for (Cell cell : cells) {
             cell.disactivate();
         }
@@ -252,6 +258,7 @@ public class Board {
 
     public void addMapToQueue(String map) {
         mapQueue.add(map);
+        controller.disableAllButtons();
 
         if (mapUpdateTimeline.getStatus() != Animation.Status.RUNNING) {
             disactivate_all_cells();
