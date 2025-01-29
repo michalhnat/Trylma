@@ -1,6 +1,9 @@
 package com.michal.Game;
 
+import java.util.List;
 import java.util.UUID;
+
+import com.michal.Models.GameMoves;
 import com.michal.PlayerCommunicator;
 
 /**
@@ -108,5 +111,9 @@ public class Player {
      */
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public void sendMoveHistory(List<GameMoves> loadedMoveHistory) {
+        communicator.sendMoveHistory(loadedMoveHistory);
     }
 }

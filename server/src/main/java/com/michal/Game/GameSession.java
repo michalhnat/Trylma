@@ -33,6 +33,7 @@ public class GameSession {
     private int save_count = 0;
     private final List<GameMoves> gameMoves = new ArrayList<>();
     private final GameMoves loadedLastMove; // If null, it's a new game
+    private final List<GameMoves> loadedMoveHistory;
 
 
     private static final List<String> COLORS =
@@ -48,8 +49,9 @@ public class GameSession {
      * @param databaseConnector databaseConnector the database connector
      */
     public GameSession(Board board, Layout layout, Variant variant, GameSessionMediator server,
-                       DatabaseConnector databaseConnector, GameMoves loadedLastMove) {
+                       DatabaseConnector databaseConnector, GameMoves loadedLastMove, List<GameMoves> loadedMoveHistory) {
         this.loadedLastMove = loadedLastMove;
+        this.loadedMoveHistory = loadedMoveHistory;
         this.sessionId = sessionCounter.getAndIncrement();
         this.game = new Game(board, layout, variant);
         this.players = new ArrayList<>();
@@ -150,10 +152,21 @@ public class GameSession {
             gameQueue.takePlayer();
         }
 
+        // Play the replay if the game is loaded
+        if (loadedMoveHistory != null) {
+            broadcastMoveHistory(loadedMoveHistory);
+        }
+
         broadcastMessage("Game started!");
         broadcastBoard(BoardStringBuilder.buildBoardString(game.getBoardArray()));
 
         promptNextPlayer();
+    }
+
+    private void broadcastMoveHistory(List<GameMoves> loadedMoveHistory) {
+        for (Player player : players) {
+            player.sendMoveHistory(loadedMoveHistory);
+        }
     }
 
     /**

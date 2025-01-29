@@ -4,6 +4,7 @@ import java.io.ObjectOutputStream;
 import java.util.List;
 import com.michal.Game.GameInfo;
 import com.michal.Models.GameModel;
+import com.michal.Models.GameMoves;
 
 /**
  * An interface for communication operations.
@@ -50,4 +51,6 @@ public interface ICommunication {
     void sendError(String msg, ObjectOutputStream out);
 
     void sendSaveListMessage(List<GameSave> list, ObjectOutputStream out);
+
+    void sendMoveHistory(List<GameMoves> moves, ObjectOutputStream out);
 }

@@ -5,7 +5,9 @@ import com.michal.Game.Board.Move;
 import com.michal.Game.Board.Node;
 import com.michal.Game.MoveValidation.MoveValidatorStandard;
 import com.michal.Game.MoveValidation.MoveValidatorSuper;
+import com.michal.Models.GameMoves;
 
+import java.util.List;
 import java.util.UUID;
 
 public class BotPlayer extends Player {
@@ -38,6 +40,11 @@ public class BotPlayer extends Player {
 
     @Override
     public void sendBoard(String board) {
+        // Do nothing
+    }
+
+    @Override
+    public void sendMoveHistory(List<GameMoves> loadedMoveHistory) {
         // Do nothing
     }
 

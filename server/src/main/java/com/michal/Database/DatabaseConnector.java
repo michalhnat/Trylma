@@ -42,4 +42,8 @@ public class DatabaseConnector {
     public Optional<GameMoves> getLastGameMove(Long gameId) {
         return gameMovesRepository.findTopByGame_IdOrderByMoveNumberDesc(gameId);
     }
+
+    public Optional<List<GameMoves>> getGameMoves(long gameId) {
+        return gameMovesRepository.findByGame_Id(gameId);
+    }
 }

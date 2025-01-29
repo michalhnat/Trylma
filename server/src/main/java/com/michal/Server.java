@@ -74,7 +74,7 @@ public class Server implements Mediator, GameSessionMediator {
      */
     @Override
     public void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout,
-            Variant variant, GameMoves loadedGameMovesInfo) {
+            Variant variant, GameMoves loadedLastMove, List<GameMoves> loadedMoveHistory) {
         synchronized (gameSessions) {
             if (clientHandler.isInGame()) {
                 clientHandler.sendError("Error: You are already in a game session.");
@@ -91,7 +91,7 @@ public class Server implements Mediator, GameSessionMediator {
 
             try {
                 GameSession session =
-                        new GameSession(board, layout, variant, this, databaseConnector, loadedGameMovesInfo); // databse
+                        new GameSession(board, layout, variant, this, databaseConnector, loadedLastMove, loadedMoveHistory); // databse
                                                                                           // should
                                                                                           // be
                                                                                           // injected
@@ -348,14 +348,16 @@ public class Server implements Mediator, GameSessionMediator {
             Variant variant = Variant.valueOf(game.getVariant());
             int boardSize = 5; // Need to store board size in database
 
-            Optional<GameMoves> lastMove = databaseConnector.getLastGameMove(gameId);
-            if (lastMove.isEmpty()) {
+            Optional<List<GameMoves>> loadedMoveHistory = databaseConnector.getGameMoves(gameId);
+            if (loadedMoveHistory.isEmpty()) {
                 clientHandler.sendError("No moves found for game with ID: " + gameId);
                 return;
             }
 
+            GameMoves lastMove = loadedMoveHistory.get().getLast();
+
             // Creating a new game of the variant and layout of the loaded game
-            handleCreateGame(clientHandler, boardSize, layout, variant, lastMove.get());
+            handleCreateGame(clientHandler, boardSize, layout, variant, lastMove, loadedMoveHistory.get());
 
         } else {
             clientHandler.sendError("Game with ID " + saveId + " not found.");

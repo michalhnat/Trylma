@@ -5,6 +5,8 @@ import com.michal.Game.Board.Layout;
 import com.michal.Game.Board.Position;
 import com.michal.Models.GameMoves;
 
+import java.util.List;
+
 /**
  * An interface for handling various client actions in the game.
  */
@@ -34,7 +36,7 @@ public interface Mediator {
      * @param variant the variant of the game
      */
     void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout,
-                          Variant variant, GameMoves gameMoves);
+                          Variant variant, GameMoves gameMoves, List<GameMoves> loadedMoveHistory);
 
     /**
      * Handles the request to make a move in the game for the specified client.

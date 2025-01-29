@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import com.google.gson.JsonObject;
 import com.michal.Game.GameInfo;
 import com.michal.Models.GameModel;
+import com.michal.Models.GameMoves;
 import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.MyLogger;
 
@@ -134,6 +135,24 @@ public class SocketCommunication implements ICommunication {
         try {
             out.writeObject(
                     JsonBuilder.setBuilder("error").setPayloadArgument("content", msg).build());
+        } catch (IOException e) {
+            logger.warning("Error sending message: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public synchronized void sendMoveHistory(List<GameMoves> moves, ObjectOutputStream out) {
+        try {
+            JsonBuilder builder = JsonBuilder.setBuilder("loaded_boards");
+            List<JsonObject> moveObjects = moves.stream().map((GameMoves move) -> {
+                JsonObject moveObj = new JsonObject();
+                moveObj.addProperty("number", move.getMoveNumber());
+                moveObj.addProperty("board", move.getBoardAfterMove());
+                return moveObj;
+            }).collect(Collectors.toList());
+
+            builder.setPayloadArray(moveObjects);
+            out.writeObject(builder.build());
         } catch (IOException e) {
             logger.warning("Error sending message: " + e.getMessage());
         }

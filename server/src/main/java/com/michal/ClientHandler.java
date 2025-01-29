@@ -14,6 +14,7 @@ import com.michal.Game.*;
 import com.michal.Game.Board.Layout;
 import com.michal.Game.Board.Position;
 import com.michal.Models.GameModel;
+import com.michal.Models.GameMoves;
 import com.michal.Utils.JsonDeserializer;
 import com.michal.Utils.MyLogger;
 
@@ -108,6 +109,10 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
         communication.sendError(msg, out);
     }
 
+    public void sendMoveHistory(List<GameMoves> moves) {
+        communication.sendMoveHistory(moves, out);
+    }
+
     /**
      * Returns the player associated with the client.
      *
@@ -175,7 +180,7 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                     Layout layout = Layout.valueOf(payload.get("layout").getAsString());
                     Variant variant = Variant.valueOf(payload.get("variant").getAsString());
                     int boardSize = payload.get("boardSize").getAsInt();
-                    mediator.handleCreateGame(this, boardSize, layout, variant, null);
+                    mediator.handleCreateGame(this, boardSize, layout, variant, null, null);
                     break;
                 case "move":
                     int start_x = payload.get("start_x").getAsInt();
