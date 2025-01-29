@@ -1,10 +1,16 @@
 package com.michal;
 
-import javafx.scene.paint.Color;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 /**
  * Represents a game board composed of colored cells in a hexagonal grid pattern. The board manages
@@ -29,6 +35,10 @@ public class Board {
     /** Flag indicating if the user is selecting the end cell */
     private boolean isSelectingEnd = false;
 
+    private Queue<String> mapQueue = new LinkedList<>();
+    private Timeline mapUpdateTimeline;
+    private static final int UPDATE_INTERVAL_MILLIS = 500;
+
 
     /**
      * Constructs a new Board with specified radius and controller.
@@ -41,6 +51,19 @@ public class Board {
         this.radius = radius;
         this.controller = controller;
 
+        initializeColorMap();
+        initializeMapUpdateTimeline();
+    }
+
+    public Board(int radius) {
+        this.cells = new ArrayList<>();
+        this.radius = radius;
+
+        initializeColorMap();
+        initializeMapUpdateTimeline();
+    }
+
+    private void initializeColorMap() {
         colorMap.put("W", Color.GRAY);
         colorMap.put("B", Color.BLUE);
         colorMap.put("R", Color.RED);
@@ -52,19 +75,10 @@ public class Board {
         colorMap.put("M", Color.MAGENTA);
     }
 
-    public Board(int radius) {
-        this.cells = new ArrayList<>();
-        this.radius = radius;
-
-        colorMap.put("W", Color.GRAY);
-        colorMap.put("B", Color.BLUE);
-        colorMap.put("R", Color.RED);
-        colorMap.put("Y", Color.YELLOW);
-        colorMap.put("G", Color.GREEN);
-        colorMap.put("P", Color.PURPLE);
-        colorMap.put("O", Color.ORANGE);
-        colorMap.put("C", Color.CYAN);
-        colorMap.put("M", Color.MAGENTA);
+    private void initializeMapUpdateTimeline() {
+        mapUpdateTimeline = new Timeline(new KeyFrame(Duration.millis(UPDATE_INTERVAL_MILLIS),
+                event -> updateMapFromQueue()));
+        mapUpdateTimeline.setCycleCount(Animation.INDEFINITE);
     }
 
     /**
@@ -221,6 +235,32 @@ public class Board {
         }
     }
 
+    private void updateMapFromQueue() {
+        if (!mapQueue.isEmpty()) {
+            String nextMap = mapQueue.poll();
+            disactivate_all_cells();
+            controller.disableAllButtons();
+            editBoardOutOfMap(nextMap);
+
+            if (mapQueue.isEmpty()) {
+                activate_all_cells();
+                controller.enableAllButtons();
+                mapUpdateTimeline.stop();
+            }
+        }
+    }
+
+    public void addMapToQueue(String map) {
+        mapQueue.add(map);
+
+        if (mapUpdateTimeline.getStatus() != Animation.Status.RUNNING) {
+            disactivate_all_cells();
+            controller.disableAllButtons();
+            updateMapFromQueue();
+            mapUpdateTimeline.play();
+        }
+    }
+
     /**
      * Gets the list of all cells on the board.
      *
@@ -236,5 +276,11 @@ public class Board {
 
     public double getBoardHeight() {
         return radius * 2 * (currentMap.split("\n").length + 1);
+    }
+
+    public void activate_all_cells() {
+        for (Cell cell : cells) {
+            cell.activate();
+        }
     }
 }

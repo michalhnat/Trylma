@@ -171,4 +171,10 @@ public class Cell extends StackPane {
         this.setOnMouseExited(null);
         this.setOnMouseClicked(null);
     }
+
+    public void activate() {
+        this.setOnMouseEntered(event -> handleMouseEntered(event));
+        this.setOnMouseExited(event -> handleMouseExited(event));
+        this.setOnMouseClicked(event -> handleMouseClicked(event));
+    }
 }

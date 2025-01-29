@@ -1,6 +1,7 @@
 package com.michal.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,6 +149,31 @@ public class JsonDeserializer {
         }
 
         return savesList;
+    }
+
+    public HashMap<Integer, String> getMovesHistory(String json) throws JsonSyntaxException {
+        JsonObject obj = deserialize(json);
+        HashMap<Integer, String> movesHistory = new HashMap<>();
+
+        String type = getType(json);
+        if (!type.equals("loaded_boards")) {
+            System.out.println("Invalid message type: " + type);
+            return movesHistory;
+        }
+        if (!obj.has("payload")) {
+            return movesHistory;
+        }
+
+        JsonArray movesArray = obj.get("payload").getAsJsonArray();
+        for (JsonElement element : movesArray) {
+            if (element.isJsonObject()) {
+                JsonObject moveObj = element.getAsJsonObject();
+                Integer number = Integer.valueOf(moveObj.get("number").getAsString());
+                String board = moveObj.get("board").getAsString();
+                movesHistory.put(number, board);
+            }
+        }
+        return movesHistory;
     }
 
     public HashMap<String, String> getGameInfoMap(String json) throws JsonSyntaxException {

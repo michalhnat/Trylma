@@ -298,9 +298,6 @@ public class PrimaryController implements IController {
                 break;
             case "save_list":
                 List<String[]> saves = jsonDeserializer.getSavesAsList(message);
-                for (String[] save : saves) {
-                    System.out.println(save[0] + " " + save[1]);
-                }
                 Stage stage = save_window(saves);
                 stage.show();
                 break;

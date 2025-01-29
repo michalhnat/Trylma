@@ -1,5 +1,7 @@
 package com.michal;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.JsonDeserializer;
@@ -174,6 +176,11 @@ public class SecondaryController implements IController, BoardControllerMediator
                     info_list.getItems().add(hbox);
                 });
                 break;
+
+            case "loaded_boards":
+                HashMap<Integer, String> movesHistory = jsonDeserializer.getMovesHistory(message);
+                replay(movesHistory);
+                break;
             default:
                 showError("Unknown message type: " + jsonDeserializer.getType(message));
                 break;
@@ -261,7 +268,8 @@ public class SecondaryController implements IController, BoardControllerMediator
             StackPane.setAlignment(group, Pos.CENTER);
 
         } else {
-            board.editBoardOutOfMap(map);
+            // board.editBoardOutOfMap(map);
+            board.addMapToQueue(map);
         }
     }
 
@@ -319,5 +327,30 @@ public class SecondaryController implements IController, BoardControllerMediator
     public void setEndXY(int x, int y) {
         this.destination_x.setText(Integer.toString(x));
         this.destination_y.setText(Integer.toString(y));
+    }
+
+    private void replay(HashMap<Integer, String> movesHistory) {
+        ArrayList<Integer> keys = new ArrayList<>(movesHistory.keySet());
+
+        Collections.sort(keys);
+        for (Integer key : keys) {
+            String map = movesHistory.get(key);
+            updateBoard(map);
+        }
+
+    }
+
+    public void disableAllButtons() {
+        moveButton.setDisable(true);
+        passButton.setDisable(true);
+        addBot.setDisable(true);
+        save.setDisable(true);
+    }
+
+    public void enableAllButtons() {
+        moveButton.setDisable(false);
+        passButton.setDisable(false);
+        addBot.setDisable(false);
+        save.setDisable(false);
     }
 }
