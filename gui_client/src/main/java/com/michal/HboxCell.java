@@ -31,9 +31,12 @@ public class HboxCell extends HBox {
     this.getChildren().addAll(label, button);
   }
 
+  /**
+   * Retrieves the label component from the HBoxCell.
+   *
+   * @return The label component
+   */
   public Label getLabel() {
     return label;
   }
-
-
 }

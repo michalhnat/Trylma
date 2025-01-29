@@ -115,12 +115,6 @@ public class SecondaryController implements IController, BoardControllerMediator
         var info = new Notification(message);
         info.getStyleClass().add(Styles.ELEVATED_1);
         info.getStyleClass().add(Styles.SUCCESS);
-        // info.setOnClose(e -> {
-        // var fadeOut = Animations.fadeOut(info, Duration.seconds(0.5));
-        // fadeOut.setOnFinished(event -> notificationPane.getChildren().remove(info));
-        // fadeOut.playFromStart();
-        // });
-
         notificationPane.getChildren().add(info);
     }
 
@@ -137,17 +131,10 @@ public class SecondaryController implements IController, BoardControllerMediator
         info.getStyleClass().add(Styles.ELEVATED_1);
         info.getStyleClass().add(Styles.DANGER);
         notificationPane.getChildren().add(info);
-
-        // message = message.toUpperCase();
-        // label.setStyle("-fx-font-weight: bold");
-        // label.setText(message);
-        // label.setTextFill(Color.RED);
-        // System.out.println("Error: " + message);
     }
 
     @Override
     public void handleMessage(String message) {
-        // System.out.println("Message: " + message);
         JsonDeserializer jsonDeserializer = JsonDeserializer.getInstance();
         switch (jsonDeserializer.getType(message)) {
             case "board":
@@ -157,7 +144,6 @@ public class SecondaryController implements IController, BoardControllerMediator
                 break;
             case "gameInfo":
                 HashMap<String, String> gameInfo = jsonDeserializer.getGameInfoMap(message);
-
                 if (gameInfo.get("status").equals("FINISHED")) {
                     Stage popup = winningPopup(gameInfo.get("winner"));
                     popup.show();
@@ -218,9 +204,7 @@ public class SecondaryController implements IController, BoardControllerMediator
      */
     @FXML
     private void pass() {
-
         String jsonMessage = JsonBuilder.setBuilder("pass").build();
-
         try {
             communication.sendMessage(jsonMessage);
         } catch (Exception e) {
@@ -273,18 +257,24 @@ public class SecondaryController implements IController, BoardControllerMediator
         }
     }
 
+    /**
+     * Displays a popup window with the winner of the game.
+     * 
+     * @param winners_color The color of the winning player
+     * @return The popup window
+     */
     private Stage winningPopup(String winners_color) {
         Stage stage = new Stage();
-        Label label = new Label(winners_color + " wins!");
-        label.setStyle(
-                "-fx-font-size: 24px;" + "-fx-font-family: 'Arial';" + "-fx-text-fill: #333333;" +
+        // Label label = new Label(winners_color + " wins!");
+        // label.setStyle(
+        // "-fx-font-size: 24px;" + "-fx-font-family: 'Arial';" + "-fx-text-fill: #333333;" +
 
-                        "-fx-background-color: linear-gradient(to bottom, #f0f0f0, #d9d9d9);" +
+        // "-fx-background-color: linear-gradient(to bottom, #f0f0f0, #d9d9d9);" +
 
-                        "-fx-border-color: #b3b3b3;" + "-fx-border-radius: 10px;"
-                        + "-fx-background-radius: 10px;" + "-fx-padding: 10px;"
-                        + "-fx-alignment: center;");
-        label.setAlignment(Pos.CENTER);
+        // "-fx-border-color: #b3b3b3;" + "-fx-border-radius: 10px;"
+        // + "-fx-background-radius: 10px;" + "-fx-padding: 10px;"
+        // + "-fx-alignment: center;");
+        // label.setAlignment(Pos.CENTER);
 
         // Fix the resource path:
         Image bgImage = new Image(
@@ -294,7 +284,7 @@ public class SecondaryController implements IController, BoardControllerMediator
                         BackgroundPosition.CENTER, new BackgroundSize(BackgroundSize.AUTO,
                                 BackgroundSize.AUTO, false, false, true, false));
 
-        VBox root = new VBox(label);
+        VBox root = new VBox();
         root.setAlignment(Pos.TOP_CENTER);
         root.setBackground(new Background(backgroundImage));
 
@@ -302,6 +292,15 @@ public class SecondaryController implements IController, BoardControllerMediator
         stage.setScene(scene);
         stage.setTitle("Game Result");
         stage.show();
+        stage.setOnCloseRequest(event -> {
+            try {
+                App.setRoot("primary");
+                App.getGeneralListener().setController(PrimaryController.getInstance());
+            } catch (Exception e) {
+                showError("Failed to return to main menu");
+            }
+
+        });
         return stage;
     }
 
@@ -329,6 +328,11 @@ public class SecondaryController implements IController, BoardControllerMediator
         this.destination_y.setText(Integer.toString(y));
     }
 
+    /**
+     * Replays the game based on the moves history.
+     * 
+     * @param movesHistory The history of moves
+     */
     private void replay(HashMap<Integer, String> movesHistory) {
         ArrayList<Integer> keys = new ArrayList<>(movesHistory.keySet());
 
@@ -340,6 +344,9 @@ public class SecondaryController implements IController, BoardControllerMediator
 
     }
 
+    /**
+     * Disables all buttons on the board.
+     */
     public void disableAllButtons() {
         moveButton.setDisable(true);
         passButton.setDisable(true);
@@ -347,6 +354,9 @@ public class SecondaryController implements IController, BoardControllerMediator
         save.setDisable(true);
     }
 
+    /**
+     * Enables all buttons on the board.
+     */
     public void enableAllButtons() {
         moveButton.setDisable(false);
         passButton.setDisable(false);

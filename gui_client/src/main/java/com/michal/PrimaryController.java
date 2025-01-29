@@ -171,6 +171,9 @@ public class PrimaryController implements IController {
 
     }
 
+    /**
+     * Reads saved games from the server.
+     */
     @FXML
     private void read_save() {
         try {
@@ -185,6 +188,12 @@ public class PrimaryController implements IController {
         }
     }
 
+    /**
+     * Creates a window for displaying saved games.
+     * 
+     * @param saves List of saved games
+     * @return Stage object for the window
+     */
     private Stage save_window(List<String[]> saves) {
 
         HashMap<String, String> idBoard_map = new HashMap<>();
@@ -239,8 +248,8 @@ public class PrimaryController implements IController {
                         String map = idBoard_map.get(newValue.getLabel().getText());
                         Board board = new Board(10);
 
-                        board.disactivate_all_cells();
                         board.createBoardOutOfMap(map);
+                        board.disactivate_all_cells();
 
                         Group group = new Group();
                         group.getChildren().addAll(board.getCells());

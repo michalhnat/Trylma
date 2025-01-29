@@ -1,7 +1,6 @@
 package com.michal.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -121,13 +120,19 @@ public class JsonDeserializer {
             String gameString = String.format("Game #%d (%d/%d players)",
                     gameObj.get("gameId").getAsInt(), gameObj.get("currentPlayers").getAsInt(),
                     gameObj.get("maxPlayers").getAsInt());
-            // System.out.println(gameString);
             gamesList.add(gameString);
         }
 
         return gamesList;
     }
 
+    /**
+     * Extracts a list of save games from the payload of a JSON string.
+     *
+     * @param json the JSON string to extract the saves from
+     * @return a list of string arrays where each array contains [id, board]
+     * @throws JsonSyntaxException if the JSON is not valid
+     */
     public List<String[]> getSavesAsList(String json) throws JsonSyntaxException {
         JsonObject obj = deserialize(json);
         List<String[]> savesList = new ArrayList<>();
@@ -151,6 +156,13 @@ public class JsonDeserializer {
         return savesList;
     }
 
+    /**
+     * Extracts the move history from a game board JSON string.
+     *
+     * @param json the JSON string containing move history
+     * @return a map of move numbers to board states
+     * @throws JsonSyntaxException if the JSON is not valid or not of type "loaded_boards"
+     */
     public HashMap<Integer, String> getMovesHistory(String json) throws JsonSyntaxException {
         JsonObject obj = deserialize(json);
         HashMap<Integer, String> movesHistory = new HashMap<>();
@@ -176,6 +188,13 @@ public class JsonDeserializer {
         return movesHistory;
     }
 
+    /**
+     * Extracts game information from the payload of a JSON string.
+     *
+     * @param json the JSON string containing game information
+     * @return a map of game information keys to their values
+     * @throws JsonSyntaxException if the JSON is not valid
+     */
     public HashMap<String, String> getGameInfoMap(String json) throws JsonSyntaxException {
         JsonObject obj = deserialize(json);
         HashMap<String, String> gameInfo = new HashMap<>();
@@ -196,17 +215,4 @@ public class JsonDeserializer {
 
         return gameInfo;
     }
-
-    // public boolean isError(String json) throws JsonSyntaxException {
-    // JsonObject obj = deserialize(json);
-    // return obj.has("error") && obj.get("error").getAsBoolean();
-    // }
-
-    // public String getErrorMessage(String json) throws JsonSyntaxException {
-    // JsonObject obj = deserialize(json);
-    // if (!obj.has("message")) {
-    // return "Unknown error";
-    // }
-    // return obj.get("message").getAsString();
-    // }
 }
