@@ -35,9 +35,14 @@ public class Board {
     /** Flag indicating if the user is selecting the end cell */
     private boolean isSelectingEnd = false;
 
+    /** Queue of maps thats will be rendered */
     private Queue<String> mapQueue = new LinkedList<>();
+
+    /** Timeline for updating the board map */
     private Timeline mapUpdateTimeline;
-    private static final int UPDATE_INTERVAL_MILLIS = 700;
+
+    /** Interval for updating the board map */
+    private static final int UPDATE_INTERVAL_MILLIS = 7;
 
 
     /**
@@ -63,6 +68,10 @@ public class Board {
         initializeMapUpdateTimeline();
     }
 
+
+    /**
+     * Initializes the color mapping for cell types.
+     */
     private void initializeColorMap() {
         colorMap.put("W", Color.GRAY);
         colorMap.put("B", Color.BLUE);
@@ -75,6 +84,9 @@ public class Board {
         colorMap.put("M", Color.MAGENTA);
     }
 
+    /**
+     * Initializes the timeline for updating the board map.
+     */
     private void initializeMapUpdateTimeline() {
         mapUpdateTimeline = new Timeline(new KeyFrame(Duration.millis(UPDATE_INTERVAL_MILLIS),
                 event -> updateMapFromQueue()));
@@ -229,6 +241,9 @@ public class Board {
         }
     }
 
+    /**
+     * Disables all cells on the board.
+     */
     public void disactivate_all_cells() {
         this.first_clicked[0] = 0;
         this.first_clicked[1] = 0;
@@ -241,6 +256,9 @@ public class Board {
         }
     }
 
+    /**
+     * Updates the board map from the queue of maps to render.
+     */
     private void updateMapFromQueue() {
         if (!mapQueue.isEmpty()) {
             String nextMap = mapQueue.poll();
@@ -256,6 +274,11 @@ public class Board {
         }
     }
 
+    /**
+     * Adds a new map to the queue of maps to render.
+     *
+     * @param map The new map to add to the queue
+     */
     public void addMapToQueue(String map) {
         mapQueue.add(map);
         controller.disableAllButtons();
