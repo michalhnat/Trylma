@@ -71,10 +71,12 @@ public class Server implements Mediator, GameSessionMediator {
      * @param boardSize the size of the game board
      * @param layout the layout of the game board
      * @param variant the variant of the game
+     * @param loadedLastMove the last move loaded from a saved game
+     * @param loadedMoveHistory the move history loaded from a saved game
      */
     @Override
     public void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout,
-            Variant variant, GameMoves loadedLastMove, List<GameMoves> loadedMoveHistory) {
+                                 Variant variant, GameMoves loadedLastMove, List<GameMoves> loadedMoveHistory) {
         synchronized (gameSessions) {
             if (clientHandler.isInGame()) {
                 clientHandler.sendError("Error: You are already in a game session.");
@@ -91,10 +93,7 @@ public class Server implements Mediator, GameSessionMediator {
 
             try {
                 GameSession session =
-                        new GameSession(board, layout, variant, this, databaseConnector, loadedLastMove, loadedMoveHistory); // databse
-                                                                                          // should
-                                                                                          // be
-                                                                                          // injected
+                        new GameSession(board, layout, variant, this, databaseConnector, loadedLastMove, loadedMoveHistory);
                 synchronized (gameSessions) {
                     gameSessions.add(session);
                 }
@@ -255,6 +254,11 @@ public class Server implements Mediator, GameSessionMediator {
         }
     }
 
+    /**
+     * Handles adding a bot to the game session.
+     *
+     * @param clientHandler the client handler requesting to add a bot
+     */
     @Override
     public void handleAddBot(ClientHandler clientHandler) {
         if (!clientHandler.isInGame()) {
@@ -276,7 +280,11 @@ public class Server implements Mediator, GameSessionMediator {
         }
     }
 
-
+    /**
+     * Saves the current game session.
+     *
+     * @param clientHandler the client handler requesting to save the game
+     */
     @Override
     public void saveGame(ClientHandler clientHandler) {
         if (!clientHandler.isInGame()) {
@@ -305,6 +313,11 @@ public class Server implements Mediator, GameSessionMediator {
         }
     }
 
+    /**
+     * Handles a request from a client to list all saved games.
+     *
+     * @param clientHandler the client handler requesting the list of saved games
+     */
     @Override
     public void handleListSaves(ClientHandler clientHandler) {
         if (clientHandler.isInGame()) {
@@ -330,6 +343,12 @@ public class Server implements Mediator, GameSessionMediator {
         clientHandler.sendSaveListMessage(gameSaves);
     }
 
+    /**
+     * Loads a saved game session.
+     *
+     * @param clientHandler the client handler requesting to load a game
+     * @param saveId the ID of the saved game to load
+     */
     @Override
     public void loadGame(ClientHandler clientHandler, int saveId) {
         if (clientHandler.isInGame()) {

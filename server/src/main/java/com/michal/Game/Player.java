@@ -113,6 +113,11 @@ public class Player {
         this.color = color;
     }
 
+    /**
+     * Sends the move history to the player.
+     *
+     * @param loadedMoveHistory the list of game moves to send
+     */
     public void sendMoveHistory(List<GameMoves> loadedMoveHistory) {
         communicator.sendMoveHistory(loadedMoveHistory);
     }

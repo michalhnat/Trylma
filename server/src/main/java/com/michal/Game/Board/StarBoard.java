@@ -151,6 +151,12 @@ public class StarBoard extends Board {
         return board;
     }
 
+    /**
+     * Loads pawns onto the board based on the last move and the list of players.
+     *
+     * @param loadedLastMove the last move loaded from the database
+     * @param players the list of players in the game
+     */
     @Override
     public void loadPawns(GameMoves loadedLastMove, List<Player> players) {
         String boardString = loadedLastMove.getBoardAfterMove();

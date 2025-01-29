@@ -8,13 +8,28 @@ import com.michal.Game.Board.Position;
 
 import java.util.ArrayList;
 
+/**
+ * Implements a random move algorithm for a bot player.
+ */
 public class BotAlgorithmRandom implements BotAlgorithm {
     private MoveValidator moveValidator;
 
+    /**
+     * Sets the move validator for the bot algorithm.
+     *
+     * @param moveValidator the move validator to set
+     */
     public void setMoveValidator(MoveValidator moveValidator) {
         this.moveValidator = moveValidator;
     }
 
+    /**
+     * Makes a random move on the board using the bot algorithm.
+     *
+     * @param board the current state of the game board
+     * @param botPlayer the bot player making the move
+     * @return the move made by the bot
+     */
     @Override
     public Move makeMove(Node[][] board, Player botPlayer) {
         ArrayList<Move> possibleMoves = new ArrayList<>();

@@ -38,5 +38,10 @@ public interface PlayerCommunicator {
      */
     void sendGameInfo(GameInfo gameInfo);
 
+    /**
+     * Sends the move history to the player.
+     *
+     * @param loadedMoveHistory the list of game moves to send
+     */
     void sendMoveHistory(List<GameMoves> loadedMoveHistory);
 }

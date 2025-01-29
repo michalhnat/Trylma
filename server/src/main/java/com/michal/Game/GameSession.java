@@ -35,7 +35,6 @@ public class GameSession {
     private final GameMoves loadedLastMove; // If null, it's a new game
     private final List<GameMoves> loadedMoveHistory;
 
-
     private static final List<String> COLORS =
             List.of("Red", "Blue", "Green", "Yellow", "Purple", "Orange", "Cyan", "Magenta");
 
@@ -46,7 +45,9 @@ public class GameSession {
      * @param layout the game layout
      * @param variant the game variant
      * @param server the server mediator
-     * @param databaseConnector databaseConnector the database connector
+     * @param databaseConnector the database connector
+     * @param loadedLastMove the last move loaded from the database
+     * @param loadedMoveHistory the move history loaded from the database
      */
     public GameSession(Board board, Layout layout, Variant variant, GameSessionMediator server,
                        DatabaseConnector databaseConnector, GameMoves loadedLastMove, List<GameMoves> loadedMoveHistory) {
@@ -91,7 +92,6 @@ public class GameSession {
         players.add(player);
         gameQueue.addPlayer(player);
         player.setGameSession(this);
-
 
         broadcastMessage("Player " + player.getName() + " has joined the game with color "
                 + assignedColor + ".");
@@ -140,7 +140,7 @@ public class GameSession {
     /**
      * Starts the game if the maximum number of players has been reached.
      */
-    private synchronized void startGame() {
+    synchronized void startGame() {
         game.start(players, loadedLastMove);
 
         // Ensure the right color is on the top of the queue if the game is loaded
@@ -163,6 +163,11 @@ public class GameSession {
         promptNextPlayer();
     }
 
+    /**
+     * Broadcasts the move history to all players in the session.
+     *
+     * @param loadedMoveHistory the move history to broadcast
+     */
     private void broadcastMoveHistory(List<GameMoves> loadedMoveHistory) {
         for (Player player : players) {
             player.sendMoveHistory(loadedMoveHistory);
@@ -216,13 +221,13 @@ public class GameSession {
                 for (Player p : players) {
                     p.sendGameInfo(new GameInfo(sessionId, players.size(), game.getLayout(),
                             game.getVariant(), game.getStatus(), winner.getColor())); // cheated
-                                                                                      // gameinfo to
-                                                                                      // send winner
-                                                                                      // color,
-                                                                                      // should be
-                                                                                      // dedicated
-                                                                                      // method for
-                                                                                      // that
+                    // gameinfo to
+                    // send winner
+                    // color,
+                    // should be
+                    // dedicated
+                    // method for
+                    // that
                     // gameModel.setEndTime(LocalDateTime.now());
                     // databaseConnector.saveGame(gameModel);
                 }
@@ -323,6 +328,11 @@ public class GameSession {
         promptNextPlayer();
     }
 
+    /**
+     * Adds a bot player to the game session.
+     *
+     * @throws IllegalArgumentException if the session is full or no colors are available
+     */
     public void addBot() {
         if (players.size() >= game.getMaxPlayers()) {
             throw new IllegalArgumentException("Game session is full.");
@@ -350,6 +360,11 @@ public class GameSession {
         }
     }
 
+    /**
+     * Saves the current state of the game to the database.
+     *
+     * @throws IllegalStateException if the game has not started yet
+     */
     public synchronized void saveGame() {
         // Create a new GameModel for this save
         GameModel newGameModel = new GameModel();
@@ -393,5 +408,14 @@ public class GameSession {
         } catch (OptimisticLockException e) {
             throw new IllegalStateException("Conflict at saving to DB. Retrying...");
         }
+    }
+
+    /**
+     * Returns the list of game moves.
+     *
+     * @return the list of game moves
+     */
+    public List<GameMoves> getGameMoves() {
+        return gameMoves;
     }
 }

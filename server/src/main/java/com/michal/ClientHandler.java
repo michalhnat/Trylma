@@ -77,6 +77,11 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
         communication.sendListMessage(list, out);
     }
 
+    /**
+     * Sends a list of saved games to the client.
+     *
+     * @param list the list of saved games to send
+     */
     public void sendSaveListMessage(List<GameSave> list) {
         communication.sendSaveListMessage(list, out);
     }
@@ -109,6 +114,11 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
         communication.sendError(msg, out);
     }
 
+    /**
+     * Sends the move history to the client.
+     *
+     * @param moves the list of game moves to send
+     */
     public void sendMoveHistory(List<GameMoves> moves) {
         communication.sendMoveHistory(moves, out);
     }

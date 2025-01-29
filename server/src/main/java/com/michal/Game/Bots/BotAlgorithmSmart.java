@@ -9,13 +9,28 @@ import com.michal.Game.MoveValidation.MoveValidator;
 
 import java.util.*;
 
+/**
+ * Implements a smart algorithm for a bot player.
+ */
 public class BotAlgorithmSmart implements BotAlgorithm {
     private MoveValidator moveValidator;
 
+    /**
+     * Sets the move validator for the bot algorithm.
+     *
+     * @param moveValidator the move validator to set
+     */
     public void setMoveValidator(MoveValidator moveValidator) {
         this.moveValidator = moveValidator;
     }
 
+    /**
+     * Makes a move on the board using the bot algorithm.
+     *
+     * @param originalBoard the original state of the game board
+     * @param botPlayer the bot player making the move
+     * @return the move made by the bot
+     */
     @Override
     public Move makeMove(Node[][] originalBoard, Player botPlayer) {
         Node[][] board = deepCopyBoard(originalBoard);
@@ -54,7 +69,13 @@ public class BotAlgorithmSmart implements BotAlgorithm {
         return bestMoves.isEmpty() ? null : bestMoves.get(new Random().nextInt(bestMoves.size()));
     }
 
-
+    /**
+     * Evaluates the board and returns a score for the bot player.
+     *
+     * @param board the current state of the game board
+     * @param player the bot player
+     * @return the score of the board
+     */
     private int evaluateBoard(Node[][] board, Player player) {
         // Precompute destination positions
         Map<Direction, Direction> oppositeDirections = Map.of(Direction.SOUTH, Direction.NORTH,
@@ -130,6 +151,14 @@ public class BotAlgorithmSmart implements BotAlgorithm {
         return score;
     }
 
+    /**
+     * Calculates a depth bonus based on the position and direction.
+     *
+     * @param position the position of the node
+     * @param length the length of the board
+     * @param direction the direction of the node
+     * @return the depth bonus
+     */
     private int calculateDepthBonus(Position position, int length, Direction direction) {
         int distanceFromEnd = 0;
         int blockSize = (length - 1) / 4;
@@ -149,6 +178,13 @@ public class BotAlgorithmSmart implements BotAlgorithm {
         return blockSize - distanceFromEnd;
     }
 
+    /**
+     * Calculates the distance between two positions.
+     *
+     * @param p1 the first position
+     * @param p2 the second position
+     * @return the distance between the positions
+     */
     private int calculateDistance(Position p1, Position p2) {
         // Calculate differences
         int lenX = p2.x() - p1.x(); // Change in x (can be positive or negative)
@@ -186,7 +222,6 @@ public class BotAlgorithmSmart implements BotAlgorithm {
         // Move the pawn
         toNode.setPawn(fromNode.getPawn());
         fromNode.setPawn(null);
-
     }
 
     /**
@@ -211,5 +246,3 @@ public class BotAlgorithmSmart implements BotAlgorithm {
         return boardCopy;
     }
 }
-
-

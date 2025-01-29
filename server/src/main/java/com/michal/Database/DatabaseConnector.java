@@ -21,28 +21,53 @@ public class DatabaseConnector {
     @Autowired
     private GameMovesRepository gameMovesRepository;
 
-
+    /**
+     * Saves the game model to the database.
+     *
+     * @param game the game model to save
+     */
     @Transactional
     @Retryable(value = OptimisticLockException.class, maxAttempts = 3)
     public void saveGame(GameModel game) {
         gameRepository.save(game);
     }
 
-
+    /**
+     * Saves the game move to the database.
+     *
+     * @param gameMove the game move to save
+     */
     @Transactional
     @Retryable(value = OptimisticLockException.class, maxAttempts = 3)
     public void saveGameMove(GameMoves gameMove) {
         gameMovesRepository.save(gameMove);
     }
 
+    /**
+     * Retrieves all game models from the database.
+     *
+     * @return a list of all game models
+     */
     public List<GameModel> getAllGames() {
         return gameRepository.findAll();
     }
 
+    /**
+     * Retrieves the last game move for a specific game.
+     *
+     * @param gameId the ID of the game
+     * @return an optional containing the last game move, or empty if not found
+     */
     public Optional<GameMoves> getLastGameMove(Long gameId) {
         return gameMovesRepository.findTopByGame_IdOrderByMoveNumberDesc(gameId);
     }
 
+    /**
+     * Retrieves all game moves for a specific game.
+     *
+     * @param gameId the ID of the game
+     * @return an optional containing a list of game moves, or empty if not found
+     */
     public Optional<List<GameMoves>> getGameMoves(long gameId) {
         return gameMovesRepository.findByGame_Id(gameId);
     }

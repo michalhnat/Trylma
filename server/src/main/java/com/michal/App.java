@@ -10,6 +10,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.retry.annotation.EnableRetry;
 import com.michal.Database.DatabaseConnector;
 
+/**
+ * Main application class for the Spring Boot application.
+ */
 @SpringBootApplication
 @EntityScan(basePackages = {"com.michal.Models"})
 @ComponentScan(basePackages = {"com.michal"})
@@ -17,10 +20,22 @@ import com.michal.Database.DatabaseConnector;
 @EnableRetry
 public class App {
 
+    /**
+     * Main method to run the Spring Boot application.
+     *
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }
 
+    /**
+     * Initializes the server and database connector.
+     *
+     * @param server the server to start
+     * @param databaseConnector the database connector to initialize
+     * @return a CommandLineRunner to execute the initialization
+     */
     @Bean
     CommandLineRunner init(Server server, DatabaseConnector databaseConnector) {
         return args -> {

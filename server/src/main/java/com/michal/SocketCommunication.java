@@ -20,7 +20,6 @@ public class SocketCommunication implements ICommunication {
 
     /**
      * Constructs a new SocketCommunication instance with the specified socket.
-     *
      */
     public SocketCommunication() {}
 
@@ -69,6 +68,12 @@ public class SocketCommunication implements ICommunication {
         }
     }
 
+    /**
+     * Sends a list of GameSave objects as a message to the specified output stream.
+     *
+     * @param list the list of GameSave objects to send
+     * @param out the output stream to send the message to
+     */
     @Override
     public synchronized void sendSaveListMessage(List<GameSave> list, ObjectOutputStream out) {
         try {
@@ -140,6 +145,12 @@ public class SocketCommunication implements ICommunication {
         }
     }
 
+    /**
+     * Sends a list of GameMoves objects representing the move history as a message to the specified output stream.
+     *
+     * @param moves the list of GameMoves objects to send
+     * @param out the output stream to send the message to
+     */
     @Override
     public synchronized void sendMoveHistory(List<GameMoves> moves, ObjectOutputStream out) {
         try {
