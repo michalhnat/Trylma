@@ -42,7 +42,7 @@ public class Board {
     private Timeline mapUpdateTimeline;
 
     /** Interval for updating the board map */
-    private static final int UPDATE_INTERVAL_MILLIS = 7;
+    private static final int UPDATE_INTERVAL_MILLIS = 700;
 
 
     /**
