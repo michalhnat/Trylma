@@ -91,7 +91,7 @@ public class Cell extends StackPane {
     private void handleMouseClicked(MouseEvent event) {
         board.handleCellClick(i, j);
         circle.setStrokeWidth(1);
-        circle.setStroke(color.invert());
+        circle.setStroke(Color.WHITE);
     }
 
     /**
@@ -164,5 +164,19 @@ public class Cell extends StackPane {
      */
     public Paint getFill() {
         return circle.getFill();
+    }
+
+    public void disactivate() {
+        this.circle.setOpacity(1.0);;
+        this.text.setVisible(false);
+        this.setOnMouseEntered(null);
+        this.setOnMouseExited(null);
+        this.setOnMouseClicked(null);
+    }
+
+    public void activate() {
+        this.setOnMouseEntered(event -> handleMouseEntered(event));
+        this.setOnMouseExited(event -> handleMouseExited(event));
+        this.setOnMouseClicked(event -> handleMouseClicked(event));
     }
 }

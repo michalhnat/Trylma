@@ -1,6 +1,6 @@
 package com.michal.Utils;
 
-import com.michal.Game.Node;
+import com.michal.Game.Board.Node;
 
 public class BoardStringBuilderTest {
 

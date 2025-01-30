@@ -11,6 +11,10 @@ import java.util.logging.Logger;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.michal.Game.*;
+import com.michal.Game.Board.Layout;
+import com.michal.Game.Board.Position;
+import com.michal.Models.GameModel;
+import com.michal.Models.GameMoves;
 import com.michal.Utils.JsonDeserializer;
 import com.michal.Utils.MyLogger;
 
@@ -74,6 +78,15 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
     }
 
     /**
+     * Sends a list of saved games to the client.
+     *
+     * @param list the list of saved games to send
+     */
+    public void sendSaveListMessage(List<GameSave> list) {
+        communication.sendSaveListMessage(list, out);
+    }
+
+    /**
      * Sends the current state of the game board to the client.
      *
      * @param board the board state to send
@@ -99,6 +112,15 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
     @Override
     public void sendError(String msg) {
         communication.sendError(msg, out);
+    }
+
+    /**
+     * Sends the move history to the client.
+     *
+     * @param moves the list of game moves to send
+     */
+    public void sendMoveHistory(List<GameMoves> moves) {
+        communication.sendMoveHistory(moves, out);
     }
 
     /**
@@ -168,7 +190,7 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                     Layout layout = Layout.valueOf(payload.get("layout").getAsString());
                     Variant variant = Variant.valueOf(payload.get("variant").getAsString());
                     int boardSize = payload.get("boardSize").getAsInt();
-                    mediator.handleCreateGame(this, boardSize, layout, variant);
+                    mediator.handleCreateGame(this, boardSize, layout, variant, null, null);
                     break;
                 case "move":
                     int start_x = payload.get("start_x").getAsInt();
@@ -192,6 +214,27 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
                         sendError("You are not part of any game session.");
                     }
                     break;
+                case "add_bot":
+                    if (isInGame()) {
+                        mediator.handleAddBot(this);
+                    } else {
+                        sendError("You are not part of any game session.");
+                    }
+                    break;
+                case "save_game":
+                    if (isInGame()) {
+                        mediator.saveGame(this);
+                    } else {
+                        sendError("You are not part of any game session.");
+                    }
+                    break;
+                case "list_saves":
+                    mediator.handleListSaves(this);
+                    break;
+                case "load_game":
+                    int saveId = payload.get("saveID").getAsInt();
+                    mediator.loadGame(this, saveId);
+                    break;
                 default:
                     sendError("Unsupported command: " + command);
                     break;
@@ -200,6 +243,7 @@ public class ClientHandler implements Runnable, PlayerCommunicator {
             sendError("Invalid JSON format: " + e.getMessage());
         } catch (Exception e) {
             sendError("Error processing message: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

@@ -1,4 +1,7 @@
-package com.michal.Game;
+package com.michal.Game.Board;
+
+import com.michal.Game.Player;
+import com.michal.Models.GameMoves;
 
 import java.util.List;
 
@@ -50,4 +53,6 @@ public abstract class Board {
      * @return the 2D array of nodes representing the board
      */
     public abstract Node[][] getBoardArray();
+
+    public void loadPawns(GameMoves loadedGameMoves, List<Player> players) {}
 }

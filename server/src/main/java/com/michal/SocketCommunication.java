@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import com.google.gson.JsonObject;
 import com.michal.Game.GameInfo;
+import com.michal.Models.GameModel;
+import com.michal.Models.GameMoves;
 import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.MyLogger;
 
@@ -18,10 +20,8 @@ public class SocketCommunication implements ICommunication {
 
     /**
      * Constructs a new SocketCommunication instance with the specified socket.
-     *
      */
-    public SocketCommunication() {
-    }
+    public SocketCommunication() {}
 
     /**
      * Sends a message to the specified output stream.
@@ -62,6 +62,30 @@ public class SocketCommunication implements ICommunication {
             }).collect(Collectors.toList());
 
             builder.setPayloadArray(gameObjects);
+            out.writeObject(builder.build());
+        } catch (IOException e) {
+            logger.warning("Error sending message: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Sends a list of GameSave objects as a message to the specified output stream.
+     *
+     * @param list the list of GameSave objects to send
+     * @param out the output stream to send the message to
+     */
+    @Override
+    public synchronized void sendSaveListMessage(List<GameSave> list, ObjectOutputStream out) {
+        try {
+            JsonBuilder builder = JsonBuilder.setBuilder("save_list");
+            List<JsonObject> saveObjects = list.stream().map((GameSave save) -> {
+                JsonObject saveObj = new JsonObject();
+                saveObj.addProperty("id", save.getId());
+                saveObj.addProperty("board", save.getBoard());
+                return saveObj;
+            }).collect(Collectors.toList());
+
+            builder.setPayloadArray(saveObjects);
             out.writeObject(builder.build());
         } catch (IOException e) {
             logger.warning("Error sending message: " + e.getMessage());
@@ -116,6 +140,30 @@ public class SocketCommunication implements ICommunication {
         try {
             out.writeObject(
                     JsonBuilder.setBuilder("error").setPayloadArgument("content", msg).build());
+        } catch (IOException e) {
+            logger.warning("Error sending message: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Sends a list of GameMoves objects representing the move history as a message to the specified output stream.
+     *
+     * @param moves the list of GameMoves objects to send
+     * @param out the output stream to send the message to
+     */
+    @Override
+    public synchronized void sendMoveHistory(List<GameMoves> moves, ObjectOutputStream out) {
+        try {
+            JsonBuilder builder = JsonBuilder.setBuilder("loaded_boards");
+            List<JsonObject> moveObjects = moves.stream().map((GameMoves move) -> {
+                JsonObject moveObj = new JsonObject();
+                moveObj.addProperty("number", move.getMoveNumber());
+                moveObj.addProperty("board", move.getBoardAfterMove());
+                return moveObj;
+            }).collect(Collectors.toList());
+
+            builder.setPayloadArray(moveObjects);
+            out.writeObject(builder.build());
         } catch (IOException e) {
             logger.warning("Error sending message: " + e.getMessage());
         }

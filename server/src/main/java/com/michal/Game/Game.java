@@ -1,5 +1,11 @@
 package com.michal.Game;
 
+import com.michal.Game.Board.Board;
+import com.michal.Game.Board.Layout;
+import com.michal.Game.Board.Node;
+import com.michal.Game.Board.Position;
+import com.michal.Models.GameMoves;
+
 import java.util.List;
 
 /**
@@ -34,9 +40,12 @@ public class Game {
      *
      * @param players the list of players participating in the game
      */
-    public void start(List<Player> players) {
+    public void start(List<Player> players, GameMoves loadedGameMoves) {
         this.status = GameStatus.IN_PROGRESS;
         board.initialize(layout, players);
+        if (loadedGameMoves != null) {
+            board.loadPawns(loadedGameMoves, players);
+        }
     }
 
     /**

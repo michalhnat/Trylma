@@ -1,16 +1,30 @@
 package com.michal;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import com.michal.Utils.JsonBuilder;
 import com.michal.Utils.JsonDeserializer;
+import atlantafx.base.controls.Notification;
+import atlantafx.base.theme.Styles;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * Controller for the game board view. Handles game state, board visualization, and player moves.
@@ -22,15 +36,27 @@ public class SecondaryController implements IController, BoardControllerMediator
 
     // FXML Injected Components
     /** Pane containing the game board */
+
     @FXML
-    private AnchorPane BoardPane;
+    private StackPane centerStackPane;
+
+    @FXML
+    private VBox BoardPane;
     /** Main layout container */
     @FXML
-    private BorderPane borderPane;
+    private BorderPane root;
+
+    @FXML
+    private VBox notificationPane;
     /** Button to confirm move */
     @FXML
     private Button moveButton;
     /** Button to pass turn */
+    @FXML
+    private Button addBot;
+    /* Button to add bot to the session */
+    @FXML
+    private Button save;
     @FXML
     private Button passButton;
     /** Start X coordinate input */
@@ -85,10 +111,11 @@ public class SecondaryController implements IController, BoardControllerMediator
     @Override
     public void showInfo(String message) {
         message = message.toUpperCase();
-        label.setStyle("-fx-font-weight: bold");
-        System.out.println("Info: " + message);
-        label.setText(message);
-        label.setTextFill(Color.GREEN);
+        notificationPane.getChildren().removeIf(child -> child instanceof Notification);
+        var info = new Notification(message);
+        info.getStyleClass().add(Styles.ELEVATED_1);
+        info.getStyleClass().add(Styles.SUCCESS);
+        notificationPane.getChildren().add(info);
     }
 
     /**
@@ -99,15 +126,15 @@ public class SecondaryController implements IController, BoardControllerMediator
     @Override
     public void showError(String message) {
         message = message.toUpperCase();
-        label.setStyle("-fx-font-weight: bold");
-        label.setText(message);
-        label.setTextFill(Color.RED);
-        System.out.println("Error: " + message);
+        notificationPane.getChildren().removeIf(child -> child instanceof Notification);
+        var info = new Notification(message);
+        info.getStyleClass().add(Styles.ELEVATED_1);
+        info.getStyleClass().add(Styles.DANGER);
+        notificationPane.getChildren().add(info);
     }
 
     @Override
     public void handleMessage(String message) {
-        // System.out.println("Message: " + message);
         JsonDeserializer jsonDeserializer = JsonDeserializer.getInstance();
         switch (jsonDeserializer.getType(message)) {
             case "board":
@@ -117,16 +144,28 @@ public class SecondaryController implements IController, BoardControllerMediator
                 break;
             case "gameInfo":
                 HashMap<String, String> gameInfo = jsonDeserializer.getGameInfoMap(message);
+                if (gameInfo.get("status").equals("FINISHED")) {
+                    Stage popup = winningPopup(gameInfo.get("winner"));
+                    popup.show();
+                    return;
+                }
+
                 if (gameInfo.get("players").equals("1")
                         && gameInfo.get("status").equals("IN_PROGRESS")) {
                     showError("No more players");
                     return;
                 }
+
                 info_list.getItems().clear();
                 gameInfo.forEach((key, value) -> {
                     Hboxtwolabel hbox = new Hboxtwolabel(key, value);
                     info_list.getItems().add(hbox);
                 });
+                break;
+
+            case "loaded_boards":
+                HashMap<Integer, String> movesHistory = jsonDeserializer.getMovesHistory(message);
+                replay(movesHistory);
                 break;
             default:
                 showError("Unknown message type: " + jsonDeserializer.getType(message));
@@ -166,11 +205,30 @@ public class SecondaryController implements IController, BoardControllerMediator
     @FXML
     private void pass() {
         String jsonMessage = JsonBuilder.setBuilder("pass").build();
-
         try {
             communication.sendMessage(jsonMessage);
         } catch (Exception e) {
             showError("Failed to pass");
+        }
+    }
+
+    @FXML
+    private void addBot() {
+        String jsonMessage = JsonBuilder.setBuilder("add_bot").build();
+        try {
+            communication.sendMessage(jsonMessage);
+        } catch (Exception e) {
+            showError("Failed to add bot");
+        }
+    }
+
+    @FXML
+    private void save() {
+        String jsonMessage = JsonBuilder.setBuilder("save_game").build();
+        try {
+            communication.sendMessage(jsonMessage);
+        } catch (Exception e) {
+            showError("Failed to save");
         }
     }
 
@@ -183,13 +241,67 @@ public class SecondaryController implements IController, BoardControllerMediator
     private void updateBoard(String map) {
         if (board.isEmpty()) {
             board.createBoardOutOfMap(map);
-            board.getCells().forEach(cell -> {
-                BoardPane.getChildren().add(cell);
-            });
+
+            Group group = new Group();
+            group.getChildren().addAll(board.getCells());
+
+            group.setStyle("-fx-border-color: red; -fx-border-width: 2; -fx-border-style: solid;");
+
+            BoardPane.getChildren().add(group);
+
+            StackPane.setAlignment(group, Pos.CENTER);
+
         } else {
-            // System.out.println("Edit board");
-            board.editBoardOutOfMap(map);
+            // board.editBoardOutOfMap(map);
+            board.addMapToQueue(map);
         }
+    }
+
+    /**
+     * Displays a popup window with the winner of the game.
+     * 
+     * @param winners_color The color of the winning player
+     * @return The popup window
+     */
+    private Stage winningPopup(String winners_color) {
+        Stage stage = new Stage();
+        // Label label = new Label(winners_color + " wins!");
+        // label.setStyle(
+        // "-fx-font-size: 24px;" + "-fx-font-family: 'Arial';" + "-fx-text-fill: #333333;" +
+
+        // "-fx-background-color: linear-gradient(to bottom, #f0f0f0, #d9d9d9);" +
+
+        // "-fx-border-color: #b3b3b3;" + "-fx-border-radius: 10px;"
+        // + "-fx-background-radius: 10px;" + "-fx-padding: 10px;"
+        // + "-fx-alignment: center;");
+        // label.setAlignment(Pos.CENTER);
+
+        // Fix the resource path:
+        Image bgImage = new Image(
+                getClass().getResource("/com/michal/graphics/victory.png").toExternalForm());
+        BackgroundImage backgroundImage =
+                new BackgroundImage(bgImage, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT,
+                        BackgroundPosition.CENTER, new BackgroundSize(BackgroundSize.AUTO,
+                                BackgroundSize.AUTO, false, false, true, false));
+
+        VBox root = new VBox();
+        root.setAlignment(Pos.TOP_CENTER);
+        root.setBackground(new Background(backgroundImage));
+
+        Scene scene = new Scene(root, 512, 512);
+        stage.setScene(scene);
+        stage.setTitle("Game Result");
+        stage.show();
+        stage.setOnCloseRequest(event -> {
+            try {
+                App.setRoot("primary");
+                App.getGeneralListener().setController(PrimaryController.getInstance());
+            } catch (Exception e) {
+                showError("Failed to return to main menu");
+            }
+
+        });
+        return stage;
     }
 
     /**
@@ -214,5 +326,41 @@ public class SecondaryController implements IController, BoardControllerMediator
     public void setEndXY(int x, int y) {
         this.destination_x.setText(Integer.toString(x));
         this.destination_y.setText(Integer.toString(y));
+    }
+
+    /**
+     * Replays the game based on the moves history.
+     * 
+     * @param movesHistory The history of moves
+     */
+    private void replay(HashMap<Integer, String> movesHistory) {
+        ArrayList<Integer> keys = new ArrayList<>(movesHistory.keySet());
+
+        Collections.sort(keys);
+        for (Integer key : keys) {
+            String map = movesHistory.get(key);
+            updateBoard(map);
+        }
+
+    }
+
+    /**
+     * Disables all buttons on the board.
+     */
+    public void disableAllButtons() {
+        moveButton.setDisable(true);
+        passButton.setDisable(true);
+        addBot.setDisable(true);
+        save.setDisable(true);
+    }
+
+    /**
+     * Enables all buttons on the board.
+     */
+    public void enableAllButtons() {
+        moveButton.setDisable(false);
+        passButton.setDisable(false);
+        addBot.setDisable(false);
+        save.setDisable(false);
     }
 }

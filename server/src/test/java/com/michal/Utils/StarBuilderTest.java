@@ -1,7 +1,7 @@
 package com.michal.Utils;
 
-import com.michal.Game.CornerNode;
-import com.michal.Game.Node;
+import com.michal.Game.Board.CornerNode;
+import com.michal.Game.Board.Node;
 
 public class StarBuilderTest {
     StarBuilder starBuilder = StarBuilder.getInstance();

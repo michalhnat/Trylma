@@ -1,4 +1,4 @@
-package com.michal.Game;
+package com.michal.Game.Board;
 
 /**
  * Enum representing different game layouts with a specified number of players.

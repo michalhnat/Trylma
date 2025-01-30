@@ -7,14 +7,21 @@
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.StackPane?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.michal.SecondaryController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.michal.SecondaryController"
+    fx:id="root">
     <left>
         <ListView fx:id="info_list" />
     </left>
     <center>
-        <AnchorPane fx:id="BoardPane" />
+        <StackPane fx:id="centerStackPane" AnchorPane.topAnchor="0.0"
+            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <VBox fx:id="notificationPane" />
+            <VBox alignment="CENTER" fx:id="BoardPane" />
+        </StackPane>
     </center>
     <bottom>
         <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
@@ -25,14 +32,17 @@
                 <TextField fx:id="destination_y" promptText="destination_y" />
                 <Button fx:id="moveButton" text="Move" onAction="#move" />
                 <Button fx:id="passButton" text="Pass" onAction="#pass" />
+                <Button fx:id="addBot" text="Add Bot" onAction="#addBot" />
+                <Button fx:id="save" text="Save" onAction="#save" />
             </buttons>
         </ButtonBar>
     </bottom>
     <top>
-        <HBox alignment="CENTER" prefHeight="35.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+        <!-- <HBox alignment="CENTER" prefHeight="35.0" prefWidth="600.0"
+        BorderPane.alignment="CENTER">
             <children>
                 <Label fx:id="label" />
             </children>
-        </HBox>
+        </HBox> -->
     </top>
 </BorderPane>

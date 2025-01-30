@@ -1,5 +1,8 @@
-package com.michal.Game;
+package com.michal.Game.Board;
 
+import com.michal.Game.*;
+import com.michal.Game.MoveValidation.MoveValidator;
+import com.michal.Models.GameMoves;
 import com.michal.Utils.StarBuilder;
 
 import java.util.*;
@@ -9,7 +12,7 @@ import java.util.*;
  */
 public class StarBoard extends Board {
 
-    private final Node[][] board;
+    private Node[][] board;
     private final MoveValidator moveValidator;
 
     /**
@@ -58,11 +61,11 @@ public class StarBoard extends Board {
         // For each player, check if they won
         for (Player p : players) {
             String playerColor = p.getColor();
-            Direction playerDestination = null;
+            HashSet<Direction> playerDestinations = new HashSet<>();
             for (Node[] row : board) {
                 for (Node node : row) {
                     if (node instanceof CornerNode cornerNode && cornerNode.getOwner() == p) {
-                        playerDestination = oppositeDirections.get(cornerNode.getDirection());
+                        playerDestinations.add(oppositeDirections.get(cornerNode.getDirection()));
                         break;
                     }
                 }
@@ -72,7 +75,7 @@ public class StarBoard extends Board {
             boolean won = true;
             for (Node[] row : board) {
                 for (Node node : row) {
-                    if (node instanceof CornerNode cornerNode && cornerNode.getDirection() == playerDestination) {
+                    if (node instanceof CornerNode cornerNode && playerDestinations.contains(cornerNode.getDirection())) {
                         if (cornerNode.getPawn() == null || !Objects.equals(cornerNode.getPawn().getPlayer().getColor(), playerColor)) {
                             won = false;
                             break;
@@ -102,7 +105,7 @@ public class StarBoard extends Board {
                 Layout.SIXPLAYERS, List.of(Direction.SOUTH, Direction.SOUTHWEST, Direction.NORTHWEST, Direction.NORTH, Direction.NORTHEAST, Direction.SOUTHEAST),
                 Layout.FOURPLAYERS, List.of(Direction.SOUTHWEST, Direction.NORTHWEST, Direction.NORTHEAST, Direction.SOUTHEAST),
                 Layout.THREEPLAYERS_ONESET, List.of(Direction.SOUTH, Direction.NORTHWEST, Direction.NORTHEAST),
-                Layout.THREEPLAYERS_TWOSETS, List.of(Direction.SOUTH, Direction.SOUTHWEST, Direction.NORTHWEST, Direction.NORTH, Direction.NORTHEAST, Direction.SOUTHEAST),
+                Layout.THREEPLAYERS_TWOSETS, List.of(Direction.SOUTH, Direction.NORTHWEST, Direction.NORTHEAST, Direction.SOUTHWEST, Direction.NORTH, Direction.SOUTHEAST),
                 Layout.TWOPLAYERS_ONESET, List.of(Direction.SOUTH, Direction.NORTH),
                 Layout.TWOPLAYERS_TWOSETS_ADJACENT, List.of(Direction.SOUTHWEST, Direction.NORTHEAST, Direction.NORTHWEST, Direction.SOUTHEAST),
                 Layout.TWOPLAYERS_TWOSETS_OPPOSITE, List.of(Direction.SOUTHWEST, Direction.NORTHWEST, Direction.SOUTHEAST, Direction.NORTHEAST),
@@ -146,5 +149,51 @@ public class StarBoard extends Board {
      */
     public Node[][] getBoardArray() {
         return board;
+    }
+
+    /**
+     * Loads pawns onto the board based on the last move and the list of players.
+     *
+     * @param loadedLastMove the last move loaded from the database
+     * @param players the list of players in the game
+     */
+    @Override
+    public void loadPawns(GameMoves loadedLastMove, List<Player> players) {
+        String boardString = loadedLastMove.getBoardAfterMove();
+
+        // convert string to 2D array of characters
+        String[] rows = boardString.split("\n");
+        String[][] stringBoard = new String[rows.length][rows[0].length()];
+
+        for (int i = 0; i < rows.length; i++) {
+            stringBoard[i] = rows[i].split("");
+        }
+
+        // Remove every pawn from the board
+        for (Node[] row : board) {
+            for (Node node : row) {
+                if (node instanceof CornerNode cornerNode) {
+                    cornerNode.setPawn(null);
+                }
+            }
+        }
+
+        // Insert pawns into the Node[][] board
+        int length = rows.length;
+        int size = (length - 1) / 4 + 1;
+
+        for (int y = 0; y < length; y++) {
+            for (int x = 0; x < length; x++) {
+                if (stringBoard[length - y - 1][x].equals("W") || stringBoard[length - y - 1][x].equals("X")) {
+                    continue;
+                } else {
+                    for (Player player : players) {
+                        if (stringBoard[length - y - 1][x].equals(player.getColor().substring(0, 1))) {
+                            board[x][y].setPawn(new Pawn(player));
+                        }
+                    }
+                }
+            }
+        }
     }
 }

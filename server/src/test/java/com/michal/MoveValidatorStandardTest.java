@@ -1,7 +1,13 @@
 package com.michal;
 
-import com.michal.Game.*;
+import com.michal.Game.Board.Node;
+import com.michal.Game.Board.Pawn;
+import com.michal.Game.Board.Position;
+import com.michal.Game.MoveValidation.MoveValidator;
+import com.michal.Game.MoveValidation.MoveValidatorStandard;
 import com.michal.Utils.StarBuilder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 
@@ -17,7 +23,8 @@ public class MoveValidatorStandardTest {
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_WHITE = "\u001B[37m";
 
-    public static void main(String[] args) {
+    @Test
+    public void main() {
         Node[][] board = StarBuilder.buildStar(5);
 
         board[5][5].setPawn(new Pawn(null));
@@ -55,5 +62,12 @@ public class MoveValidatorStandardTest {
         for (Position move : validMoves) {
             System.out.println(move.x() + " " + move.y());
         }
+
+        Position expectedValidMove = new Position(0, 0);
+        if (validMoves.contains(new Position(13, 11))) {
+            expectedValidMove = new Position(13, 11);
+        }
+        Assertions.assertEquals(expectedValidMove, new Position(13, 11));
+
     }
 }

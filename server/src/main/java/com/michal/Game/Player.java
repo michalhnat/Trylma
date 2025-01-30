@@ -1,6 +1,9 @@
 package com.michal.Game;
 
+import java.util.List;
 import java.util.UUID;
+
+import com.michal.Models.GameMoves;
 import com.michal.PlayerCommunicator;
 
 /**
@@ -108,5 +111,14 @@ public class Player {
      */
     public void setColor(String color) {
         this.color = color;
+    }
+
+    /**
+     * Sends the move history to the player.
+     *
+     * @param loadedMoveHistory the list of game moves to send
+     */
+    public void sendMoveHistory(List<GameMoves> loadedMoveHistory) {
+        communicator.sendMoveHistory(loadedMoveHistory);
     }
 }

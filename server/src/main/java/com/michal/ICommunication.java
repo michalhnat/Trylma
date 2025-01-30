@@ -3,6 +3,8 @@ package com.michal;
 import java.io.ObjectOutputStream;
 import java.util.List;
 import com.michal.Game.GameInfo;
+import com.michal.Models.GameModel;
+import com.michal.Models.GameMoves;
 
 /**
  * An interface for communication operations.
@@ -47,4 +49,20 @@ public interface ICommunication {
      * @param out the output stream to send the error message to
      */
     void sendError(String msg, ObjectOutputStream out);
+
+    /**
+     * Sends a list of GameSave objects as a message to the specified output stream.
+     *
+     * @param list the list of GameSave objects to send
+     * @param out the output stream to send the message to
+     */
+    void sendSaveListMessage(List<GameSave> list, ObjectOutputStream out);
+
+    /**
+     * Sends a list of GameMoves objects representing the move history as a message to the specified output stream.
+     *
+     * @param moves the list of GameMoves objects to send
+     * @param out the output stream to send the message to
+     */
+    void sendMoveHistory(List<GameMoves> moves, ObjectOutputStream out);
 }

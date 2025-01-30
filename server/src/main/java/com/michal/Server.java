@@ -6,25 +6,42 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import com.michal.Game.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.michal.Database.DatabaseConnector;
+import com.michal.Game.GameInfo;
+import com.michal.Game.GameSession;
+import com.michal.Game.Player;
+import com.michal.Game.Variant;
+import com.michal.Game.Board.Board;
+import com.michal.Game.Board.Layout;
+import com.michal.Game.Board.Position;
+import com.michal.Game.Board.StarBoard;
+import com.michal.Game.MoveValidation.MoveValidator;
+import com.michal.Game.MoveValidation.MoveValidatorStandard;
+import com.michal.Game.MoveValidation.MoveValidatorSuper;
+import com.michal.Models.GameModel;
+import com.michal.Models.GameMoves;
 
 /**
- * The Server class implements the Mediator and GameSessionMediator interfaces
- * to manage game sessions and client connections.
+ * The Server class implements the Mediator and GameSessionMediator interfaces to manage game
+ * sessions and client connections.
  */
+@Service
 public class Server implements Mediator, GameSessionMediator {
     private static final int PORT = 8085;
 
     private final List<GameSession> gameSessions = Collections.synchronizedList(new ArrayList<>());
     private final List<ClientHandler> clients = Collections.synchronizedList(new ArrayList<>());
 
+    @Autowired
+    private DatabaseConnector databaseConnector;
+
     /**
      * Starts the server and listens for client connections.
      */
     public void startServer() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(PORT);
+        try (ServerSocket serverSocket = new ServerSocket(PORT)) {
             System.out.println("Server started on port " + PORT);
 
             while (true) {
@@ -54,10 +71,12 @@ public class Server implements Mediator, GameSessionMediator {
      * @param boardSize the size of the game board
      * @param layout the layout of the game board
      * @param variant the variant of the game
+     * @param loadedLastMove the last move loaded from a saved game
+     * @param loadedMoveHistory the move history loaded from a saved game
      */
     @Override
     public void handleCreateGame(ClientHandler clientHandler, int boardSize, Layout layout,
-                                 Variant variant) {
+                                 Variant variant, GameMoves loadedLastMove, List<GameMoves> loadedMoveHistory) {
         synchronized (gameSessions) {
             if (clientHandler.isInGame()) {
                 clientHandler.sendError("Error: You are already in a game session.");
@@ -67,14 +86,14 @@ public class Server implements Mediator, GameSessionMediator {
             MoveValidator moveValidator;
             if (variant == Variant.SUPER) {
                 moveValidator = new MoveValidatorSuper();
-            }
-            else {
+            } else {
                 moveValidator = new MoveValidatorStandard();
             }
             Board board = new StarBoard(boardSize, moveValidator);
 
             try {
-                GameSession session = new GameSession(board, layout, variant, this);
+                GameSession session =
+                        new GameSession(board, layout, variant, this, databaseConnector, loadedLastMove, loadedMoveHistory);
                 synchronized (gameSessions) {
                     gameSessions.add(session);
                 }
@@ -232,6 +251,135 @@ public class Server implements Mediator, GameSessionMediator {
             } else {
                 clientHandler.sendError("You are not part of any game session.");
             }
+        }
+    }
+
+    /**
+     * Handles adding a bot to the game session.
+     *
+     * @param clientHandler the client handler requesting to add a bot
+     */
+    @Override
+    public void handleAddBot(ClientHandler clientHandler) {
+        if (!clientHandler.isInGame()) {
+            clientHandler.sendError("You are not part of any game session.");
+            return;
+        }
+
+        synchronized (gameSessions) {
+            Player player = clientHandler.getPlayer();
+            Optional<GameSession> sessionOptional = gameSessions.stream()
+                    .filter(session -> session.getPlayers().contains(player)).findFirst();
+
+            if (sessionOptional.isPresent()) {
+                GameSession session = sessionOptional.get();
+                session.addBot();
+            } else {
+                clientHandler.sendError("You are not part of any game session.");
+            }
+        }
+    }
+
+    /**
+     * Saves the current game session.
+     *
+     * @param clientHandler the client handler requesting to save the game
+     */
+    @Override
+    public void saveGame(ClientHandler clientHandler) {
+        if (!clientHandler.isInGame()) {
+            clientHandler.sendError("You are not part of any game session.");
+            return;
+        }
+
+        synchronized (gameSessions) {
+            Player player = clientHandler.getPlayer();
+            Optional<GameSession> sessionOptional = gameSessions.stream()
+                    .filter(session -> session.getPlayers().contains(player)).findFirst();
+
+            if (sessionOptional.isPresent()) {
+                GameSession session = sessionOptional.get();
+
+                try {
+                    session.saveGame();
+                    clientHandler.sendMessage("Game saved successfully.");
+                } catch (IllegalStateException e) {
+                    clientHandler.sendError("Failed to save game: " + e.getMessage());
+                }
+
+            } else {
+                clientHandler.sendError("You are not part of any game session.");
+            }
+        }
+    }
+
+    /**
+     * Handles a request from a client to list all saved games.
+     *
+     * @param clientHandler the client handler requesting the list of saved games
+     */
+    @Override
+    public void handleListSaves(ClientHandler clientHandler) {
+        if (clientHandler.isInGame()) {
+            clientHandler.sendError("Cannot list saves while in a game session.");
+            return;
+        }
+
+        List<GameModel> savedGames = databaseConnector.getAllGames();
+        List<GameSave> gameSaves = new ArrayList<>();
+
+        for (GameModel game : savedGames) {
+            Long id = game.getId();
+            Optional<GameMoves> lastMove = databaseConnector.getLastGameMove(id);
+            if (lastMove.isPresent()) {
+                String board = lastMove.get().getBoardAfterMove();
+                gameSaves.add(new GameSave(id.toString(), board));
+                continue;
+            } else {
+                clientHandler.sendError("No moves found for game with ID: " + id);
+            }
+        }
+
+        clientHandler.sendSaveListMessage(gameSaves);
+    }
+
+    /**
+     * Loads a saved game session.
+     *
+     * @param clientHandler the client handler requesting to load a game
+     * @param saveId the ID of the saved game to load
+     */
+    @Override
+    public void loadGame(ClientHandler clientHandler, int saveId) {
+        if (clientHandler.isInGame()) {
+            clientHandler.sendError("Cannot load a game while in a game session.");
+            return;
+        }
+
+        List<GameModel> savedGames = databaseConnector.getAllGames();
+        Optional<GameModel> gameOptional = savedGames.stream()
+                .filter(game -> game.getId().equals((long) saveId)).findFirst();
+
+        if (gameOptional.isPresent()) {
+            GameModel game = gameOptional.get();
+            long gameId = game.getId();
+            Layout layout = Layout.valueOf(game.getLayout());
+            Variant variant = Variant.valueOf(game.getVariant());
+            int boardSize = 5; // Need to store board size in database
+
+            Optional<List<GameMoves>> loadedMoveHistory = databaseConnector.getGameMoves(gameId);
+            if (loadedMoveHistory.isEmpty()) {
+                clientHandler.sendError("No moves found for game with ID: " + gameId);
+                return;
+            }
+
+            GameMoves lastMove = loadedMoveHistory.get().getLast();
+
+            // Creating a new game of the variant and layout of the loaded game
+            handleCreateGame(clientHandler, boardSize, layout, variant, lastMove, loadedMoveHistory.get());
+
+        } else {
+            clientHandler.sendError("Game with ID " + saveId + " not found.");
         }
     }
 }

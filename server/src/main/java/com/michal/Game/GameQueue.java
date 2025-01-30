@@ -29,6 +29,11 @@ public class GameQueue {
         return player;
     }
 
+    // Peek at the first player in the queue
+    public synchronized Player peekPlayer() {
+        return players.peek();
+    }
+
     /**
      * Adds a player to the queue.
      *
@@ -63,5 +68,19 @@ public class GameQueue {
      */
     public List<Player> getPlayers() {
         return List.copyOf(players);
+    }
+
+    /**
+     * Copy constructor to create a deep copy of a GameQueue.
+     *
+     * @param original the GameQueue to copy
+     */
+    public GameQueue(GameQueue original) {
+        this.players = new java.util.LinkedList<>();
+        synchronized (original.players) {
+            for (Player player : original.players) {
+                this.players.add(new Player(player));
+            }
+        }
     }
 }

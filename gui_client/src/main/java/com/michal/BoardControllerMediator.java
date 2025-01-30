@@ -21,4 +21,8 @@ public interface BoardControllerMediator {
      * @param y The y-coordinate of the ending position
      */
     public void setEndXY(int x, int y);
+
+    public void disableAllButtons();
+
+    public void enableAllButtons();
 }

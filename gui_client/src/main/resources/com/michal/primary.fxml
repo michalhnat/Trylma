@@ -83,6 +83,8 @@
                </HBox>
                <Button fx:id="create_button" mnemonicParsing="false" text="create"
                   onAction="#create_game" />
+               <Button fx:id="read_save" mnemonicParsing="false" text="read save"
+                  onAction="#read_save" />
             </VBox>
          </children>
       </VBox>

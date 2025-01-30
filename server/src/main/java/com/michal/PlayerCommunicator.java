@@ -1,6 +1,9 @@
 package com.michal;
 
 import com.michal.Game.GameInfo;
+import com.michal.Models.GameMoves;
+
+import java.util.List;
 
 /**
  * Interface for communicating with a player.
@@ -34,4 +37,11 @@ public interface PlayerCommunicator {
      * @param gameInfo the game information to send
      */
     void sendGameInfo(GameInfo gameInfo);
+
+    /**
+     * Sends the move history to the player.
+     *
+     * @param loadedMoveHistory the list of game moves to send
+     */
+    void sendMoveHistory(List<GameMoves> loadedMoveHistory);
 }

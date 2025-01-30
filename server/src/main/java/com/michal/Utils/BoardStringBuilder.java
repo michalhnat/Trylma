@@ -1,6 +1,6 @@
 package com.michal.Utils;
 
-import com.michal.Game.Node;
+import com.michal.Game.Board.Node;
 
 /**
  * Utility class for building a string representation of a game board.

@@ -1,10 +1,16 @@
 package com.michal;
 
-import javafx.scene.paint.Color;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 /**
  * Represents a game board composed of colored cells in a hexagonal grid pattern. The board manages
@@ -26,6 +32,18 @@ public class Board {
     private int[] first_clicked = new int[2];
     /** Coordinates of the second clicked cell [x,y] */
     private int[] second_clicked = new int[2];
+    /** Flag indicating if the user is selecting the end cell */
+    private boolean isSelectingEnd = false;
+
+    /** Queue of maps thats will be rendered */
+    private Queue<String> mapQueue = new LinkedList<>();
+
+    /** Timeline for updating the board map */
+    private Timeline mapUpdateTimeline;
+
+    /** Interval for updating the board map */
+    private static final int UPDATE_INTERVAL_MILLIS = 7;
+
 
     /**
      * Constructs a new Board with specified radius and controller.
@@ -38,6 +56,23 @@ public class Board {
         this.radius = radius;
         this.controller = controller;
 
+        initializeColorMap();
+        initializeMapUpdateTimeline();
+    }
+
+    public Board(int radius) {
+        this.cells = new ArrayList<>();
+        this.radius = radius;
+
+        initializeColorMap();
+        initializeMapUpdateTimeline();
+    }
+
+
+    /**
+     * Initializes the color mapping for cell types.
+     */
+    private void initializeColorMap() {
         colorMap.put("W", Color.GRAY);
         colorMap.put("B", Color.BLUE);
         colorMap.put("R", Color.RED);
@@ -47,6 +82,15 @@ public class Board {
         colorMap.put("O", Color.ORANGE);
         colorMap.put("C", Color.CYAN);
         colorMap.put("M", Color.MAGENTA);
+    }
+
+    /**
+     * Initializes the timeline for updating the board map.
+     */
+    private void initializeMapUpdateTimeline() {
+        mapUpdateTimeline = new Timeline(new KeyFrame(Duration.millis(UPDATE_INTERVAL_MILLIS),
+                event -> updateMapFromQueue()));
+        mapUpdateTimeline.setCycleCount(Animation.INDEFINITE);
     }
 
     /**
@@ -64,7 +108,8 @@ public class Board {
                 double x = radius * j * 2 + radius + i * radius;
                 double y = radius * 2 * i + radius;
                 if (!(row[j].equals("X"))) {
-                    cells.add(new Cell(x, y, j, 16 - i, radius, colorMap.get(row[j]), this));
+                    cells.add(new Cell(x, y, j, mapArray.length - i - 1, radius,
+                            colorMap.get(row[j]), this));
                 }
 
             }
@@ -124,7 +169,7 @@ public class Board {
 
             for (int j = 0; j < newRow.length; j++) {
                 if (!newRow[j].equals(currentRow[j])) {
-                    int[] location = {j, 16 - i};
+                    int[] location = {j, newMapArray.length - i - 1};
                     Color newColor = colorMap.get(newRow[j]);
                     changes.put(location, newColor);
                 }
@@ -141,30 +186,34 @@ public class Board {
      * @param j The y-coordinate of the clicked cell
      */
     public void handleCellClick(int i, int j) {
-        if (first_clicked[0] == 0 && first_clicked[1] == 0) {
+        if (!isSelectingEnd) {
+            Cell firstCell = getCellByCoordinates(first_clicked[0], first_clicked[1]);
+            Cell secondCell = getCellByCoordinates(second_clicked[0], second_clicked[1]);
+
+            if (firstCell != null) {
+                firstCell.resetBorder();
+            }
+
+            if (secondCell != null) {
+                secondCell.resetBorder();
+            }
+
             first_clicked[0] = i;
             first_clicked[1] = j;
+            second_clicked[0] = 0;
+            second_clicked[1] = 0;
+
             controller.setStartXY(i, j);
-        } else if (second_clicked[0] == 0 && second_clicked[1] == 0) {
+
+            controller.setEndXY(0, 0);
+
+            isSelectingEnd = true;
+
+        } else {
             second_clicked[0] = i;
             second_clicked[1] = j;
             controller.setEndXY(i, j);
-        } else {
-            first_clicked[0] = i;
-            first_clicked[1] = j;
-            controller.setStartXY(i, j);
-            second_clicked[0] = 0;
-            second_clicked[1] = 0;
-            controller.setEndXY(0, 0);
-        }
-        Cell firstCell = getCellByCoordinates(first_clicked[0], first_clicked[1]);
-        Cell secondCell = getCellByCoordinates(second_clicked[0], second_clicked[1]);
-
-        if (firstCell != null) {
-            firstCell.resetBorder();
-        }
-        if (secondCell != null) {
-            secondCell.resetBorder();
+            isSelectingEnd = false;
         }
     }
 
@@ -193,11 +242,75 @@ public class Board {
     }
 
     /**
+     * Disables all cells on the board.
+     */
+    public void disactivate_all_cells() {
+        this.first_clicked[0] = 0;
+        this.first_clicked[1] = 0;
+        this.second_clicked[0] = 0;
+        this.second_clicked[1] = 0;
+        this.isSelectingEnd = false;
+
+        for (Cell cell : cells) {
+            cell.disactivate();
+        }
+    }
+
+    /**
+     * Updates the board map from the queue of maps to render.
+     */
+    private void updateMapFromQueue() {
+        if (!mapQueue.isEmpty()) {
+            String nextMap = mapQueue.poll();
+            disactivate_all_cells();
+            controller.disableAllButtons();
+            editBoardOutOfMap(nextMap);
+
+            if (mapQueue.isEmpty()) {
+                activate_all_cells();
+                controller.enableAllButtons();
+                mapUpdateTimeline.stop();
+            }
+        }
+    }
+
+    /**
+     * Adds a new map to the queue of maps to render.
+     *
+     * @param map The new map to add to the queue
+     */
+    public void addMapToQueue(String map) {
+        mapQueue.add(map);
+        controller.disableAllButtons();
+
+        if (mapUpdateTimeline.getStatus() != Animation.Status.RUNNING) {
+            disactivate_all_cells();
+            controller.disableAllButtons();
+            updateMapFromQueue();
+            mapUpdateTimeline.play();
+        }
+    }
+
+    /**
      * Gets the list of all cells on the board.
      *
      * @return List of Cell objects representing the board
      */
     public List<Cell> getCells() {
         return cells;
+    }
+
+    public double getBoardWidth() {
+        return radius * 2 * (currentMap.split("\n")[0].length() + 1);
+    }
+
+    public double getBoardHeight() {
+        return radius * 2 * (currentMap.split("\n").length + 1);
+    }
+
+    public void activate_all_cells() {
+        for (Cell cell : cells) {
+            cell.activate();
+        }
     }
 }
